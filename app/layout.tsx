@@ -1,29 +1,48 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Almarai, Montserrat } from "next/font/google"
+import { cookies } from "next/headers"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+import { defaultLocale, getDirection, isLocale, type Locale } from "@/lib/i18n"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-sans",
 })
 
-export default function RootLayout({
+const almarai = Almarai({
+  subsets: ["arabic"],
+  weight: ["300", "400", "700", "800"],
+  variable: "--font-arabic",
+})
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const localeCookie = (await cookies()).get("locale")?.value
+  const locale: Locale = isLocale(localeCookie) ? localeCookie : defaultLocale
+  const direction = getDirection(locale)
+
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={direction}
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn(
+        "antialiased",
+        locale === "ar" ? "font-ar" : "font-sans",
+        montserrat.variable,
+        almarai.variable
+      )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

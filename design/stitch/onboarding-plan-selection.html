@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>التهيئة - اختيار الخطة</title>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-glass": "rgba(30, 41, 59, 0.7)",
+                        "surface": "#111412",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-high": "#272b29",
+                        "on-primary": "#003829",
+                        "background": "#111412",
+                        "surface-container-lowest": "#0c0f0d",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "on-secondary-container": "#a9bad3",
+                        "surface-dim": "#111412",
+                        "surface-bright": "#373a38",
+                        "surface-container-low": "#191c1b",
+                        "status-suspicious": "#F59E0B",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#b0f0d6",
+                        "inverse-primary": "#2b6954",
+                        "primary-container": "#064e3b",
+                        "inverse-surface": "#e1e3e0",
+                        "status-noncompliant": "#EF4444",
+                        "secondary-container": "#3a4a5f",
+                        "outline-variant": "#404944",
+                        "secondary": "#b7c8e1",
+                        "primary": "#95d3ba",
+                        "on-tertiary-container": "#ea9e93",
+                        "on-tertiary-fixed-variant": "#6e372f",
+                        "inverse-on-surface": "#2e312f",
+                        "outline": "#89938d",
+                        "on-primary-fixed": "#002117",
+                        "on-primary-container": "#80bea6",
+                        "tertiary-fixed": "#ffdad5",
+                        "surface-tint": "#95d3ba",
+                        "accent-gold": "#D4AF37",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#53211b",
+                        "on-background": "#e1e3e0",
+                        "background-navy": "#0F172A",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#0b1c30",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary": "#213145",
+                        "surface-variant": "#323533",
+                        "surface-container-highest": "#323533",
+                        "on-tertiary-fixed": "#380d08",
+                        "on-surface": "#e1e3e0",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "primary-fixed-dim": "#95d3ba",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb4a9",
+                        "tertiary-container": "#6b342d",
+                        "status-halal": "#10B981",
+                        "on-surface-variant": "#bfc9c3",
+                        "surface-container": "#1d201e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-page": "2rem",
+                        "stack-sm": "0.5rem",
+                        "stack-lg": "2rem",
+                        "stack-md": "1rem",
+                        "gutter": "1.5rem",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "display": ["Almarai"],
+                        "h1": ["Almarai"],
+                        "label-sm": ["Almarai"],
+                        "h2": ["Almarai"],
+                        "body-lg": ["Almarai"],
+                        "body-md": ["Almarai"]
+                    },
+                    "fontSize": {
+                        "display": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "h1": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "label-sm": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "h2": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col lg:flex-row antialiased selection:bg-primary-container selection:text-primary-fixed">
+<aside class="w-full lg:w-[320px] xl:w-[400px] bg-background-navy border-b lg:border-b-0 lg:border-l border-white/5 flex flex-col p-8 lg:p-margin-page z-10 relative overflow-hidden">
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at top right, var(--color-primary-container), transparent 60%);"></div>
+<div class="mb-12 relative z-10 flex items-center gap-3">
+<img alt="Hallilha Logo" class="h-10 w-auto" data-alt="Minimalist modern fintech logo mark in emerald green against dark navy background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHp7r9YjFIWmk-bhd-s0lX2bbT9vZWONU6jYV6CcfU0Lj8DVHNwFZ8XEIsNKcml_kp97DqjFR90ku6-IZFcV0lYA5e85p5ldDoonqvdVsKDZg7kC-av4lpByyryH_fEn8z_v2mfMDp8BKcOeBXkjO0KYBZkIvXXEWTCp7PdgOgrC-w-bnY3koDyczEeoVpS5a0KmQOR_bPy4WNw9ULT2XEgtyC__vMwrRTSScy-y6LLaoUeDb7pEXd7TUHDIpqB6QgdvmPbDDrh6E"/>
+<span class="font-h2 text-h2 text-on-surface">حليله</span>
+</div>
+<div class="relative z-10 flex-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-8">تقدم التهيئة</div>
+<div class="space-y-6 relative before:absolute before:inset-0 before:mr-[15px] before:translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/50 before:via-surface-variant before:to-surface-variant">
+<div class="relative flex items-center gap-4">
+<div class="h-8 w-8 rounded-full bg-primary/20 border border-primary flex items-center justify-center text-primary z-10 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-primary">الخطوة 1</div>
+<div class="font-body-md text-body-md text-on-surface">تفاصيل الحساب</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="h-8 w-8 rounded-full bg-primary/20 border border-primary flex items-center justify-center text-primary z-10 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-primary">الخطوة 2</div>
+<div class="font-body-md text-body-md text-on-surface">التحقق من الهوية</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="h-8 w-8 rounded-full bg-primary/20 border border-primary flex items-center justify-center text-primary z-10 shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-primary">الخطوة 3</div>
+<div class="font-body-md text-body-md text-on-surface">الملف التجاري</div>
+</div>
+</div>
+<div class="relative flex items-center gap-4">
+<div class="h-8 w-8 rounded-full bg-accent-gold/20 border border-accent-gold flex items-center justify-center text-accent-gold z-10 shrink-0 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+<span class="material-symbols-outlined text-[18px] text-accent-gold" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-accent-gold">الخطوة 4</div>
+<div class="font-body-md text-body-md text-on-surface font-medium">اختيار الخطة</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 relative z-10">
+<div class="bg-surface-glass rounded-lg p-4 border border-white/5 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">verified_user</span>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface">معتمد من الهيئة الشرعية</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[13px] leading-tight mt-1">تتضمن جميع الباقات إطار عمل الامتثال الأساسي لدينا.</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-surface-container-lowest relative">
+<div class="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMTExNDEyIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMyNzJiMjkiPjwvcmVjdD4KPC9zdmc+')] opacity-40"></div>
+<div class="max-w-[1200px] mx-auto p-6 md:p-12 lg:p-margin-page relative z-10">
+<div class="mb-12 text-center lg:text-right">
+<h1 class="font-display text-display text-on-surface mb-4">اختر خطتك</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    اختر مستوى التوافق مع الشريعة وأدوات التدقيق بالذكاء الاصطناعي التي تناسب حجم عملك. قم بالترقية في أي وقت أثناء نموك.
+                </p>
+<div class="inline-flex items-center p-1 bg-surface-container-highest rounded-lg border border-white/5 mt-8">
+<button class="px-6 py-2 rounded-md bg-surface border border-white/10 font-label-sm text-label-sm text-on-surface shadow-sm">شهرياً</button>
+<button class="px-6 py-2 rounded-md font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors">سنوياً <span class="text-primary mr-1">-20%</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-gutter items-end">
+<div class="bg-surface-glass backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex flex-col h-full xl:h-[520px] transition-transform hover:-translate-y-1 duration-300">
+<div class="mb-6">
+<div class="font-h2 text-h2 text-on-surface mb-2">الشركات الناشئة</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-6 h-12">تتبع الامتثال الأساسي للمشاريع في مراحلها الأولى.</div>
+<div class="flex items-baseline gap-1">
+<span class="font-display text-[40px] font-bold text-on-surface">$29</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/شهر</span>
+</div>
+</div>
+<div class="h-px w-full bg-white/5 my-6"></div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">فحص المحفظة الأساسي</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">تقارير الامتثال الشهرية</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">حتى 100 معاملة/شهر</span>
+</li>
+<li class="flex items-start gap-3 opacity-40">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] shrink-0">remove</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">الوصول إلى مدقق الذكاء الاصطناعي</span>
+</li>
+</ul>
+<button class="w-full py-3.5 rounded-lg border border-white/10 bg-white/5 font-label-sm text-label-sm text-on-surface hover:bg-white/10 transition-colors mt-auto">
+                        ابدأ الآن
+                    </button>
+</div>
+<div class="bg-surface-glass backdrop-blur-xl border border-primary/40 rounded-2xl p-8 flex flex-col h-full xl:h-[560px] relative shadow-[0_0_40px_rgba(16,185,129,0.05)] transform md:-translate-y-4 transition-transform hover:-translate-y-6 duration-300">
+<div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-l from-primary to-emerald-400 rounded-t-2xl"></div>
+<div class="absolute top-4 left-4 bg-primary/10 border border-primary/30 text-primary px-3 py-1 rounded-full font-label-sm text-[11px] uppercase tracking-wider font-bold">
+                        الأكثر شيوعاً
+                    </div>
+<div class="mb-6 mt-2">
+<div class="font-h2 text-h2 text-primary mb-2">النمو</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-6 h-12">أدوات ذكاء اصطناعي متقدمة ومراقبة في الوقت الفعلي للشركات الصغيرة والمتوسطة النامية.</div>
+<div class="flex items-baseline gap-1">
+<span class="font-display text-[48px] font-bold text-on-surface">$99</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/شهر</span>
+</div>
+</div>
+<div class="h-px w-full bg-gradient-to-l from-transparent via-primary/20 to-transparent my-6"></div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface text-[15px]">كل شيء في الشركات الناشئة، بالإضافة إلى:</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">تدقيق المعاملات في الوقت الفعلي</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">معاملات غير محدودة</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-accent-gold text-[20px] shrink-0">smart_toy</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">وصول كامل لدردشة مدقق الذكاء الاصطناعي</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">محرك حساب التطهير</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-lg bg-accent-gold font-label-sm text-label-sm text-background-navy font-bold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all mt-auto flex justify-center items-center gap-2 group">
+                        اختر النمو
+                        <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+</button>
+</div>
+<div class="bg-surface-glass backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex flex-col h-full xl:h-[520px] transition-transform hover:-translate-y-1 duration-300">
+<div class="mb-6">
+<div class="font-h2 text-h2 text-on-surface mb-2">الشركات</div>
+<div class="font-body-md text-body-md text-on-surface-variant mb-6 h-12">حلول مخصصة للمؤسسات التي تتطلب إشرافاً مخصصاً.</div>
+<div class="flex items-baseline gap-1">
+<span class="font-display text-[40px] font-bold text-on-surface">مخصص</span>
+</div>
+</div>
+<div class="h-px w-full bg-white/5 my-6"></div>
+<ul class="space-y-4 mb-8 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">مستشار شرعي مخصص</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">تكامل واجهة برمجة التطبيقات (API) مخصص</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">خيارات النشر المحلي</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-[15px]">لوحة تحكم بالعلامة البيضاء</span>
+</li>
+</ul>
+<button class="w-full py-3.5 rounded-lg border border-white/10 bg-transparent font-label-sm text-label-sm text-on-surface hover:bg-white/5 transition-colors mt-auto">
+                        اتصل بالمبيعات
+                    </button>
+</div>
+</div>
+<div class="mt-12 text-center">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    العودة إلى الملف التجاري
+                </a>
+</div>
+</div>
+</main>
+</body></html>
