@@ -24,7 +24,7 @@ export default async function RegisterPage({ params }: PageProps) {
 
   return (
     <div dir={direction}>
-      <RegisterWizard t={t} />
+      <RegisterWizard locale={locale} t={t} />
     </div>
   )
 }

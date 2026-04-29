@@ -14,6 +14,23 @@ export function getDirection(locale: Locale): "rtl" | "ltr" {
 
 export const dictionary = {
   ar: {
+    common: {
+      errors: {
+        required: "هذا الحقل مطلوب",
+        invalidEmail: "صيغة البريد الإلكتروني غير صحيحة",
+        passwordMin: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+        passwordsMustMatch: "كلمتا المرور غير متطابقتين",
+        unknown: "حدث خطأ غير متوقع. حاول مرة أخرى.",
+        network: "تعذّر الاتصال بالخادم.",
+      },
+      toast: {
+        loginSuccess: "تم تسجيل الدخول بنجاح",
+        loginFailed: "بيانات الدخول غير صحيحة",
+        signupSuccess: "تم إنشاء الحساب بنجاح",
+        signupFailed: "تعذّر إنشاء الحساب",
+        saved: "تم الحفظ",
+      },
+    },
     auth: {
       login: {
         title: "مرحباً بعودتك",
@@ -233,6 +250,23 @@ export const dictionary = {
     },
   },
   en: {
+    common: {
+      errors: {
+        required: "This field is required",
+        invalidEmail: "Please enter a valid email address",
+        passwordMin: "Password must be at least 8 characters",
+        passwordsMustMatch: "Passwords do not match",
+        unknown: "Something went wrong. Please try again.",
+        network: "Could not reach the server.",
+      },
+      toast: {
+        loginSuccess: "Signed in successfully",
+        loginFailed: "Invalid credentials",
+        signupSuccess: "Account created",
+        signupFailed: "Could not create account",
+        saved: "Saved",
+      },
+    },
     auth: {
       login: {
         title: "Welcome back",

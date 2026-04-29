@@ -2,6 +2,7 @@ import { Almarai, Montserrat } from "next/font/google"
 import { cookies } from "next/headers"
 
 import "./globals.css"
+import { Providers } from "./providers"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
@@ -41,7 +42,9 @@ export default async function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <Providers>{children}</Providers>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

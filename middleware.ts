@@ -18,11 +18,12 @@ export function middleware(request: NextRequest) {
   const pathLocale = segments[0]
   if (isLocale(pathLocale)) {
     const isDashboardRoute = segments[1] === "dashboard"
-    const authToken = request.cookies.get("auth_token")?.value
+    const hasSession = request.cookies.has("hallha.session_token")
 
-    if (isDashboardRoute && !authToken) {
+    if (isDashboardRoute && !hasSession) {
       const url = request.nextUrl.clone()
       url.pathname = `/${pathLocale}/login`
+      url.searchParams.set("from", pathname)
       return NextResponse.redirect(url)
     }
 
