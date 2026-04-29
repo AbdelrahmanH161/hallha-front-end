@@ -115,7 +115,7 @@ export function LoginForm({ locale, t }: { locale: Locale; t: LoginFormCopy }) {
           <CardHeader className="items-center text-center">
             <div className="mb-2 grid size-16 place-items-center">
               <Image
-                src="/auth/login-logo.png"
+                src="/logo.png"
                 alt="Hallilha"
                 width={64}
                 height={64}
