@@ -39,7 +39,7 @@ export default async function LandingPage({ params }: PageProps) {
           <div className="flex items-center gap-8">
             <Link href={`/${locale}`} className="flex items-center gap-2">
               <Image
-                src="/landing/logo.png"
+                src="/logo.png"
                 alt={t.nav.brandAlt}
                 width={32}
                 height={32}

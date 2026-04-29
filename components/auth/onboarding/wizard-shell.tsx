@@ -49,7 +49,7 @@ export function WizardShell({
 
         <div className="relative z-10 mb-10 flex items-center gap-3">
           <Image
-            src="/auth/login-logo.png"
+            src="/logo.png"
             alt={copy.brand}
             width={40}
             height={40}
@@ -80,7 +80,7 @@ export function WizardShell({
         <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b bg-background/70 px-6 py-4 backdrop-blur md:hidden">
           <div className="flex items-center gap-2">
             <Image
-              src="/auth/login-logo.png"
+              src="/logo.png"
               alt={copy.brand}
               width={32}
               height={32}

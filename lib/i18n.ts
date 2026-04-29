@@ -33,7 +33,7 @@ export const dictionary = {
       },
       register: {
         shell: {
-          brand: "حلالها",
+          brand: "حلّلها",
           title: "إعداد مساحة الامتثال الخاصة بك",
           secureBadge: "مؤمن بتشفير 256 بت",
           stepCounterTemplate: "الخطوة {current} من {total}",
@@ -150,8 +150,8 @@ export const dictionary = {
     },
     landing: {
       nav: {
-        brand: "حلولها",
-        brandAlt: "شعار حلولها",
+        brand: "حلّلها",
+        brandAlt: "شعار حلّلها",
         home: "الرئيسية",
         auditor: "المدقق",
         compliance: "الامتثال",
@@ -161,7 +161,7 @@ export const dictionary = {
       },
       hero: {
         pill: "تمويل إسلامي مدعوم بالذكاء الاصطناعي",
-        title: "حلولها.. مستقبلك المالي، على",
+        title: "حلّلها.. مستقبلك المالي، على",
         titleAccent: "أسس شرعية",
         description:
           "المنظومة المالية الحديثة للشركات الصغيرة والمتوسطة. أتمتة الامتثال، وضمان التطهير، وتنمية ثروتك بثقة أخلاقية مطلقة.",
@@ -229,7 +229,7 @@ export const dictionary = {
           },
         },
       },
-      footer: "© 2024 منصة حلولها. مدققة من قبل هيئة الرقابة الشرعية.",
+      footer: "© 2024 منصة حلّلها. مدققة من قبل هيئة الرقابة الشرعية.",
     },
   },
   en: {
