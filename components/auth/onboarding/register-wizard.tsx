@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useMessages } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -17,7 +18,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-import { WizardShell, type WizardShellCopy } from "@/components/auth/onboarding/wizard-shell"
+import { WizardShell } from "@/components/auth/onboarding/wizard-shell"
 import { Button } from "@/components/ui/button"
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
 import {
@@ -43,7 +44,6 @@ import {
   useUpdateCompanyProfileMutation,
 } from "@/lib/api/queries/organization"
 import { signUp } from "@/lib/auth/client"
-import { dictionary, type Locale } from "@/lib/i18n"
 import { signUpSchema, type SignUpInput } from "@/lib/schemas/auth"
 import {
   bankLinkSchema,
@@ -57,7 +57,6 @@ import { useRegisterDraft } from "@/lib/stores/register-draft"
 import { cn } from "@/lib/utils"
 
 export type RegisterWizardCopy = {
-  shell: WizardShellCopy
   steps: {
     accountBasics: string
     companyProfile: string
@@ -140,7 +139,11 @@ export type RegisterWizardCopy = {
 }
 
 const TOTAL_STEPS = 4
-type CommonCopy = (typeof dictionary)[Locale]["common"]
+
+type CommonCopy = {
+  errors: Record<string, string>
+  toast: Record<string, string>
+}
 
 function clampStep(value: number) {
   if (!Number.isFinite(value)) return 1
@@ -159,13 +162,15 @@ function describeError(err: unknown, common: CommonCopy): string {
   return common.errors.unknown
 }
 
-export function RegisterWizard({ locale, t }: { locale: Locale; t: RegisterWizardCopy }) {
+export function RegisterWizard() {
   const router = useRouter()
   const params = useSearchParams()
+  const messages = useMessages()
+  const t = messages.auth.register as unknown as RegisterWizardCopy
+  const common = messages.common as CommonCopy
   const stepParam = params.get("step")
   const activeStep = clampStep(stepParam ? Number(stepParam) : 1)
   const activeIndex = activeStep - 1
-  const common = dictionary[locale].common
 
   const steps = React.useMemo(
     () => [
@@ -188,11 +193,11 @@ export function RegisterWizard({ locale, t }: { locale: Locale; t: RegisterWizar
   )
 
   const finish = React.useCallback(() => {
-    router.push(`/${locale}/dashboard`)
-  }, [router, locale])
+    router.push("/dashboard")
+  }, [router])
 
   return (
-    <WizardShell copy={t.shell} steps={steps} activeIndex={activeIndex}>
+    <WizardShell steps={steps} activeIndex={activeIndex}>
       {activeStep === 1 ? (
         <AccountBasicsStep
           t={t.step1}

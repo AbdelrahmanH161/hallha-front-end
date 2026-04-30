@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
-import Link from "next/link"
+import { useMessages, useTranslations } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -11,7 +11,13 @@ import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -26,40 +32,30 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
+import Link from "next/link"
 import { signIn } from "@/lib/auth/client"
 import { ApiError } from "@/lib/api/client"
-import { dictionary, type Locale } from "@/lib/i18n"
 import { loginSchema, type LoginInput } from "@/lib/schemas/auth"
 
-export type LoginFormCopy = {
-  title: string
-  subtitle: string
-  emailLabel: string
-  emailPlaceholder: string
-  passwordLabel: string
-  passwordPlaceholder: string
-  forgotPassword: string
-  submit: string
-  signupPrompt: string
-  signupLink: string
-  badges: {
-    shariaCertified: string
-    secureEncryption: string
-  }
+type CommonCopy = {
+  errors: Record<string, string>
+  toast: Record<string, string>
 }
 
-type CommonCopy = (typeof dictionary)[Locale]["common"]
-
-function resolveErrorKey(key: string | undefined, common: CommonCopy): string | undefined {
+function resolveErrorKey(
+  key: string | undefined,
+  common: CommonCopy
+): string | undefined {
   if (!key) return undefined
-  const errors = common.errors as Record<string, string>
-  return errors[key] ?? key
+  return common.errors[key] ?? key
 }
 
-export function LoginForm({ locale, t }: { locale: Locale; t: LoginFormCopy }) {
+export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const common = dictionary[locale].common
+  const messages = useMessages()
+  const commonResolved = messages.common as CommonCopy
+  const t = useTranslations("auth.login")
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -76,14 +72,14 @@ export function LoginForm({ locale, t }: { locale: Locale; t: LoginFormCopy }) {
         password: values.password,
       })
       if (result.error) {
-        toast.error(common.toast.loginFailed, {
+        toast.error(commonResolved.toast.loginFailed, {
           description: result.error.message ?? undefined,
         })
         return
       }
-      toast.success(common.toast.loginSuccess)
+      toast.success(commonResolved.toast.loginSuccess)
       const from = searchParams.get("from")
-      router.push(from && from.startsWith("/") ? from : `/${locale}/dashboard`)
+      router.push(from && from.startsWith("/") ? from : "/dashboard")
       router.refresh()
     } catch (err) {
       const message =
@@ -91,13 +87,13 @@ export function LoginForm({ locale, t }: { locale: Locale; t: LoginFormCopy }) {
           ? err.detail
           : err instanceof Error
             ? err.message
-            : common.errors.unknown
-      toast.error(common.toast.loginFailed, { description: message })
+            : commonResolved.errors.unknown
+      toast.error(commonResolved.toast.loginFailed, { description: message })
     }
   }
 
   return (
-    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-background px-4 py-10 text-foreground">
+    <main className="relative flex h-svh max-h-svh flex-col overflow-hidden bg-background text-foreground">
       <div className="pointer-events-none absolute inset-0 opacity-[0.08] dark:opacity-[0.05]">
         <Image
           src="/auth/login-pattern.png"
@@ -107,133 +103,141 @@ export function LoginForm({ locale, t }: { locale: Locale; t: LoginFormCopy }) {
           className="object-cover"
         />
       </div>
-      <div className="pointer-events-none absolute -left-24 -top-24 size-[420px] rounded-full bg-primary/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 size-[420px] rounded-full bg-accent/15 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 -left-24 size-[420px] rounded-full bg-primary/15 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 -bottom-24 size-[420px] rounded-full bg-accent/15 blur-3xl" />
 
-      <div className="relative z-10 w-full max-w-[420px]">
-        <Card className="border bg-card/60 shadow-2xl backdrop-blur-xl">
-          <CardHeader className="items-center text-center">
-            <div className="mb-2 grid size-16 place-items-center">
-              <Image
-                src="/logo.png"
-                alt="Hallilha"
-                width={64}
-                height={64}
-                priority
-                className="max-h-16 w-auto object-contain"
-              />
-            </div>
-
-            <CardTitle className="text-xl">{t.title}</CardTitle>
-            <p className="text-sm text-muted-foreground">{t.subtitle}</p>
-          </CardHeader>
-
-          <CardContent>
-            <Form {...form}>
-              <form
-                className="flex flex-col gap-4"
-                onSubmit={form.handleSubmit(onSubmit)}
-                noValidate
-              >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field, fieldState }) => (
-                    <FormItem>
-                      <FormLabel>{t.emailLabel}</FormLabel>
-                      <FormControl>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-end">
-                            <InputGroupText>
-                              <Mail className="size-4" aria-hidden />
-                            </InputGroupText>
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            type="email"
-                            placeholder={t.emailPlaceholder}
-                            autoComplete="email"
-                            disabled={isSubmitting}
-                            {...field}
-                          />
-                        </InputGroup>
-                      </FormControl>
-                      <FormMessage>
-                        {resolveErrorKey(fieldState.error?.message, common)}
-                      </FormMessage>
-                    </FormItem>
-                  )}
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-4 py-10">
+        <div className="w-full max-w-[420px]">
+          <Card className="border bg-card/60 shadow-2xl backdrop-blur-xl">
+            <CardHeader className="items-center text-center">
+              <div className="mb-2 grid size-16 place-items-center">
+                <Image
+                  src="/logo.png"
+                  alt="Hallilha"
+                  width={64}
+                  height={64}
+                  priority
+                  className="max-h-16 w-auto object-contain"
                 />
+              </div>
 
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field, fieldState }) => (
-                    <FormItem>
-                      <div className="flex items-baseline justify-between gap-3">
-                        <FormLabel>{t.passwordLabel}</FormLabel>
-                        <Link
-                          href={`/${locale}/forgot-password`}
-                          className="text-xs font-medium text-primary underline-offset-4 hover:underline"
-                        >
-                          {t.forgotPassword}
-                        </Link>
-                      </div>
-                      <FormControl>
-                        <InputGroup>
-                          <InputGroupAddon align="inline-end">
-                            <InputGroupText>
-                              <Lock className="size-4" aria-hidden />
-                            </InputGroupText>
-                          </InputGroupAddon>
-                          <InputGroupInput
-                            type="password"
-                            placeholder={t.passwordPlaceholder}
-                            autoComplete="current-password"
-                            disabled={isSubmitting}
-                            {...field}
-                          />
-                        </InputGroup>
-                      </FormControl>
-                      <FormMessage>
-                        {resolveErrorKey(fieldState.error?.message, common)}
-                      </FormMessage>
-                    </FormItem>
-                  )}
-                />
+              <CardTitle className="text-xl">{t("title")}</CardTitle>
+              <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
+            </CardHeader>
 
-                <Button
-                  type="submit"
-                  className="mt-1 w-full font-semibold"
-                  disabled={isSubmitting}
+            <CardContent>
+              <Form {...form}>
+                <form
+                  className="flex flex-col gap-4"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  noValidate
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" aria-hidden />
-                      {t.submit}
-                    </>
-                  ) : (
-                    t.submit
-                  )}
-                </Button>
-              </form>
-            </Form>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>{t("emailLabel")}</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon align="inline-end">
+                              <InputGroupText>
+                                <Mail className="size-4" aria-hidden />
+                              </InputGroupText>
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              type="email"
+                              placeholder={t("emailPlaceholder")}
+                              autoComplete="email"
+                              disabled={isSubmitting}
+                              {...field}
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage>
+                          {resolveErrorKey(
+                            fieldState.error?.message,
+                            commonResolved
+                          )}
+                        </FormMessage>
+                      </FormItem>
+                    )}
+                  />
 
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              {t.signupPrompt}{" "}
-              <Link
-                className="font-medium text-primary underline-offset-4 hover:underline"
-                href={`/${locale}/register`}
-              >
-                {t.signupLink}
-              </Link>
-            </p>
-          </CardContent>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <div className="flex items-baseline justify-between gap-3">
+                          <FormLabel>{t("passwordLabel")}</FormLabel>
+                          <Link
+                            href="/forgot-password"
+                            className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+                          >
+                            {t("forgotPassword")}
+                          </Link>
+                        </div>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon align="inline-end">
+                              <InputGroupText>
+                                <Lock className="size-4" aria-hidden />
+                              </InputGroupText>
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              type="password"
+                              placeholder={t("passwordPlaceholder")}
+                              autoComplete="current-password"
+                              disabled={isSubmitting}
+                              {...field}
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage>
+                          {resolveErrorKey(
+                            fieldState.error?.message,
+                            commonResolved
+                          )}
+                        </FormMessage>
+                      </FormItem>
+                    )}
+                  />
 
-          <CardFooter className="flex flex-wrap items-center justify-center gap-2">
-            <Badge variant="secondary">{t.badges.shariaCertified}</Badge>
-            <Badge variant="secondary">{t.badges.secureEncryption}</Badge>
-          </CardFooter>
-        </Card>
+                  <Button
+                    type="submit"
+                    className="mt-1 w-full font-semibold"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" aria-hidden />
+                        {t("submit")}
+                      </>
+                    ) : (
+                      t("submit")
+                    )}
+                  </Button>
+                </form>
+              </Form>
+
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                {t("signupPrompt")}{" "}
+                <Link
+                  className="font-medium text-primary underline-offset-4 hover:underline"
+                  href="/register"
+                >
+                  {t("signupLink")}
+                </Link>
+              </p>
+            </CardContent>
+
+            <CardFooter className="flex flex-wrap items-center justify-center gap-2">
+              <Badge variant="secondary">{t("badges.shariaCertified")}</Badge>
+              <Badge variant="secondary">{t("badges.secureEncryption")}</Badge>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
     </main>
   )

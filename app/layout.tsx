@@ -1,12 +1,12 @@
 import { Almarai, Montserrat } from "next/font/google"
-import { cookies } from "next/headers"
+import { getLocale } from "next-intl/server"
 
 import "./globals.css"
 import { Providers } from "./providers"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { defaultLocale, getDirection, isLocale, type Locale } from "@/lib/i18n"
+import { NextIntlClientProvider } from "next-intl"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -24,9 +24,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const localeCookie = (await cookies()).get("locale")?.value
-  const locale: Locale = isLocale(localeCookie) ? localeCookie : defaultLocale
-  const direction = getDirection(locale)
+  const locale = await getLocale()
+  const direction = locale === "ar" ? "rtl" : "ltr"
 
   return (
     <html
@@ -41,11 +40,13 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>
-          <TooltipProvider>
-            <Providers>{children}</Providers>
-          </TooltipProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider>
+          <ThemeProvider>
+            <TooltipProvider>
+              <Providers>{children}</Providers>
+            </TooltipProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

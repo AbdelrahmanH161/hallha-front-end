@@ -1,0 +1,305 @@
+{
+  "common": {
+    "errors": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordsMustMatch": "Passwords do not match",
+      "unknown": "Something went wrong. Please try again.",
+      "network": "Could not reach the server."
+    },
+    "toast": {
+      "loginSuccess": "Signed in successfully",
+      "loginFailed": "Invalid credentials",
+      "signupSuccess": "Account created",
+      "signupFailed": "Could not create account",
+      "saved": "Saved"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your compliant dashboard",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "name@company.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Log in",
+      "signupPrompt": "New to Hallilha?",
+      "signupLink": "Sign up",
+      "badges": {
+        "shariaCertified": "Shariah certified",
+        "secureEncryption": "256-bit secure encryption"
+      }
+    },
+    "register": {
+      "shell": {
+        "brand": "HalalIha",
+        "title": "Set up your compliance workspace",
+        "secureBadge": "Secured with 256-bit encryption",
+        "stepCounterTemplate": "Step {current} of {total}"
+      },
+      "steps": {
+        "accountBasics": "Account basics",
+        "companyProfile": "Company profile",
+        "bankConnection": "Bank connection",
+        "planSelection": "Plan selection"
+      },
+      "buttons": {
+        "back": "Back",
+        "continue": "Continue",
+        "next": "Next"
+      },
+      "step1": {
+        "title": "Account basics",
+        "description": "Create your credentials to start setting up your compliance workspace.",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "name@company.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "••••••••",
+        "confirmPasswordLabel": "Confirm password",
+        "confirmPasswordPlaceholder": "••••••••"
+      },
+      "step2": {
+        "title": "Company profile",
+        "description": "Enter your business details to verify Shariah compliance.",
+        "legalNameLabel": "Legal business name",
+        "legalNamePlaceholder": "e.g., Al Noor Holdings LLC",
+        "registrationNumberLabel": "Registration number",
+        "registrationNumberPlaceholder": "Commercial register or employer ID",
+        "incorporationCountryLabel": "Country of incorporation",
+        "incorporationCountryPlaceholder": "Select a country",
+        "countries": [
+          {
+            "value": "ae",
+            "label": "United Arab Emirates"
+          },
+          {
+            "value": "sa",
+            "label": "Saudi Arabia"
+          },
+          {
+            "value": "uk",
+            "label": "United Kingdom"
+          },
+          {
+            "value": "us",
+            "label": "United States"
+          }
+        ],
+        "industryLabel": "Primary industry",
+        "industries": [
+          {
+            "value": "retail",
+            "label": "Retail"
+          },
+          {
+            "value": "tech",
+            "label": "Technology"
+          },
+          {
+            "value": "services",
+            "label": "Services"
+          }
+        ]
+      },
+      "step3": {
+        "title": "Connect your institution",
+        "description": "Securely connect your primary operating account to enable automated Shariah compliance auditing and portfolio tracking.",
+        "searchPlaceholder": "Search for your bank or institution…",
+        "popularInstitutionsLabel": "Popular institutions",
+        "institutions": [
+          "Chase",
+          "Bank of America",
+          "Wells Fargo",
+          "Citi",
+          "US Bank"
+        ],
+        "viewAll": "View all",
+        "sandboxCta": "Connect via Sandbox API",
+        "plaidNote": "Secured by Plaid. We never store your login credentials."
+      },
+      "step4": {
+        "title": "Choose your plan",
+        "description": "Pick the Shariah compliance level and AI auditing tools that match your business size. Upgrade anytime as you grow.",
+        "billingMonthly": "Monthly",
+        "billingYearly": "Yearly",
+        "yearlyDiscount": "-20%",
+        "plans": {
+          "startup": {
+            "title": "Startups",
+            "description": "Basic compliance tracking for early-stage projects.",
+            "price": "$29",
+            "period": "/month",
+            "features": [
+              {
+                "text": "Basic portfolio scan",
+                "included": true
+              },
+              {
+                "text": "Monthly compliance reports",
+                "included": true
+              },
+              {
+                "text": "Up to 100 transactions/month",
+                "included": true
+              },
+              {
+                "text": "AI auditor chat access",
+                "included": false
+              }
+            ],
+            "cta": "Get started"
+          },
+          "growth": {
+            "title": "Growth",
+            "description": "Advanced AI tools and real-time monitoring for growing SMEs.",
+            "price": "$99",
+            "period": "/month",
+            "popularLabel": "Most popular",
+            "features": [
+              {
+                "text": "Everything in Startups, plus:",
+                "included": true
+              },
+              {
+                "text": "Real-time transaction auditing",
+                "included": true
+              },
+              {
+                "text": "Unlimited transactions",
+                "included": true
+              },
+              {
+                "text": "Full AI auditor chat access",
+                "included": true,
+                "accent": true
+              },
+              {
+                "text": "Purification calculation engine",
+                "included": true
+              }
+            ],
+            "cta": "Choose Growth"
+          },
+          "enterprise": {
+            "title": "Enterprise",
+            "description": "Custom solutions for organizations requiring dedicated oversight.",
+            "price": "Custom",
+            "period": "",
+            "features": [
+              {
+                "text": "Dedicated Shariah advisor",
+                "included": true
+              },
+              {
+                "text": "Custom API integration",
+                "included": true
+              },
+              {
+                "text": "On‑prem deployment options",
+                "included": true
+              },
+              {
+                "text": "White‑label dashboard",
+                "included": true
+              }
+            ],
+            "cta": "Contact sales"
+          }
+        },
+        "backToCompanyProfile": "Back to company profile"
+      }
+    }
+  },
+  "landing": {
+    "nav": {
+      "brand": "Hallilha",
+      "brandAlt": "Hallilha logo",
+      "home": "Home",
+      "auditor": "Auditor",
+      "compliance": "Compliance",
+      "kyc": "KYC verified",
+      "switchLocaleLabel": "العربية",
+      "login": "Log in"
+    },
+    "hero": {
+      "pill": "AI-powered Islamic finance",
+      "title": "Hallilha… your financial future, on",
+      "titleAccent": "Shariah-first foundations",
+      "description": "A modern financial system for SMEs. Automate compliance, ensure purification, and grow wealth with complete ethical confidence.",
+      "primaryCta": "Start your free audit",
+      "secondaryCta": "Watch the platform demo"
+    },
+    "metrics": {
+      "title": "Shariah Health Score",
+      "subtitle": "Real-time portfolio analysis",
+      "score": "98%",
+      "status": "Halal",
+      "trend": "+2.4%",
+      "item1Title": "Recent transaction",
+      "item1Status": "Compliant",
+      "item2Title": "Smart contract review",
+      "item2Status": "Pending"
+    },
+    "features": {
+      "title": "A complete ethical system",
+      "description": "Enterprise-grade tools made simple for SMEs to maintain 100% Shariah compliance.",
+      "items": {
+        "auditor": {
+          "title": "Smart auditor",
+          "description": "An AI chat interface that reviews contracts and transactions against approved fatwas in real time."
+        },
+        "purification": {
+          "title": "Automatic purification",
+          "description": "Automatically identify and isolate non-compliant income sources to track purification."
+        },
+        "contracts": {
+          "title": "Contract templates",
+          "description": "Access a library of pre-audited, ready-to-use Musharakah, Mudarabah, and Murabahah agreements."
+        },
+        "zakat": {
+          "title": "Zakat dashboard",
+          "description": "Automatic calculations for hawl and nisab across your entire business portfolio."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Ethical, transparent pricing",
+      "period": "/month",
+      "tiers": {
+        "startup": {
+          "title": "Startups",
+          "price": "$49",
+          "features": [
+            "Basic zakat calculator",
+            "5 contract reviews/month"
+          ],
+          "cta": "Choose plan"
+        },
+        "growth": {
+          "title": "Growth",
+          "price": "$149",
+          "highlightLabel": "Most popular",
+          "features": [
+            "Unlimited smart auditing",
+            "Automatic purification tracking",
+            "Full contract library"
+          ],
+          "cta": "Start free trial"
+        },
+        "enterprise": {
+          "title": "Enterprise",
+          "price": "Custom",
+          "features": [
+            "Dedicated Shariah advisor",
+            "Custom API integration"
+          ],
+          "cta": "Contact sales"
+        }
+      }
+    },
+    "footer": "© 2024 Hallilha. Audited by the Shariah Supervisory Board."
+  }
+}

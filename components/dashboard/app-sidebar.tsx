@@ -1,8 +1,11 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { LayoutDashboardIcon, MessageSquareTextIcon, ArrowLeftRightIcon } from "lucide-react"
+import { useLocale } from "next-intl"
+import {
+  LayoutDashboardIcon,
+  MessageSquareTextIcon,
+  ArrowLeftRightIcon,
+} from "lucide-react"
 
 import {
   Sidebar,
@@ -17,6 +20,8 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -38,15 +43,14 @@ const navItems = [
 ] as const
 
 export function DashboardSidebar({
-  locale,
   className,
   side = "left",
 }: {
-  locale: string
   className?: string
   side?: React.ComponentProps<typeof Sidebar>["side"]
 }) {
   const pathname = usePathname()
+  const locale = useLocale()
 
   return (
     <Sidebar collapsible="icon" side={side} className={className}>
@@ -74,7 +78,7 @@ export function DashboardSidebar({
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const href = `/${locale}/${item.href}`
+                const href = `/${item.href}`
                 const isActive =
                   pathname === href ||
                   (item.href !== "dashboard" && pathname.startsWith(`${href}/`))
@@ -106,4 +110,3 @@ export function DashboardSidebar({
     </Sidebar>
   )
 }
-
