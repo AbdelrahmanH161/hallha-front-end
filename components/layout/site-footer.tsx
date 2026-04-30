@@ -14,8 +14,8 @@ export async function SiteFooter() {
 
   const companyLinks = [
     { href: "#about",   label: t("nav.about") },
-    { href: "#contact", label: t("nav.contact") },
     { href: "#faq",     label: t("nav.faq") },
+    { href: "#contact", label: t("nav.contact") },
   ]
 
   const socials = [

@@ -121,8 +121,8 @@ function BentoCell({
     <LiquidGlassCard
       tilt
       goldBorder={accent}
-      className={`group relative h-full overflow-hidden p-6 transition-shadow duration-300 hover:shadow-xl ${
-        large ? "min-h-[200px]" : "min-h-[180px]"
+      className={`group relative h-full overflow-hidden p-5 sm:p-6 transition-shadow duration-300 hover:shadow-xl ${
+        large ? "min-h-[170px] sm:min-h-[200px]" : "min-h-[150px] sm:min-h-[180px]"
       } ${accent ? "bg-primary/5 dark:bg-primary/10" : ""}`}
     >
       {/* Shimmer on hover */}
@@ -135,9 +135,9 @@ function BentoCell({
         </span>
       )}
 
-      <div className="relative z-10 flex h-full flex-col gap-4">
+      <div className="relative z-10 flex h-full flex-col gap-3 sm:gap-4">
         <div
-          className={`flex h-11 w-11 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 ${
+          className={`flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 ${
             accent
               ? "bg-accent/20 text-accent"
               : "bg-primary/10 text-primary dark:bg-primary/20"
@@ -146,7 +146,7 @@ function BentoCell({
           {icon}
         </div>
         <div>
-          <h3 className="mb-2 font-bold text-foreground">{title}</h3>
+          <h3 className="mb-2 text-lg font-bold leading-snug text-foreground sm:text-xl">{title}</h3>
           <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
         </div>
       </div>
