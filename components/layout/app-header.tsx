@@ -18,7 +18,7 @@ export function AppHeader() {
         <LocaleSwitch variant="ghost" />
         <ThemeToggle />
         <Separator orientation="vertical" className="h-4 mx-1" />
-        <UserMenu />
+        {/* <UserMenu /> */}
       </div>
     </header>
   )

@@ -15,8 +15,8 @@ export async function SiteHeader() {
     { href: "#about",    label: t("about") },
     { href: "#features", label: t("features") },
     { href: "#pricing",  label: t("pricing") },
-    { href: "#contact",  label: t("contact") },
     { href: "#faq",      label: t("faq") },
+    { href: "#contact",  label: t("contact") },
   ]
 
   return (
