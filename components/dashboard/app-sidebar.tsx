@@ -1,11 +1,14 @@
 "use client"
 
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import {
+  ArrowLeftRightIcon,
   LayoutDashboardIcon,
   MessageSquareTextIcon,
-  ArrowLeftRightIcon,
+  type LucideIcon,
 } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
   Sidebar,
@@ -20,27 +23,33 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
-const navItems = [
+type NavItem = {
+  href: string
+  labelKey: "chat" | "overview" | "transactions"
+  icon: LucideIcon
+  exact?: boolean
+}
+
+const navItems: readonly NavItem[] = [
   {
-    href: "dashboard",
-    label: "Dashboard",
+    href: "/dashboard",
+    labelKey: "chat",
+    icon: MessageSquareTextIcon,
+    exact: true,
+  },
+  {
+    href: "/dashboard/overview",
+    labelKey: "overview",
     icon: LayoutDashboardIcon,
   },
   {
-    href: "dashboard/chat",
-    label: "AI Auditor Chat",
-    icon: MessageSquareTextIcon,
-  },
-  {
-    href: "dashboard/transactions",
-    label: "Transactions",
+    href: "/dashboard/transactions",
+    labelKey: "transactions",
     icon: ArrowLeftRightIcon,
   },
-] as const
+]
 
 export function DashboardSidebar({
   className,
@@ -51,6 +60,8 @@ export function DashboardSidebar({
 }) {
   const pathname = usePathname()
   const locale = useLocale()
+  const tNav = useTranslations("app.nav")
+  const tSidebar = useTranslations("app.sidebar")
 
   return (
     <Sidebar collapsible="icon" side={side} className={className}>
@@ -58,10 +69,10 @@ export function DashboardSidebar({
         <div className="flex items-center justify-between gap-2 rounded-lg border bg-card/50 px-2 py-2 backdrop-blur">
           <div className="grid min-w-0 gap-0.5">
             <div className="truncate text-sm font-semibold tracking-tight text-accent">
-              Hallilha
+              {tSidebar("brand")}
             </div>
             <div className="truncate text-xs text-muted-foreground">
-              Sharia Compliance
+              {tSidebar("tagline")}
             </div>
           </div>
           <div className="rounded-md border bg-background/60 px-2 py-1 text-[10px] font-semibold text-muted-foreground">
@@ -74,28 +85,29 @@ export function DashboardSidebar({
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>{tSidebar("workspace")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const href = `/${item.href}`
-                const isActive =
-                  pathname === href ||
-                  (item.href !== "dashboard" && pathname.startsWith(`${href}/`))
+                const label = tNav(item.labelKey)
+                const isActive = item.exact
+                  ? pathname === item.href
+                  : pathname === item.href ||
+                    pathname.startsWith(`${item.href}/`)
 
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      tooltip={item.label}
+                      tooltip={label}
                       className={cn(
                         "data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
                       )}
                     >
-                      <Link href={href}>
+                      <Link href={item.href}>
                         <item.icon />
-                        <span>{item.label}</span>
+                        <span>{label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

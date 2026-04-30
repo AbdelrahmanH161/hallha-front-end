@@ -1,7 +1,8 @@
-import Image from "next/image"
+import type { Metadata } from "next"
 import { getLocale, getTranslations } from "next-intl/server"
 
-import { ThemeToggle } from "@/components/landing/theme-toggle"
+import { SiteFooter } from "@/components/layout/site-footer"
+import { SiteHeader } from "@/components/layout/site-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 type PricingTier = {
@@ -24,80 +24,48 @@ type PricingTier = {
   highlightLabel?: string
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: "landing.metadata" })
+  const altLocale = locale === "ar" ? "en" : "ar"
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: "/",
+      languages: {
+        [locale]: "/",
+        [altLocale]: "/",
+      },
+    },
+    openGraph: {
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      type: "website",
+      locale,
+      alternateLocale: altLocale,
+      images: ["/og.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      images: ["/og.png"],
+    },
+  }
+}
+
 export default async function LandingPage() {
   const locale = await getLocale()
-
   const t = await getTranslations({ locale, namespace: "landing" })
   const direction = locale === "ar" ? "rtl" : "ltr"
-  const nextLocale = locale === "ar" ? "en" : "ar"
 
   const tiersRaw = t.raw("pricing.tiers") as Record<string, PricingTier>
 
   return (
     <div dir={direction} className="min-h-svh bg-background text-foreground">
-      <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/logo.png"
-                alt={t("nav.brandAlt")}
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded"
-                priority
-              />
-              <span className="text-xl font-black tracking-tight text-accent">
-                {t("nav.brand")}
-              </span>
-            </Link>
-
-            <nav className="hidden items-center gap-6 md:flex">
-              <a
-                href="#home"
-                className="border-b-2 border-primary pb-1 text-sm font-medium text-primary"
-              >
-                {t("nav.home")}
-              </a>
-              <a
-                href="#features"
-                className="rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                {t("nav.auditor")}
-              </a>
-              <a
-                href="#pricing"
-                className="rounded px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                {t("nav.compliance")}
-              </a>
-            </nav>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Badge variant="secondary" className="hidden sm:inline-flex">
-              {t("nav.kyc")}
-            </Badge>
-
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
-              <Link href="/" locale={nextLocale}>
-                {t("nav.switchLocaleLabel")}
-              </Link>
-            </Button>
-
-            <ThemeToggle />
-
-            <Button asChild size="sm">
-              <Link href="/login">{t("nav.login")}</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="home" className="relative overflow-hidden pt-24">
         <div className="pointer-events-none absolute inset-0">
@@ -281,11 +249,7 @@ export default async function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t bg-muted/20 py-12">
-        <div className="mx-auto max-w-7xl px-6 text-center text-sm text-muted-foreground">
-          {t("footer")}
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

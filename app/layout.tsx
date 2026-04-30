@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Almarai, Montserrat } from "next/font/google"
 import { getLocale } from "next-intl/server"
 
@@ -18,6 +19,16 @@ const almarai = Almarai({
   weight: ["300", "400", "700", "800"],
   variable: "--font-arabic",
 })
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  icons: {
+    icon: "/logo.png",
+  },
+}
 
 export default async function RootLayout({
   children,

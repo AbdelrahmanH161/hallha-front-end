@@ -1,16 +1,10 @@
 import type { ReactNode } from "react"
+import { getLocale } from "next-intl/server"
 
 import { DashboardSidebar } from "@/components/dashboard/app-sidebar"
-import { LocaleSwitch } from "@/components/locale-switch"
-import { ThemeToggle } from "@/components/landing/theme-toggle"
+import { AppHeader } from "@/components/layout/app-header"
 import { DirectionProvider } from "@/components/ui/direction"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { getLocale } from "next-intl/server"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 type DashboardLayoutProps = {
   children: ReactNode
@@ -20,7 +14,6 @@ export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const locale = await getLocale()
-
   const direction = locale === "ar" ? "rtl" : "ltr"
   const sidebarSide = direction === "rtl" ? "right" : "left"
 
@@ -43,23 +36,10 @@ export default async function DashboardLayout({
               />
             </div>
 
-            <header className="relative flex h-16 shrink-0 items-center gap-2 border-b bg-background/70 px-4 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-              <div className="flex flex-1 items-center gap-2">
-                <SidebarTrigger className="-ml-1" />
-                <Separator orientation="vertical" className="h-4" />
-                <p className="text-sm font-medium text-muted-foreground">
-                  Sharia Compliance Intelligence
-                </p>
-              </div>
+            <AppHeader />
 
-              <div className="flex items-center gap-2">
-                <LocaleSwitch />
-                <ThemeToggle />
-              </div>
-            </header>
-
-            <main className="relative mx-auto w-full max-w-7xl flex-1 p-4 md:p-6">
-              <div className="rounded-2xl border bg-card/50 p-4 shadow-sm backdrop-blur md:p-6">
+            <main className="relative mx-auto flex w-full max-w-7xl flex-1 min-h-0 flex-col p-4 md:p-6">
+              <div className="flex min-h-0 flex-1 flex-col rounded-2xl border bg-card/50 p-4 shadow-sm backdrop-blur md:p-6">
                 {children}
               </div>
             </main>

@@ -17,6 +17,14 @@
     }
   },
   "auth": {
+    "shell": {
+      "tagline": "Sharia compliance, automated.",
+      "subtitle": "Join SMEs running their compliance, purification and zakat in one place.",
+      "feature1": "Real-time Shariah auditing",
+      "feature2": "Automatic purification tracking",
+      "feature3": "Zakat-ready reporting",
+      "back": "Back to home"
+    },
     "login": {
       "title": "Welcome back",
       "subtitle": "Sign in to your compliant dashboard",
@@ -214,10 +222,18 @@
     }
   },
   "landing": {
+    "metadata": {
+      "title": "Hallilha — Sharia compliance, automated for SMEs",
+      "description": "AI-powered Islamic finance platform. Automate Shariah compliance, purification tracking, and zakat reporting in one workspace.",
+      "ogTitle": "Hallilha — Sharia-first finance",
+      "ogDescription": "Real-time Sharia auditing, purification, and zakat dashboards for modern SMEs."
+    },
     "nav": {
       "brand": "Hallilha",
       "brandAlt": "Hallilha logo",
       "home": "Home",
+      "features": "Features",
+      "pricing": "Pricing",
       "auditor": "Auditor",
       "compliance": "Compliance",
       "kyc": "KYC verified",
@@ -301,5 +317,39 @@
       }
     },
     "footer": "© 2024 Hallilha. Audited by the Shariah Supervisory Board."
+  },
+  "app": {
+    "sidebar": {
+      "brand": "Hallilha",
+      "tagline": "Sharia Compliance",
+      "workspace": "Workspace"
+    },
+    "nav": {
+      "chat": "AI Auditor Chat",
+      "overview": "Overview",
+      "transactions": "Transactions"
+    },
+    "header": {
+      "title": "Sharia Compliance Intelligence"
+    },
+    "userMenu": {
+      "label": "Account",
+      "profile": "Profile",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "guest": "Guest"
+    },
+    "chat": {
+      "pageTitle": "AI Auditor Chat",
+      "pageDescription": "Ask compliance questions and review AI-generated audit explanations."
+    },
+    "overview": {
+      "pageTitle": "Compliance Overview",
+      "pageDescription": "Monitor portfolio compliance and receive instant Sharia insights.",
+      "shariaMeter": "Sharia Meter",
+      "shariaMeterDescription": "Current score: 67% compliant (placeholder).",
+      "alerts": "Alerts",
+      "alertsDescription": "No critical violations detected."
+    }
   }
 }
