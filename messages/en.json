@@ -234,13 +234,17 @@
       "brand": "Hallilha",
       "brandAlt": "Hallilha logo",
       "home": "Home",
+      "about": "About",
       "features": "Features",
       "pricing": "Pricing",
+      "contact": "Contact",
+      "faq": "FAQ",
       "auditor": "Auditor",
       "compliance": "Compliance",
       "kyc": "KYC verified",
       "switchLocaleLabel": "العربية",
-      "login": "Log in"
+      "login": "Log in",
+      "register": "Get started"
     },
     "hero": {
       "pill": "AI-powered Islamic finance",
@@ -261,49 +265,98 @@
       "item2Title": "Smart contract review",
       "item2Status": "Pending"
     },
+    "stats": {
+      "items": [
+        "500+ SMEs Onboarded",
+        "99.8% Sharia Compliance Rate",
+        "Certified by Sharia Supervisory Board",
+        "Real-time Transaction Auditing",
+        "256-bit Bank-grade Encryption",
+        "MENA Region Focused",
+        "Zakat Auto-calculated",
+        "Trusted by Ethical Investors"
+      ]
+    },
+    "about": {
+      "sectionLabel": "About us",
+      "title": "Built for the",
+      "titleAccent": "ethical entrepreneur",
+      "missionTitle": "Our Mission",
+      "missionBody": "Hallilha was founded on a simple conviction: every Muslim founder deserves access to world-class Islamic financial tools — without the prohibitive cost of traditional Sharia boards. We automate compliance so you can focus on building.",
+      "point1": "Automated Sharia auditing for SMEs and freelancers across the MENA region",
+      "point2": "Real-time purification tracking so you never unknowingly mix funds",
+      "point3": "Partnered with leading Islamic finance scholars and regional banks",
+      "stat1Value": "500+",
+      "stat1Label": "SMEs Served",
+      "stat2Value": "98%",
+      "stat2Label": "Avg. Compliance Score",
+      "stat3Value": "12+",
+      "stat3Label": "MENA Countries",
+      "stat4Value": "3M+",
+      "stat4Label": "Transactions Audited"
+    },
     "features": {
+      "sectionLabel": "Platform features",
       "title": "A complete ethical system",
       "description": "Enterprise-grade tools made simple for SMEs to maintain 100% Shariah compliance.",
       "items": {
         "auditor": {
-          "title": "Smart auditor",
-          "description": "An AI chat interface that reviews contracts and transactions against approved fatwas in real time."
+          "title": "Smart AI Auditor",
+          "description": "An AI chat interface that reviews contracts and transactions against approved fatwas in real time — available 24/7."
         },
         "purification": {
-          "title": "Automatic purification",
-          "description": "Automatically identify and isolate non-compliant income sources to track purification."
+          "title": "Automatic Purification",
+          "description": "Automatically identify and isolate non-compliant income sources to track purification with pinpoint accuracy."
         },
         "contracts": {
-          "title": "Contract templates",
+          "title": "Contract Templates",
           "description": "Access a library of pre-audited, ready-to-use Musharakah, Mudarabah, and Murabahah agreements."
         },
         "zakat": {
-          "title": "Zakat dashboard",
-          "description": "Automatic calculations for hawl and nisab across your entire business portfolio."
+          "title": "Zakat Dashboard",
+          "description": "Automatic calculations for hawl and nisab across your entire business portfolio, ready to pay."
+        },
+        "realtime": {
+          "title": "Real-time Monitoring",
+          "description": "Connect your bank accounts for live cash-flow auditing. Every transaction is scored the moment it lands."
+        },
+        "secure": {
+          "title": "Bank-grade Security",
+          "description": "256-bit encryption, SOC 2 compliant infrastructure, and your credentials are never stored on our servers."
         }
       }
     },
     "pricing": {
+      "sectionLabel": "Pricing",
       "title": "Ethical, transparent pricing",
       "period": "/month",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "savings": "Save 20%",
       "tiers": {
         "startup": {
           "title": "Startups",
           "price": "$49",
+          "yearlyPrice": "$39",
           "features": [
             "Basic zakat calculator",
-            "5 contract reviews/month"
+            "5 contract reviews/month",
+            "Manual transaction entry",
+            "Basic compliance guidelines"
           ],
           "cta": "Choose plan"
         },
         "growth": {
           "title": "Growth",
           "price": "$149",
+          "yearlyPrice": "$119",
           "highlightLabel": "Most popular",
           "features": [
             "Unlimited smart auditing",
             "Automatic purification tracking",
-            "Full contract library"
+            "Full contract library",
+            "Automated bank sync",
+            "Zakat & purification reports"
           ],
           "cta": "Start free trial"
         },
@@ -312,13 +365,74 @@
           "price": "Custom",
           "features": [
             "Dedicated Shariah advisor",
-            "Custom API integration"
+            "Custom API integration",
+            "Multi-account management",
+            "Official compliance reports",
+            "White-label dashboard"
           ],
           "cta": "Contact sales"
         }
       }
     },
-    "footer": "© 2024 Hallilha. Audited by the Shariah Supervisory Board."
+    "contact": {
+      "sectionLabel": "Contact us",
+      "title": "Let's start a",
+      "titleAccent": "conversation",
+      "subtitle": "Have a question or want to see a demo? Our team typically responds within 24 hours.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Your full name",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@company.com",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Tell us how we can help you…",
+      "submit": "Send message",
+      "success": "Message sent! We'll be in touch soon."
+    },
+    "faq": {
+      "sectionLabel": "FAQ",
+      "title": "Questions",
+      "titleAccent": "& answers",
+      "items": [
+        {
+          "q": "Is Hallilha certified by a Sharia Supervisory Board?",
+          "a": "Yes. All compliance rules, purification calculations, and contract templates on Hallilha have been reviewed and approved by our Sharia Supervisory Board, composed of certified Islamic finance scholars."
+        },
+        {
+          "q": "How does automatic purification work?",
+          "a": "When Hallilha detects a non-compliant income source (such as interest income from a conventional bank account), it automatically quarantines the flagged amount in a 'Purification Queue'. You can then easily donate it to a charity of your choice directly from the dashboard."
+        },
+        {
+          "q": "Can I connect my existing business bank account?",
+          "a": "Yes. Hallilha integrates with major banks in the MENA region via secure open-banking APIs. We use 256-bit encryption and never store your bank credentials."
+        },
+        {
+          "q": "What is the Zakat Dashboard?",
+          "a": "The Zakat Dashboard automatically tracks your business's assets over the lunar year (hawl) and calculates your exact Zakat obligation based on your current nisab threshold. It generates a ready-to-pay Zakat report at year end."
+        },
+        {
+          "q": "Is there a free trial?",
+          "a": "The Startup tier is permanently free for freelancers and solo founders. For Growth and Enterprise features, we offer a 14-day free trial with no credit card required."
+        },
+        {
+          "q": "What languages does Hallilha support?",
+          "a": "Hallilha fully supports both Arabic (RTL) and English, with more languages planned. The entire platform — including the AI auditor — works in both languages."
+        }
+      ]
+    },
+    "footerNote": "All rights reserved.",
+    "footer": {
+      "copyright": "© 2025 Hallilha. Audited by the Shariah Supervisory Board.",
+      "tagline": "Your financial future, built on Shariah-first foundations.",
+      "complianceBadge": "Shariah Supervisory Board Certified",
+      "productTitle": "Product",
+      "companyTitle": "Company",
+      "stayUpdated": "Stay Updated",
+      "newsletterDesc": "Get insights on Islamic finance and compliance delivered to your inbox.",
+      "contactUs": "Get in touch",
+      "getStarted": "Get started",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
   },
   "app": {
     "onboardingBanner": {
