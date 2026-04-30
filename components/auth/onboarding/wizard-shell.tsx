@@ -3,10 +3,11 @@
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 
-import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { Stepper, type OnboardingStep } from "@/components/auth/onboarding/stepper"
+import { IslamicPattern } from "@/components/landing/islamic-pattern"
+import { LiquidGlassCard } from "@/components/landing/liquid-glass-card"
 
 export function WizardShell({
   steps,
@@ -33,11 +34,26 @@ export function WizardShell({
         className
       )}
     >
-      <aside className="relative hidden min-h-0 min-w-0 w-[360px] shrink-0 overflow-hidden border-r bg-muted/20 p-8 md:flex md:flex-col">
-        <div className="pointer-events-none absolute inset-0 opacity-20" aria-hidden>
-          <div className="absolute -left-10 -top-10 size-[300px] rounded-full bg-primary/15 blur-3xl" />
-          <div className="absolute -bottom-10 -right-10 size-[260px] rounded-full bg-accent/15 blur-3xl" />
-        </div>
+      <aside className="relative hidden min-h-0 min-w-0 w-[360px] shrink-0 overflow-hidden border-r glass p-8 md:flex md:flex-col">
+        <IslamicPattern opacity={0.05} />
+
+        {/* Floating blobs */}
+        <div
+          className="blob pointer-events-none absolute -left-20 -top-20 h-[420px] w-[420px] animate-pulse-glow"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(6,78,59,0.22) 0%, transparent 70%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="blob pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] animate-float-slow"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)",
+          }}
+          aria-hidden
+        />
 
         <div className="relative z-10 mb-10 flex items-center gap-3">
           <Image
@@ -45,9 +61,9 @@ export function WizardShell({
             alt={t("brand")}
             width={40}
             height={40}
-            className="h-10 w-10 rounded-lg bg-card p-1"
+            className="h-10 w-10 rounded-lg glass p-1"
           />
-          <div className="text-lg font-semibold">{t("brand")}</div>
+          <div className="text-lg font-semibold gradient-text-gold">{t("brand")}</div>
         </div>
 
         <div className="relative z-10 flex-1">
@@ -58,16 +74,30 @@ export function WizardShell({
         </div>
 
         <div className="relative z-10 mt-8">
-          <Badge variant="secondary">{t("secureBadge")}</Badge>
+          <LiquidGlassCard className="inline-flex">
+            <Badge variant="secondary">{t("secureBadge")}</Badge>
+          </LiquidGlassCard>
         </div>
       </aside>
 
       <section className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.08] dark:opacity-[0.05]">
-          <Image src="/auth/login-pattern.png" alt="" fill className="object-cover" priority />
-        </div>
-        <div className="pointer-events-none absolute -left-24 -top-24 size-[420px] rounded-full bg-primary/15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -right-24 size-[420px] rounded-full bg-accent/15 blur-3xl" />
+        {/* Floating blobs */}
+        <div
+          className="blob pointer-events-none absolute -top-24 -left-24 h-[500px] w-[500px] animate-pulse-glow"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(6,78,59,0.22) 0%, transparent 70%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="blob pointer-events-none absolute -bottom-16 -right-16 h-[420px] w-[420px] animate-float-slow"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)",
+          }}
+          aria-hidden
+        />
 
         <div className="sticky top-0 z-20 flex min-w-0 shrink-0 items-center justify-between gap-3 border-b bg-background/70 px-6 py-4 backdrop-blur md:hidden">
           <div className="flex min-w-0 items-center gap-2">
@@ -85,9 +115,9 @@ export function WizardShell({
 
         <div className="relative min-h-0 min-w-0 flex-1 overflow-hidden">
           <div className="relative mx-auto flex min-h-0 w-full min-w-0 max-w-2xl flex-1 flex-col justify-center px-6 py-10">
-            <Card className="max-h-full min-h-0 overflow-x-hidden overflow-y-auto border bg-card/60 p-6 shadow-2xl backdrop-blur-xl md:p-8">
+            <LiquidGlassCard goldBorder className="max-h-full min-h-0 overflow-x-hidden overflow-y-auto p-6 shadow-2xl md:p-8">
               {children}
-            </Card>
+            </LiquidGlassCard>
           </div>
         </div>
       </section>

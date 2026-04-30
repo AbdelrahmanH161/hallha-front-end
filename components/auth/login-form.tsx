@@ -12,7 +12,6 @@ import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  Card,
   CardContent,
   CardFooter,
   CardHeader,
@@ -33,6 +32,8 @@ import {
   InputGroupText,
 } from "@/components/ui/input-group"
 import Link from "next/link"
+import { IslamicPattern } from "@/components/landing/islamic-pattern"
+import { LiquidGlassCard } from "@/components/landing/liquid-glass-card"
 import { signIn } from "@/lib/auth/client"
 import { ApiError } from "@/lib/api/client"
 import { loginSchema, type LoginInput } from "@/lib/schemas/auth"
@@ -94,23 +95,53 @@ export function LoginForm() {
 
   return (
     <main className="relative flex h-svh max-h-svh flex-col overflow-hidden bg-background text-foreground">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.08] dark:opacity-[0.05]">
-        <Image
-          src="/auth/login-pattern.png"
-          alt=""
-          fill
-          priority
-          className="object-cover"
-        />
+      <IslamicPattern opacity={0.05} />
+
+      {/* Floating blobs */}
+      <div
+        className="blob pointer-events-none absolute -top-24 -left-24 h-[500px] w-[500px] animate-pulse-glow"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(6,78,59,0.22) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="blob pointer-events-none absolute -bottom-16 -right-16 h-[420px] w-[420px] animate-float-slow"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* Subtle Islamic ring */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07] dark:opacity-[0.05]">
+        <div className="animate-spin-slow">
+          <svg width="420" height="420" viewBox="0 0 420 420" aria-hidden>
+            <g fill="none" stroke="currentColor" className="text-accent">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <line
+                  key={i}
+                  x1="210"
+                  y1="30"
+                  x2="210"
+                  y2="390"
+                  strokeWidth="0.75"
+                  transform={`rotate(${i * 15} 210 210)`}
+                />
+              ))}
+              <circle cx="210" cy="210" r="178" strokeWidth="0.75" />
+              <circle cx="210" cy="210" r="140" strokeWidth="0.75" />
+              <circle cx="210" cy="210" r="100" strokeWidth="0.75" />
+            </g>
+          </svg>
+        </div>
       </div>
-      <div className="pointer-events-none absolute -top-24 -left-24 size-[420px] rounded-full bg-primary/15 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 -bottom-24 size-[420px] rounded-full bg-accent/15 blur-3xl" />
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-4 py-10">
-        <div className="w-full max-w-[420px]">
-          <Card className="border bg-card/60 shadow-2xl backdrop-blur-xl">
+        <div className="w-full max-w-[420px] animate-float">
+          <LiquidGlassCard tilt goldBorder className="p-0 pt-4">
             <CardHeader className="items-center text-center">
-              <div className="mb-2 grid size-16 place-items-center">
+              <div className="mb-2 grid size-16 place-items-center mx-auto">
                 <Image
                   src="/logo.png"
                   alt="Hallilha"
@@ -121,14 +152,16 @@ export function LoginForm() {
                 />
               </div>
 
-              <CardTitle className="text-xl">{t("title")}</CardTitle>
+              <CardTitle className="text-xl">
+                <span className="gradient-text-gold">{t("title")}</span>
+              </CardTitle>
               <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="py-4">
               <Form {...form}>
                 <form
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-4 "
                   onSubmit={form.handleSubmit(onSubmit)}
                   noValidate
                 >
@@ -139,7 +172,7 @@ export function LoginForm() {
                       <FormItem>
                         <FormLabel>{t("emailLabel")}</FormLabel>
                         <FormControl>
-                          <InputGroup>
+                          <InputGroup className="rtl:pl-2">
                             <InputGroupAddon align="inline-end">
                               <InputGroupText>
                                 <Mail className="size-4" aria-hidden />
@@ -179,7 +212,7 @@ export function LoginForm() {
                           </Link>
                         </div>
                         <FormControl>
-                          <InputGroup>
+                          <InputGroup className="rtl:pl-2">
                             <InputGroupAddon align="inline-end">
                               <InputGroupText>
                                 <Lock className="size-4" aria-hidden />
@@ -236,7 +269,7 @@ export function LoginForm() {
               <Badge variant="secondary">{t("badges.shariaCertified")}</Badge>
               <Badge variant="secondary">{t("badges.secureEncryption")}</Badge>
             </CardFooter>
-          </Card>
+          </LiquidGlassCard>
         </div>
       </div>
     </main>

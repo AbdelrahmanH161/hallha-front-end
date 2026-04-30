@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from "lucide-react"
 import { getLocale, getTranslations } from "next-intl/server"
 
 import { LocaleSwitch } from "@/components/locale-switch"
+import { IslamicPattern } from "@/components/landing/islamic-pattern"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { DirectionProvider } from "@/components/ui/direction"
@@ -19,7 +20,8 @@ export default async function AuthLayout({
 
   return (
     <DirectionProvider dir={direction} direction={direction}>
-      <div dir={direction} className="relative min-h-svh">
+      <div dir={direction} className="relative min-h-svh overflow-hidden mesh-bg">
+        <IslamicPattern opacity={0.045} />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between gap-2 px-4 py-3 sm:px-6">
           <div className="pointer-events-auto">
             <Button asChild variant="ghost" size="sm">
