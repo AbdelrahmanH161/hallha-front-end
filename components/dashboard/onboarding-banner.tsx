@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { ArrowRight, Building2, CreditCard, Landmark, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import { useOrganizationQuery } from "@/lib/api/queries/organization"
+import { useSettingsDialog } from "@/lib/stores/settings-dialog"
 import { cn } from "@/lib/utils"
 
 const DISMISS_KEY = "hallha-onboarding-banner-dismissed-at"
@@ -15,13 +15,13 @@ const DISMISS_TTL_MS = 24 * 60 * 60 * 1000
 type StepStatus = {
   key: "company" | "bank" | "plan"
   done: boolean
-  href: string
   Icon: typeof Building2
   labelKey: "company" | "bank" | "plan"
 }
 
 export function OnboardingBanner() {
   const t = useTranslations("app.onboardingBanner")
+  const openSettings = useSettingsDialog((s) => s.openAt)
   const [dismissed, setDismissed] = React.useState(() => {
     const raw =
       typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
@@ -41,21 +41,18 @@ export function OnboardingBanner() {
     {
       key: "company",
       done: Boolean(org.legalName && org.industry),
-      href: "/register?step=2",
       Icon: Building2,
       labelKey: "company",
     },
     {
       key: "bank",
       done: Boolean(org.bankInstitutionId),
-      href: "/register?step=3",
       Icon: Landmark,
       labelKey: "bank",
     },
     {
       key: "plan",
       done: Boolean(org.plan && org.plan !== "free"),
-      href: "/register?step=4",
       Icon: CreditCard,
       labelKey: "plan",
     },
@@ -63,10 +60,8 @@ export function OnboardingBanner() {
   const remaining = steps.filter((s) => !s.done).length
   if (remaining === 0) return null
 
-  const nextStep = steps.find((s) => !s.done)!
-
   return (
-    <div className="relative mb-4 overflow-hidden rounded-xl border border-primary/30 bg-primary/5 p-4 shadow-sm">
+    <div className="relative mb-3 overflow-hidden rounded-xl border border-primary/30 bg-primary/5 p-4 shadow-sm">
       <button
         type="button"
         onClick={onDismiss}
@@ -101,11 +96,13 @@ export function OnboardingBanner() {
           </ul>
         </div>
 
-        <Button asChild className="self-start sm:self-center">
-          <Link href={nextStep.href}>
-            {t("cta")}
-            <ArrowRight className="ms-1 size-4" aria-hidden />
-          </Link>
+        <Button
+          type="button"
+          onClick={() => openSettings("organization")}
+          className="self-start sm:self-center"
+        >
+          {t("cta")}
+          <ArrowRight className="ms-1 size-4 rtl:rotate-180" aria-hidden />
         </Button>
       </div>
     </div>

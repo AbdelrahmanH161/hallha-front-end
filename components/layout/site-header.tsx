@@ -11,37 +11,37 @@ export async function SiteHeader() {
   const t = await getTranslations("landing.nav")
 
   const navLinks = [
-    { href: "#home",     label: t("home") },
-    { href: "#about",    label: t("about") },
+    { href: "#home", label: t("home") },
+    { href: "#about", label: t("about") },
     { href: "#features", label: t("features") },
-    { href: "#pricing",  label: t("pricing") },
-    { href: "#contact",  label: t("contact") },
-    { href: "#faq",      label: t("faq") },
+    { href: "#pricing", label: t("pricing") },
+    { href: "#contact", label: t("contact") },
+    { href: "#faq", label: t("faq") },
   ]
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 glass-nav">
+    <header className="glass-nav fixed inset-x-0 top-0 z-50">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         {/* Brand */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+          <Link href="/" className="group flex items-center gap-2.5">
+            <div className="flex h-14 w-14 items-center justify-center">
               <Image
                 src="/logo.png"
                 alt={t("brandAlt")}
                 width={28}
                 height={28}
-                className="h-7 w-7 rounded-lg"
+                className="h-14 w-14 rounded-lg"
                 priority
               />
             </div>
-            <span className="text-xl font-black tracking-tight gradient-text-gold">
-              {t("brand")}
-            </span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+          <nav
+            className="hidden items-center gap-1 md:flex"
+            aria-label="Main navigation"
+          >
             {navLinks.map(({ href, label }) => (
               <a
                 key={href}
@@ -71,7 +71,7 @@ export async function SiteHeader() {
           <Button
             asChild
             size="sm"
-            className="hidden sm:inline-flex bg-primary shadow-sm shadow-primary/25 hover:bg-primary/90"
+            className="hidden bg-primary shadow-sm shadow-primary/25 hover:bg-primary/90 sm:inline-flex"
           >
             <Link href="/register">{t("register")}</Link>
           </Button>
