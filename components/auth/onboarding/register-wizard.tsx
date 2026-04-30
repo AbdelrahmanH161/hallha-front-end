@@ -41,6 +41,7 @@ import { ApiError } from "@/lib/api/client"
 import {
   useChoosePlanMutation,
   useLinkBankMutation,
+  useSkipOnboardingMutation,
   useUpdateCompanyProfileMutation,
 } from "@/lib/api/queries/organization"
 import { signUp } from "@/lib/auth/client"
@@ -67,6 +68,8 @@ export type RegisterWizardCopy = {
     back: string
     continue: string
     next: string
+    skip: string
+    finishLater: string
   }
   step1: {
     title: string
@@ -108,7 +111,7 @@ export type RegisterWizardCopy = {
     billingYearly: string
     yearlyDiscount: string
     plans: {
-      startup: {
+      starter: {
         title: string
         description: string
         price: string
@@ -116,7 +119,7 @@ export type RegisterWizardCopy = {
         features: readonly { text: string; included: boolean }[]
         cta: string
       }
-      growth: {
+      business: {
         title: string
         description: string
         price: string
@@ -196,6 +199,21 @@ export function RegisterWizard() {
     router.push("/dashboard")
   }, [router])
 
+  const skipMutation = useSkipOnboardingMutation()
+  const reset = useRegisterDraft((s) => s.reset)
+  const skipFromStep = React.useCallback(
+    async (fromStep: number) => {
+      try {
+        await skipMutation.mutateAsync({ fromStep })
+        reset()
+        finish()
+      } catch (err) {
+        toast.error(common.errors.unknown, { description: describeError(err, common) })
+      }
+    },
+    [skipMutation, reset, finish, common]
+  )
+
   return (
     <WizardShell steps={steps} activeIndex={activeIndex}>
       {activeStep === 1 ? (
@@ -212,8 +230,11 @@ export function RegisterWizard() {
           common={common}
           backLabel={t.buttons.back}
           nextLabel={t.buttons.continue}
+          skipLabel={t.buttons.skip}
           onBack={() => goTo(1)}
           onSuccess={() => goTo(3)}
+          onSkip={() => skipFromStep(2)}
+          isSkipping={skipMutation.isPending}
         />
       ) : null}
       {activeStep === 3 ? (
@@ -222,16 +243,22 @@ export function RegisterWizard() {
           common={common}
           backLabel={t.buttons.back}
           nextLabel={t.buttons.next}
+          skipLabel={t.buttons.skip}
           onBack={() => goTo(2)}
           onSuccess={() => goTo(4)}
+          onSkip={() => skipFromStep(3)}
+          isSkipping={skipMutation.isPending}
         />
       ) : null}
       {activeStep === 4 ? (
         <PlanSelectionStep
           t={t.step4}
           common={common}
+          skipLabel={t.buttons.finishLater}
           onBackToCompany={() => goTo(2)}
           onComplete={finish}
+          onSkip={() => skipFromStep(4)}
+          isSkipping={skipMutation.isPending}
         />
       ) : null}
     </WizardShell>
@@ -250,23 +277,42 @@ function Header({ title, description }: { title: string; description: string }) 
 function FooterNav({
   backLabel,
   nextLabel,
+  skipLabel,
   onBack,
+  onSkip,
   isSubmitting,
+  isSkipping,
 }: {
   backLabel: string
   nextLabel: string
+  skipLabel?: string
   onBack: () => void
+  onSkip?: () => void
   isSubmitting: boolean
+  isSkipping?: boolean
 }) {
   return (
     <div className="mt-8 flex items-center justify-between gap-3 border-t pt-6">
-      <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting}>
+      <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting || isSkipping}>
         {backLabel}
       </Button>
-      <Button type="submit" className="font-semibold" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-        {nextLabel}
-      </Button>
+      <div className="flex items-center gap-2">
+        {onSkip && skipLabel ? (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onSkip}
+            disabled={isSubmitting || isSkipping}
+          >
+            {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+            {skipLabel}
+          </Button>
+        ) : null}
+        <Button type="submit" className="font-semibold" disabled={isSubmitting || isSkipping}>
+          {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+          {nextLabel}
+        </Button>
+      </div>
     </div>
   )
 }
@@ -417,15 +463,21 @@ function CompanyProfileStep({
   common,
   backLabel,
   nextLabel,
+  skipLabel,
   onBack,
   onSuccess,
+  onSkip,
+  isSkipping,
 }: {
   t: RegisterWizardCopy["step2"]
   common: CommonCopy
   backLabel: string
   nextLabel: string
+  skipLabel: string
   onBack: () => void
   onSuccess: () => void
+  onSkip: () => void
+  isSkipping: boolean
 }) {
   const draft = useRegisterDraft((s) => s.company)
   const setCompany = useRegisterDraft((s) => s.setCompany)
@@ -584,8 +636,11 @@ function CompanyProfileStep({
           <FooterNav
             backLabel={backLabel}
             nextLabel={nextLabel}
+            skipLabel={skipLabel}
             onBack={onBack}
+            onSkip={onSkip}
             isSubmitting={isSubmitting}
+            isSkipping={isSkipping}
           />
         </form>
       </Form>
@@ -598,15 +653,21 @@ function BankConnectionStep({
   common,
   backLabel,
   nextLabel,
+  skipLabel,
   onBack,
   onSuccess,
+  onSkip,
+  isSkipping,
 }: {
   t: RegisterWizardCopy["step3"]
   common: CommonCopy
   backLabel: string
   nextLabel: string
+  skipLabel: string
   onBack: () => void
   onSuccess: () => void
+  onSkip: () => void
+  isSkipping: boolean
 }) {
   const draft = useRegisterDraft((s) => s.bank)
   const setBank = useRegisterDraft((s) => s.setBank)
@@ -711,17 +772,28 @@ function BankConnectionStep({
       </div>
 
       <div className="mt-8 flex items-center justify-between gap-3 border-t pt-6">
-        <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting}>
+        <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting || isSkipping}>
           {backLabel}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onSuccess}
-          disabled={isSubmitting}
-        >
-          {nextLabel}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onSkip}
+            disabled={isSubmitting || isSkipping}
+          >
+            {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+            {skipLabel}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onSuccess}
+            disabled={isSubmitting || isSkipping}
+          >
+            {nextLabel}
+          </Button>
+        </div>
       </div>
     </div>
   )
@@ -730,13 +802,19 @@ function BankConnectionStep({
 function PlanSelectionStep({
   t,
   common,
+  skipLabel,
   onBackToCompany,
   onComplete,
+  onSkip,
+  isSkipping,
 }: {
   t: RegisterWizardCopy["step4"]
   common: CommonCopy
+  skipLabel: string
   onBackToCompany: () => void
   onComplete: () => void
+  onSkip: () => void
+  isSkipping: boolean
 }) {
   const draft = useRegisterDraft((s) => s.planSelection)
   const setPlanSelection = useRegisterDraft((s) => s.setPlanSelection)
@@ -790,14 +868,18 @@ function PlanSelectionStep({
       </div>
 
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <PlanCard plan={t.plans.startup} onChoose={() => submit("startup")} disabled={isSubmitting} />
-        <PlanCard plan={t.plans.growth} highlighted onChoose={() => submit("growth")} disabled={isSubmitting} />
-        <PlanCard plan={t.plans.enterprise} onChoose={() => submit("enterprise")} disabled={isSubmitting} />
+        <PlanCard plan={t.plans.starter} onChoose={() => submit("starter")} disabled={isSubmitting || isSkipping} />
+        <PlanCard plan={t.plans.business} highlighted onChoose={() => submit("business")} disabled={isSubmitting || isSkipping} />
+        <PlanCard plan={t.plans.enterprise} onChoose={() => submit("enterprise")} disabled={isSubmitting || isSkipping} />
       </div>
 
-      <div className="mt-10 text-center">
-        <Button type="button" variant="ghost" onClick={onBackToCompany} disabled={isSubmitting}>
+      <div className="mt-10 flex items-center justify-center gap-2">
+        <Button type="button" variant="ghost" onClick={onBackToCompany} disabled={isSubmitting || isSkipping}>
           {t.backToCompanyProfile}
+        </Button>
+        <Button type="button" variant="ghost" onClick={onSkip} disabled={isSubmitting || isSkipping}>
+          {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+          {skipLabel}
         </Button>
       </div>
     </div>

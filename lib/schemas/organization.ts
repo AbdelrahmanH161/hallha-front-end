@@ -17,7 +17,7 @@ export const bankLinkSchema = z.object({
 export type BankLinkInput = z.infer<typeof bankLinkSchema>
 
 export const planSchema = z.object({
-  plan: z.enum(["startup", "growth", "enterprise"]),
+  plan: z.enum(["starter", "business", "enterprise"]),
   billing: z.enum(["monthly", "yearly"]),
 })
 

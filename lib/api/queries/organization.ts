@@ -85,3 +85,20 @@ export function useChoosePlanMutation() {
     },
   })
 }
+
+export function useSkipOnboardingMutation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (data: { fromStep?: number }) =>
+      apiFetch<{ ok: true; organization: Organization }>(
+        "/organizations/me/onboarding/skip",
+        {
+          method: "POST",
+          body: data,
+        }
+      ),
+    onSuccess: (data) => {
+      qc.setQueryData(organizationKeys.me, data.organization)
+    },
+  })
+}

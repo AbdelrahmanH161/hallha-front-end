@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import { getLocale } from "next-intl/server"
 
 import { DashboardSidebar } from "@/components/dashboard/app-sidebar"
+import { OnboardingBanner } from "@/components/dashboard/onboarding-banner"
 import { AppHeader } from "@/components/layout/app-header"
 import { DirectionProvider } from "@/components/ui/direction"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -39,6 +40,7 @@ export default async function DashboardLayout({
             <AppHeader />
 
             <main className="relative mx-auto flex w-full max-w-7xl flex-1 min-h-0 flex-col p-4 md:p-6">
+              <OnboardingBanner />
               <div className="flex min-h-0 flex-1 flex-col rounded-2xl border bg-card/50 p-4 shadow-sm backdrop-blur md:p-6">
                 {children}
               </div>

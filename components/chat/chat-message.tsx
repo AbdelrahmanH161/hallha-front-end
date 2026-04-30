@@ -1,16 +1,21 @@
 "use client"
 
+import * as React from "react"
 import { Bot, User } from "lucide-react"
 
+import { ChatMessageContent } from "@/components/chat/chat-message-content"
 import { cn } from "@/lib/utils"
 
 export type ChatMessageProps = {
   role: "user" | "assistant" | "system" | "tool"
   content: string
   pending?: boolean
+  id?: string
 }
 
-export function ChatMessage({ role, content, pending }: ChatMessageProps) {
+export function ChatMessage({ role, content, pending, id }: ChatMessageProps) {
+  const reactId = React.useId()
+  const anchorPrefix = `cite-${(id ?? reactId).replace(/[^a-zA-Z0-9_-]/g, "")}`
   const isUser = role === "user"
   return (
     <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
@@ -21,14 +26,23 @@ export function ChatMessage({ role, content, pending }: ChatMessageProps) {
       ) : null}
       <div
         className={cn(
-          "max-w-[85%] rounded-2xl border px-4 py-2.5 text-sm leading-relaxed shadow-sm whitespace-pre-wrap break-words",
+          "max-w-[85%] rounded-2xl border px-4 py-2.5 text-sm leading-relaxed shadow-sm break-words",
           isUser
-            ? "bg-primary text-primary-foreground border-transparent"
+            ? "bg-primary text-primary-foreground border-transparent whitespace-pre-wrap"
             : "bg-card text-foreground"
         )}
       >
-        {content}
-        {pending ? <span className="ml-1 inline-block animate-pulse">▍</span> : null}
+        {isUser ? (
+          <>
+            {content}
+            {pending ? <span className="ml-1 inline-block animate-pulse">▍</span> : null}
+          </>
+        ) : (
+          <>
+            <ChatMessageContent content={content} anchorPrefix={anchorPrefix} />
+            {pending ? <span className="ml-1 inline-block animate-pulse">▍</span> : null}
+          </>
+        )}
       </div>
       {isUser ? (
         <div className="grid size-8 shrink-0 place-items-center rounded-full border bg-card text-muted-foreground">

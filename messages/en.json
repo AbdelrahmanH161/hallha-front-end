@@ -57,7 +57,9 @@
       "buttons": {
         "back": "Back",
         "continue": "Continue",
-        "next": "Next"
+        "next": "Next",
+        "skip": "Skip for now",
+        "finishLater": "Complete this later"
       },
       "step1": {
         "title": "Account basics",
@@ -135,8 +137,8 @@
         "billingYearly": "Yearly",
         "yearlyDiscount": "-20%",
         "plans": {
-          "startup": {
-            "title": "Startups",
+          "starter": {
+            "title": "Starter",
             "description": "Basic compliance tracking for early-stage projects.",
             "price": "$29",
             "period": "/month",
@@ -160,15 +162,15 @@
             ],
             "cta": "Get started"
           },
-          "growth": {
-            "title": "Growth",
+          "business": {
+            "title": "Business",
             "description": "Advanced AI tools and real-time monitoring for growing SMEs.",
             "price": "$99",
             "period": "/month",
             "popularLabel": "Most popular",
             "features": [
               {
-                "text": "Everything in Startups, plus:",
+                "text": "Everything in Starter, plus:",
                 "included": true
               },
               {
@@ -189,7 +191,7 @@
                 "included": true
               }
             ],
-            "cta": "Choose Growth"
+            "cta": "Choose Business"
           },
           "enterprise": {
             "title": "Enterprise",
@@ -319,6 +321,17 @@
     "footer": "© 2024 Hallilha. Audited by the Shariah Supervisory Board."
   },
   "app": {
+    "onboardingBanner": {
+      "title": "Finish setting up your workspace ({count} step left)",
+      "subtitle": "Complete the remaining setup steps to unlock the full experience.",
+      "cta": "Continue setup",
+      "dismiss": "Dismiss",
+      "steps": {
+        "company": "Company profile",
+        "bank": "Bank connection",
+        "plan": "Plan"
+      }
+    },
     "sidebar": {
       "brand": "Hallilha",
       "tagline": "Sharia Compliance",

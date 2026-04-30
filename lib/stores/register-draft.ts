@@ -13,7 +13,7 @@ export type BankDraft = {
 }
 
 export type PlanDraft = {
-  plan: "startup" | "growth" | "enterprise" | null
+  plan: "starter" | "business" | "enterprise" | null
   billing: "monthly" | "yearly"
 }
 
