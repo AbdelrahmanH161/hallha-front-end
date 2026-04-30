@@ -2,7 +2,10 @@
 
 import * as React from "react"
 import ReactMarkdown, { type Components } from "react-markdown"
+import { useTranslations } from "next-intl"
 import remarkGfm from "remark-gfm"
+
+import type { RetrievedSource } from "@/lib/types/retrieved-source"
 
 const SOURCES_HEADING_RE =
   /(?:^|\n)(?:\s*(?:#+\s*)?(?:\*\*)?\s*Sources\s*(?:\*\*)?:?\s*)\n/i
@@ -74,11 +77,20 @@ function leadingCitationNumber(node: React.ReactNode): string | null {
 export function ChatMessageContent({
   content,
   anchorPrefix,
+  structuredSources,
 }: {
   content: string
   anchorPrefix: string
+  structuredSources?: RetrievedSource[]
 }) {
-  const parts = React.useMemo(() => splitContent(content), [content])
+  const t = useTranslations("dashboard.chat")
+  const parts = React.useMemo(() => {
+    const raw = splitContent(content)
+    if (structuredSources?.length) {
+      return raw.filter((p) => p.kind === "body")
+    }
+    return raw
+  }, [content, structuredSources])
 
   const bodyComponents: Components = React.useMemo(
     () => ({
@@ -125,10 +137,10 @@ export function ChatMessageContent({
         ) : (
           <div
             key={`sources-${i}`}
-            className="mt-3 border-t pt-2 text-xs text-muted-foreground"
+            className="mt-3 border-t border-border pt-2 text-xs text-muted-foreground"
           >
             <div className="mb-1 font-semibold uppercase tracking-wide text-foreground/70">
-              Sources
+              {t("sourcesHeading")}
             </div>
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -139,6 +151,42 @@ export function ChatMessageContent({
           </div>
         )
       )}
+      {structuredSources && structuredSources.length > 0 ? (
+        <div className="mt-3 border-t border-border pt-2 text-xs text-muted-foreground">
+          <div className="mb-1 font-semibold uppercase tracking-wide text-foreground/70">
+            {t("sourcesHeading")}
+          </div>
+          <ol className="my-1.5 ms-5 list-decimal space-y-1 [&_a]:text-primary">
+            {structuredSources.map((s) => (
+              <li
+                key={s.id}
+                id={`${anchorPrefix}-${s.id}`}
+                className="scroll-mt-24 marker:text-muted-foreground"
+              >
+                {s.url ? (
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary no-underline hover:underline"
+                  >
+                    {s.source}
+                  </a>
+                ) : (
+                  <span className="font-medium text-foreground">{s.source}</span>
+                )}
+                <span className="text-muted-foreground">
+                  {" "}
+                  — {t("sourcePage", { page: s.page })}
+                </span>
+                {s.url ? (
+                  <span className="sr-only"> ({t("openDocument")})</span>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
     </div>
   )
 }

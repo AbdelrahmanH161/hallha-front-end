@@ -14,6 +14,8 @@ export function ChatWindow() {
   const streamingText = useChatStore((s) => s.streamingText)
   const isStreaming = useChatStore((s) => s.isStreaming)
 
+  const streamingSources = useChatStore((s) => s.streamingSources)
+
   const { data, isFetching, isError, error } = useChatQuery(activeThreadId)
 
   const scrollerRef = React.useRef<HTMLDivElement>(null)
@@ -22,7 +24,7 @@ export function ChatWindow() {
     const el = scrollerRef.current
     if (!el) return
     el.scrollTop = el.scrollHeight
-  }, [data?.messages.length, streamingText, activeThreadId])
+  }, [data?.messages.length, streamingText, streamingSources.length, activeThreadId])
 
   if (!activeThreadId) {
     return (
@@ -63,11 +65,30 @@ export function ChatWindow() {
           </div>
         ) : (
           <div className="space-y-4">
-            {messages.map((m, i) => (
-              <ChatMessage key={`${m.role}-${i}`} role={m.role} content={m.content} />
-            ))}
+            {messages.map((m, i) => {
+              const isLastAssistant =
+                m.role === "assistant" && i === messages.length - 1
+              const threadSources = data?.sources ?? []
+              const sources =
+                isLastAssistant && threadSources.length > 0 ? threadSources : undefined
+              return (
+                <ChatMessage
+                  key={`${m.role}-${i}`}
+                  role={m.role}
+                  content={m.content}
+                  structuredSources={sources}
+                />
+              )
+            })}
             {showStreamingBubble ? (
-              <ChatMessage role="assistant" content={streamingText || "…"} pending />
+              <ChatMessage
+                role="assistant"
+                content={streamingText || "…"}
+                structuredSources={
+                  streamingSources.length > 0 ? streamingSources : undefined
+                }
+                pending
+              />
             ) : null}
           </div>
         )}

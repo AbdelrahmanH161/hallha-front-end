@@ -24,9 +24,7 @@ export function OnboardingBanner() {
   const t = useTranslations("app.onboardingBanner")
   const [dismissed, setDismissed] = React.useState(() => {
     const raw =
-      typeof window !== "undefined"
-        ? localStorage.getItem(DISMISS_KEY)
-        : null
+      typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
     const dismissedAt = raw ? Number(raw) : 0
     return Date.now() - dismissedAt < DISMISS_TTL_MS
   })

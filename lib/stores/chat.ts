@@ -1,14 +1,18 @@
 import { create } from "zustand"
 
+import type { RetrievedSource } from "@/lib/types/retrieved-source"
+
 type ChatStreamState = {
   activeThreadId: string | null
   streamingThreadId: string | null
   streamingText: string
+  streamingSources: RetrievedSource[]
   isStreaming: boolean
   abortController: AbortController | null
   setActiveThreadId: (id: string | null) => void
   startStreaming: (threadId: string, controller: AbortController) => void
   appendToken: (text: string) => void
+  setStreamingSources: (sources: RetrievedSource[]) => void
   finishStreaming: () => void
   abortStreaming: () => void
 }
@@ -17,6 +21,7 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
   activeThreadId: null,
   streamingThreadId: null,
   streamingText: "",
+  streamingSources: [],
   isStreaming: false,
   abortController: null,
   setActiveThreadId: (id) => set({ activeThreadId: id }),
@@ -24,15 +29,18 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
     set({
       streamingThreadId: threadId,
       streamingText: "",
+      streamingSources: [],
       isStreaming: true,
       abortController: controller,
     }),
   appendToken: (text) =>
     set((state) => ({ streamingText: state.streamingText + text })),
+  setStreamingSources: (sources) => set({ streamingSources: sources }),
   finishStreaming: () =>
     set({
       streamingThreadId: null,
       streamingText: "",
+      streamingSources: [],
       isStreaming: false,
       abortController: null,
     }),
@@ -42,6 +50,7 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
     set({
       streamingThreadId: null,
       streamingText: "",
+      streamingSources: [],
       isStreaming: false,
       abortController: null,
     })

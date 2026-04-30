@@ -3,6 +3,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { apiFetch } from "@/lib/api/client"
 import { streamChatAudit } from "@/lib/api/sse"
 import { useChatStore } from "@/lib/stores/chat"
+import type { RetrievedSource } from "@/lib/types/retrieved-source"
+
+export type { RetrievedSource }
 
 export type ChatThreadSummary = {
   thread_id: string
@@ -22,6 +25,7 @@ export type ChatThread = {
   createdAt: string
   lastMessageAt: string
   messages: ChatMessage[]
+  sources: RetrievedSource[]
 }
 
 export const chatKeys = {
@@ -41,8 +45,15 @@ export function useChatsQuery() {
 export function useChatQuery(threadId: string | null) {
   return useQuery({
     queryKey: threadId ? chatKeys.detail(threadId) : chatKeys.detail(""),
-    queryFn: () =>
-      apiFetch<ChatThread>(`/chats/${encodeURIComponent(threadId!)}`),
+    queryFn: async () => {
+      const thread = await apiFetch<ChatThread>(
+        `/chats/${encodeURIComponent(threadId!)}`
+      )
+      return {
+        ...thread,
+        sources: Array.isArray(thread.sources) ? thread.sources : [],
+      }
+    },
     enabled: !!threadId,
     retry: (failureCount, error) => {
       const status = (error as { status?: number }).status
@@ -76,6 +87,7 @@ export function useSendChatStream() {
   const qc = useQueryClient()
   const startStreaming = useChatStore((s) => s.startStreaming)
   const appendToken = useChatStore((s) => s.appendToken)
+  const setStreamingSources = useChatStore((s) => s.setStreamingSources)
   const finishStreaming = useChatStore((s) => s.finishStreaming)
 
   return useMutation({
@@ -92,6 +104,7 @@ export function useSendChatStream() {
             createdAt: new Date().toISOString(),
             lastMessageAt: new Date().toISOString(),
             messages: [],
+            sources: [],
           }
           const userMsg: ChatMessage = {
             role: "user",
@@ -110,6 +123,7 @@ export function useSendChatStream() {
           file,
           signal: controller.signal,
           onToken: (text) => appendToken(text),
+          onSources: (sources) => setStreamingSources(sources),
           onError: (detail) => {
             lastError = detail
           },

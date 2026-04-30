@@ -468,7 +468,10 @@
     },
     "chat": {
       "pageTitle": "AI Auditor Chat",
-      "pageDescription": "Ask compliance questions and review AI-generated audit explanations."
+      "pageDescription": "Ask compliance questions and review AI-generated audit explanations.",
+      "sourcesHeading": "Sources",
+      "sourcePage": "p. {page}",
+      "openDocument": "Open document"
     },
     "overview": {
       "pageTitle": "Compliance Overview",

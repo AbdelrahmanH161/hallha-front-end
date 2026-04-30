@@ -1,4 +1,5 @@
 import { API_URL, ApiError } from "@/lib/api/client"
+import type { RetrievedSource } from "@/lib/types/retrieved-source"
 
 export type SseEvent = { event: string; data: unknown }
 
@@ -9,6 +10,7 @@ export type StreamChatAuditOptions = {
   signal?: AbortSignal
   onMeta?: (data: { thread_id: string }) => void
   onToken?: (text: string) => void
+  onSources?: (sources: RetrievedSource[]) => void
   onDone?: (data: { thread_id: string }) => void
   onError?: (detail: string) => void
 }
@@ -40,6 +42,7 @@ export async function streamChatAudit({
   signal,
   onMeta,
   onToken,
+  onSources,
   onDone,
   onError,
 }: StreamChatAuditOptions): Promise<void> {
@@ -89,6 +92,12 @@ export async function streamChatAudit({
           case "token":
             onToken?.((evt.data as { text?: string }).text ?? "")
             break
+          case "sources": {
+            const raw = evt.data as { sources?: unknown }
+            const list = Array.isArray(raw.sources) ? raw.sources : []
+            onSources?.(list as RetrievedSource[])
+            break
+          }
           case "done":
             onDone?.(evt.data as { thread_id: string })
             break
