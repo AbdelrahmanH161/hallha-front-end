@@ -22,14 +22,15 @@ type StepStatus = {
 
 export function OnboardingBanner() {
   const t = useTranslations("app.onboardingBanner")
-  const [dismissed, setDismissed] = React.useState(true)
-  const { data: org } = useOrganizationQuery()
-
-  React.useEffect(() => {
-    const raw = typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
+  const [dismissed, setDismissed] = React.useState(() => {
+    const raw =
+      typeof window !== "undefined"
+        ? localStorage.getItem(DISMISS_KEY)
+        : null
     const dismissedAt = raw ? Number(raw) : 0
-    setDismissed(Date.now() - dismissedAt < DISMISS_TTL_MS)
-  }, [])
+    return Date.now() - dismissedAt < DISMISS_TTL_MS
+  })
+  const { data: org } = useOrganizationQuery()
 
   const onDismiss = () => {
     localStorage.setItem(DISMISS_KEY, String(Date.now()))
@@ -72,7 +73,7 @@ export function OnboardingBanner() {
         type="button"
         onClick={onDismiss}
         aria-label={t("dismiss")}
-        className="absolute end-3 top-3 rounded-md p-1 text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
+        className="absolute inset-e-3 top-3 rounded-md p-1 text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
       >
         <X className="size-4" aria-hidden />
       </button>
