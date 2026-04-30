@@ -28,7 +28,9 @@ export function OnboardingBanner() {
   React.useEffect(() => {
     const raw = typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
     const dismissedAt = raw ? Number(raw) : 0
-    setDismissed(Date.now() - dismissedAt < DISMISS_TTL_MS)
+    React.startTransition(() => {
+      setDismissed(Date.now() - dismissedAt < DISMISS_TTL_MS)
+    })
   }, [])
 
   const onDismiss = () => {

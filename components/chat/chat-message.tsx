@@ -5,15 +5,17 @@ import { Bot, User } from "lucide-react"
 
 import { ChatMessageContent } from "@/components/chat/chat-message-content"
 import { cn } from "@/lib/utils"
+import type { RetrievedSource } from "@/lib/types/retrieved-source"
 
 export type ChatMessageProps = {
   role: "user" | "assistant" | "system" | "tool"
   content: string
   pending?: boolean
   id?: string
+  structuredSources?: RetrievedSource[]
 }
 
-export function ChatMessage({ role, content, pending, id }: ChatMessageProps) {
+export function ChatMessage({ role, content, pending, id, structuredSources }: ChatMessageProps) {
   const reactId = React.useId()
   const anchorPrefix = `cite-${(id ?? reactId).replace(/[^a-zA-Z0-9_-]/g, "")}`
   const isUser = role === "user"
@@ -39,7 +41,11 @@ export function ChatMessage({ role, content, pending, id }: ChatMessageProps) {
           </>
         ) : (
           <>
-            <ChatMessageContent content={content} anchorPrefix={anchorPrefix} />
+            <ChatMessageContent
+              content={content}
+              anchorPrefix={anchorPrefix}
+              structuredSources={structuredSources}
+            />
             {pending ? <span className="ml-1 inline-block animate-pulse">▍</span> : null}
           </>
         )}
