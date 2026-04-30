@@ -10,17 +10,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { getLocale } from "next-intl/server"
 
 type DashboardLayoutProps = {
   children: ReactNode
-  params: Promise<{ locale: string }>
 }
 
 export default async function DashboardLayout({
   children,
-  params,
 }: DashboardLayoutProps) {
-  const { locale } = await params
+  const locale = await getLocale()
 
   const direction = locale === "ar" ? "rtl" : "ltr"
   const sidebarSide = direction === "rtl" ? "right" : "left"

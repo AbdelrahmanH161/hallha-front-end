@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { getTranslations } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 
 import { ThemeToggle } from "@/components/landing/theme-toggle"
 import { Badge } from "@/components/ui/badge"
@@ -16,10 +16,6 @@ import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
-type PageProps = {
-  params: Promise<{ locale: string }>
-}
-
 type PricingTier = {
   title: string
   price: string
@@ -28,8 +24,8 @@ type PricingTier = {
   highlightLabel?: string
 }
 
-export default async function LandingPage({ params }: PageProps) {
-  const { locale } = await params
+export default async function LandingPage() {
+  const locale = await getLocale()
 
   const t = await getTranslations({ locale, namespace: "landing" })
   const direction = locale === "ar" ? "rtl" : "ltr"

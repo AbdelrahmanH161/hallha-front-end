@@ -1,12 +1,8 @@
 import { RegisterWizard } from "@/components/auth/onboarding/register-wizard"
+import { getLocale } from "next-intl/server"
 
-type PageProps = {
-  params: Promise<{ locale: string }>
-}
-
-export default async function RegisterPage({ params }: PageProps) {
-  const { locale } = await params
-
+export default async function RegisterPage() {
+  const locale = await getLocale()
   const direction = locale === "ar" ? "rtl" : "ltr"
 
   return (

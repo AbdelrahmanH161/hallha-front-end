@@ -1,12 +1,8 @@
 import { LoginForm } from "@/components/auth/login-form"
+import { getLocale } from "next-intl/server"
 
-type PageProps = {
-  params: Promise<{ locale: string }>
-}
-
-export default async function LoginPage({ params }: PageProps) {
-  const { locale } = await params
-
+export default async function LoginPage() {
+  const locale = await getLocale()
   const direction = locale === "ar" ? "rtl" : "ltr"
 
   return (
