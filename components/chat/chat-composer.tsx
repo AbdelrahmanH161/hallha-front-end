@@ -27,6 +27,21 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   const [file, setFile] = React.useState<File | null>(null)
   const [focused, setFocused] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+
+  React.useEffect(() => {
+    let previousPrefill = useChatStore.getState().composerPrefill
+    return useChatStore.subscribe((state) => {
+      const current = state.composerPrefill
+      if (current === previousPrefill) return
+      previousPrefill = current
+      if (!current) return
+      const text = useChatStore.getState().takeComposerPrefill()
+      if (!text) return
+      setMessage(text)
+      queueMicrotask(() => textareaRef.current?.focus())
+    })
+  }, [])
 
   const isStreaming = useChatStore((s) => s.isStreaming)
   const streamingThreadId = useChatStore((s) => s.streamingThreadId)
@@ -115,6 +130,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
         ) : null}
 
         <Textarea
+          ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}

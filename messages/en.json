@@ -485,6 +485,10 @@
       "empty": "No conversations yet.",
       "loadingConversation": "Loading conversation…",
       "loadMessagesFailed": "Failed to load messages.",
+      "errorTitleGeneric": "Couldn't load this conversation",
+      "errorTitleNotFound": "Conversation not found",
+      "errorTitleQuota": "Usage limit reached",
+      "errorTitleRateLimit": "Too many requests",
       "firstMessageHint": "Send your first message to start this conversation.",
       "groups": {
         "today": "Today",

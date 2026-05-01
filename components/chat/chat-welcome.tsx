@@ -1,27 +1,21 @@
 "use client"
 
 import * as React from "react"
+import { useIsMutating } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
-import { toast } from "sonner"
 
 import { ChatSuggestionChip } from "@/components/chat/chat-suggestion-chip"
 import { HalimAvatar } from "@/components/chat/halim-avatar"
-import { ApiError } from "@/lib/api/client"
-import { useSendChatStream } from "@/lib/api/queries/chats"
+import { chatAuditStreamMutationKey } from "@/lib/api/queries/chats"
 import { useChatStore } from "@/lib/stores/chat"
-
-function newThreadId() {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID()
-  }
-  return `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-}
 
 export function ChatWelcome() {
   const t = useTranslations("app.chat.welcome")
-  const tComposer = useTranslations("app.chat.composer")
-  const setActiveThreadId = useChatStore((s) => s.setActiveThreadId)
-  const sendChat = useSendChatStream()
+  const setComposerPrefill = useChatStore((s) => s.setComposerPrefill)
+  const isStreaming = useChatStore((s) => s.isStreaming)
+  const sendMutationBusy =
+    useIsMutating({ mutationKey: chatAuditStreamMutationKey }) > 0
+  const chipsDisabled = isStreaming || sendMutationBusy
 
   const suggestions = React.useMemo(
     () => [
@@ -49,22 +43,9 @@ export function ChatWelcome() {
     [t]
   )
 
-  async function handleSuggestion(label: string) {
-    if (sendChat.isPending) return
-    const threadId = newThreadId()
-    setActiveThreadId(threadId)
-    try {
-      await sendChat.mutateAsync({ threadId, message: label })
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return
-      const description =
-        err instanceof ApiError
-          ? err.detail
-          : err instanceof Error
-            ? err.message
-            : undefined
-      toast.error(tComposer("sendFailed"), { description })
-    }
+  function handleSuggestion(label: string) {
+    if (chipsDisabled) return
+    setComposerPrefill(label)
   }
 
   return (
@@ -93,8 +74,8 @@ export function ChatWelcome() {
             icon={s.icon}
             label={s.label}
             sub={s.sub}
-            onClick={() => void handleSuggestion(s.label)}
-            disabled={sendChat.isPending}
+            onClick={() => handleSuggestion(s.label)}
+            disabled={chipsDisabled}
           />
         ))}
       </div>

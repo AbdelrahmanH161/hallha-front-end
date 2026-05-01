@@ -9,12 +9,15 @@ type ChatStreamState = {
   streamingSources: RetrievedSource[]
   isStreaming: boolean
   abortController: AbortController | null
+  composerPrefill: string | null
   setActiveThreadId: (id: string | null) => void
   startStreaming: (threadId: string, controller: AbortController) => void
   appendToken: (text: string) => void
   setStreamingSources: (sources: RetrievedSource[]) => void
   finishStreaming: () => void
   abortStreaming: () => void
+  setComposerPrefill: (text: string | null) => void
+  takeComposerPrefill: () => string | null
 }
 
 export const useChatStore = create<ChatStreamState>((set, get) => ({
@@ -24,6 +27,7 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
   streamingSources: [],
   isStreaming: false,
   abortController: null,
+  composerPrefill: null,
   setActiveThreadId: (id) => set({ activeThreadId: id }),
   startStreaming: (threadId, controller) =>
     set({
@@ -54,5 +58,11 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
       isStreaming: false,
       abortController: null,
     })
+  },
+  setComposerPrefill: (text) => set({ composerPrefill: text }),
+  takeComposerPrefill: () => {
+    const text = get().composerPrefill
+    set({ composerPrefill: null })
+    return text
   },
 }))

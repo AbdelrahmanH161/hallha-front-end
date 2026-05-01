@@ -485,6 +485,10 @@
       "empty": "لا توجد محادثات بعد.",
       "loadingConversation": "جارٍ تحميل المحادثة…",
       "loadMessagesFailed": "تعذّر تحميل الرسائل.",
+      "errorTitleGeneric": "تعذّر تحميل هذه المحادثة",
+      "errorTitleNotFound": "المحادثة غير موجودة",
+      "errorTitleQuota": "تم بلوغ حد الاستخدام",
+      "errorTitleRateLimit": "طلبات كثيرة جداً",
       "firstMessageHint": "أرسل رسالتك الأولى لبدء المحادثة.",
       "groups": {
         "today": "اليوم",
