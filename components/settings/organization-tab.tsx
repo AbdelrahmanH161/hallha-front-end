@@ -133,7 +133,11 @@ function CompanySection() {
       />
 
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+        <form
+          className="space-y-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
           <FormField
             control={form.control}
             name="legalName"
@@ -147,7 +151,9 @@ function CompanySection() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage>{resolveError(fieldState.error?.message)}</FormMessage>
+                <FormMessage>
+                  {resolveError(fieldState.error?.message)}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -166,7 +172,9 @@ function CompanySection() {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage>{resolveError(fieldState.error?.message)}</FormMessage>
+                  <FormMessage>
+                    {resolveError(fieldState.error?.message)}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -184,7 +192,9 @@ function CompanySection() {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("fields.countryPlaceholder")} />
+                        <SelectValue
+                          placeholder={t("fields.countryPlaceholder")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -195,7 +205,9 @@ function CompanySection() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage>{resolveError(fieldState.error?.message)}</FormMessage>
+                  <FormMessage>
+                    {resolveError(fieldState.error?.message)}
+                  </FormMessage>
                 </FormItem>
               )}
             />
@@ -214,7 +226,9 @@ function CompanySection() {
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("fields.industryPlaceholder")} />
+                      <SelectValue
+                        placeholder={t("fields.industryPlaceholder")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -225,14 +239,18 @@ function CompanySection() {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage>{resolveError(fieldState.error?.message)}</FormMessage>
+                <FormMessage>
+                  {resolveError(fieldState.error?.message)}
+                </FormMessage>
               </FormItem>
             )}
           />
 
           <div className="flex justify-end">
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+              {isSubmitting ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : null}
               {t("saveCompany")}
             </Button>
           </div>
@@ -267,9 +285,8 @@ function BankSectionInner({
     label,
   }))
 
-  const [institutionId, setInstitutionId] = React.useState<string>(
-    initialInstitutionId
-  )
+  const [institutionId, setInstitutionId] =
+    React.useState<string>(initialInstitutionId)
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -297,7 +314,9 @@ function BankSectionInner({
 
       <form className="space-y-4" onSubmit={onSubmit} noValidate>
         <div className="space-y-2">
-          <Label className="text-sm font-medium">{t("fields.institution")}</Label>
+          <Label className="text-sm font-medium">
+            {t("fields.institution")}
+          </Label>
           <Select
             value={institutionId || undefined}
             onValueChange={setInstitutionId}
@@ -318,7 +337,9 @@ function BankSectionInner({
 
         <div className="flex justify-end">
           <Button type="submit" disabled={isSubmitting || !institutionId}>
-            {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+            ) : null}
             {t("saveBank")}
           </Button>
         </div>
@@ -363,23 +384,24 @@ function PlanSection() {
   const billing = form.watch("billing")
   const plan = form.watch("plan")
 
-  const plans: { id: PlanInput["plan"]; title: string; description: string }[] = [
-    {
-      id: "starter",
-      title: t("plans.starter"),
-      description: t("plans.starterDescription"),
-    },
-    {
-      id: "business",
-      title: t("plans.business"),
-      description: t("plans.businessDescription"),
-    },
-    {
-      id: "enterprise",
-      title: t("plans.enterprise"),
-      description: t("plans.enterpriseDescription"),
-    },
-  ]
+  const plans: { id: PlanInput["plan"]; title: string; description: string }[] =
+    [
+      {
+        id: "starter",
+        title: t("plans.starter"),
+        description: t("plans.starterDescription"),
+      },
+      {
+        id: "business",
+        title: t("plans.business"),
+        description: t("plans.businessDescription"),
+      },
+      {
+        id: "enterprise",
+        title: t("plans.enterprise"),
+        description: t("plans.enterpriseDescription"),
+      },
+    ]
 
   return (
     <section className="space-y-3">
@@ -389,7 +411,11 @@ function PlanSection() {
       />
 
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+        <form
+          className="space-y-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
           <div>
             <div className="text-xs font-medium text-muted-foreground">
               {t("fields.billing")}
@@ -453,7 +479,9 @@ function PlanSection() {
 
           <div className="flex justify-end">
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+              {isSubmitting ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : null}
               {t("savePlan")}
             </Button>
           </div>

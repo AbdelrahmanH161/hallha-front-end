@@ -42,21 +42,28 @@ export function PricingSectionClient({
     <>
       {/* Header */}
       <ScrollReveal className="mb-5 text-center">
-        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest glass">
+        <div className="glass mx-auto mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold tracking-widest uppercase">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           {sectionLabel}
         </div>
-        <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">{title}</h2>
+        <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+          {title}
+        </h2>
       </ScrollReveal>
 
       {/* Toggle */}
-      <ScrollReveal delay={100} className="mb-12 flex items-center justify-center gap-3">
-        <span className={`text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+      <ScrollReveal
+        delay={100}
+        className="mb-12 flex items-center justify-center gap-3"
+      >
+        <span
+          className={`text-sm font-medium transition-colors ${!isYearly ? "text-foreground" : "text-muted-foreground"}`}
+        >
           {monthlyToggle}
         </span>
         <button
           onClick={() => setIsYearly(!isYearly)}
-          className={`relative h-7 w-12 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+          className={`relative h-7 w-12 rounded-full transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${
             isYearly ? "bg-primary" : "bg-muted"
           }`}
           aria-label="Toggle billing period"
@@ -67,7 +74,9 @@ export function PricingSectionClient({
             }`}
           />
         </button>
-        <span className={`text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground"}`}>
+        <span
+          className={`text-sm font-medium transition-colors ${isYearly ? "text-foreground" : "text-muted-foreground"}`}
+        >
           {yearlyToggle}
           {isYearly && (
             <span className="ms-1.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
@@ -78,7 +87,7 @@ export function PricingSectionClient({
       </ScrollReveal>
 
       {/* Tier cards */}
-      <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3 md:gap-8 items-start">
+      <div className="mx-auto grid max-w-5xl items-start gap-6 md:grid-cols-3 md:gap-8">
         {tiers.map((tier, i) => (
           <ScrollReveal
             key={tier.title}
@@ -90,7 +99,7 @@ export function PricingSectionClient({
               goldBorder={tier.variant === "primary"}
               className={`relative flex flex-col gap-0 overflow-hidden ${
                 tier.variant === "primary"
-                  ? "bg-primary/5 dark:bg-primary/10 shadow-2xl shadow-primary/15"
+                  ? "bg-primary/5 shadow-2xl shadow-primary/15 dark:bg-primary/10"
                   : ""
               }`}
             >
@@ -98,7 +107,7 @@ export function PricingSectionClient({
               {tier.highlightLabel && (
                 <div className="flex items-center gap-1.5 border-b border-accent/20 bg-accent/10 px-5 py-2.5">
                   <Sparkles className="h-3.5 w-3.5 text-accent" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-accent">
+                  <span className="text-xs font-bold tracking-widest text-accent uppercase">
                     {tier.highlightLabel}
                   </span>
                 </div>
@@ -107,17 +116,23 @@ export function PricingSectionClient({
               <div className="p-6 pb-0">
                 <h3
                   className={`mb-1 text-lg font-bold ${
-                    tier.variant === "primary" ? "text-primary dark:text-accent" : ""
+                    tier.variant === "primary"
+                      ? "text-primary dark:text-accent"
+                      : ""
                   }`}
                 >
                   {tier.title}
                 </h3>
                 <div className="mt-3 flex items-end gap-1.5">
                   <span className="text-4xl font-black tracking-tight">
-                    {isYearly && tier.yearlyPrice ? tier.yearlyPrice : tier.price}
+                    {isYearly && tier.yearlyPrice
+                      ? tier.yearlyPrice
+                      : tier.price}
                   </span>
                   {tier.period && (
-                    <span className="mb-1 text-sm text-muted-foreground">{tier.period}</span>
+                    <span className="mb-1 text-sm text-muted-foreground">
+                      {tier.period}
+                    </span>
                   )}
                 </div>
               </div>

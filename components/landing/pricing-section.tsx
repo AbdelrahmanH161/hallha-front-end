@@ -7,7 +7,14 @@ export async function PricingSection() {
   const t = await getTranslations("landing")
   const tiersRaw = t.raw("pricing.tiers") as Record<
     string,
-    { title: string; price: string; yearlyPrice?: string; features: string[]; cta: string; highlightLabel?: string }
+    {
+      title: string
+      price: string
+      yearlyPrice?: string
+      features: string[]
+      cta: string
+      highlightLabel?: string
+    }
   >
 
   const tiers = [
@@ -33,8 +40,11 @@ export async function PricingSection() {
       <IslamicPattern opacity={0.04} />
 
       <div
-        className="blob pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 h-96 w-96 opacity-40"
-        style={{ background: "radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)" }}
+        className="blob pointer-events-none absolute top-1/2 right-0 h-96 w-96 -translate-y-1/2 opacity-40"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)",
+        }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6">

@@ -14,7 +14,11 @@ function makeQueryClient() {
         staleTime: 30_000,
         refetchOnWindowFocus: false,
         retry: (failureCount, error) => {
-          if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
+          if (
+            error instanceof ApiError &&
+            error.status >= 400 &&
+            error.status < 500
+          ) {
             return false
           }
           return failureCount < 2
@@ -42,7 +46,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       {children}
       <Toaster richColors position="top-center" />
       {process.env.NODE_ENV === "development" ? (
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+        <ReactQueryDevtools
+          initialIsOpen={false}
+          buttonPosition="bottom-left"
+        />
       ) : null}
     </QueryClientProvider>
   )

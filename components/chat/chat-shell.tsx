@@ -24,8 +24,8 @@ export function ChatShell() {
       {/* Background mesh + Islamic pattern + floating blobs */}
       <div className="mesh-bg pointer-events-none absolute inset-0" />
       <IslamicPattern opacity={0.028} className="z-0 text-primary" />
-      <div className="animate-pulse-glow blob pointer-events-none absolute -left-20 -top-20 size-[400px] bg-[radial-gradient(circle,rgba(6,78,59,0.14)_0%,transparent_70%)]" />
-      <div className="blob pointer-events-none absolute -bottom-16 -right-16 size-[360px] bg-[radial-gradient(circle,rgba(212,175,55,0.10)_0%,transparent_70%)]" />
+      <div className="animate-pulse-glow blob pointer-events-none absolute -top-20 -left-20 size-[400px] bg-[radial-gradient(circle,rgba(6,78,59,0.14)_0%,transparent_70%)]" />
+      <div className="blob pointer-events-none absolute -right-16 -bottom-16 size-[360px] bg-[radial-gradient(circle,rgba(212,175,55,0.10)_0%,transparent_70%)]" />
 
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent
