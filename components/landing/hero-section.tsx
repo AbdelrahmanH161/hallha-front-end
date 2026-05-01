@@ -166,14 +166,14 @@ export async function HeroSection() {
           <div className="absolute -top-4 -left-4 hidden md:block animate-float" style={{ animationDelay: "1s" }}>
             <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
               <span className="text-lg">🕌</span>
-              <span className="text-xs font-semibold text-primary">Sharia-First</span>
+              <span className="text-xs font-semibold text-primary">{t("hero.shariaFirst")}</span>
             </LiquidGlassCard>
           </div>
 
           <div className="absolute -bottom-4 -right-4 hidden md:block animate-float" style={{ animationDelay: "2s" }}>
             <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
               <span className="text-lg">✓</span>
-              <span className="text-xs font-semibold text-accent">Certified</span>
+              <span className="text-xs font-semibold text-accent">{t("hero.certified")}</span>
             </LiquidGlassCard>
           </div>
         </div>
