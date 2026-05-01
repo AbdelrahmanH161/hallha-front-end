@@ -58,18 +58,13 @@ export function ChatWelcome() {
   }
 
   return (
-    <div className="animate-fade-up flex flex-1 flex-col items-center justify-center gap-8 px-6 py-10">
+    <div className="animate-fade-up flex flex-1 flex-col items-center justify-center gap-8 px-6 py-2">
       <div className="flex flex-col items-center gap-3">
         <div className="relative">
           <div className="animate-pulse-glow pointer-events-none absolute -inset-3 rounded-2xl bg-[radial-gradient(circle,rgba(6,78,59,0.18)_0%,transparent_70%)]" />
           <HalimAvatar size={68} />
         </div>
         <div className="text-center">
-          <h1 className="font-heading text-2xl leading-tight font-bold sm:text-3xl">
-            <span className="ms-2 align-middle font-arabic text-lg font-normal text-muted-foreground">
-              {t("titleArabic")}
-            </span>
-          </h1>
           <p className="mt-1 max-w-md text-sm leading-relaxed text-muted-foreground">
             {t("subtitle")}
           </p>

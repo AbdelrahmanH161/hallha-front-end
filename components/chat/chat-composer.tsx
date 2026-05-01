@@ -56,7 +56,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   const [isRecording, setIsRecording] = React.useState(false)
   const [isTranscribing, setIsTranscribing] = React.useState(false)
   const [waveAnalyser, setWaveAnalyser] = React.useState<AnalyserNode | null>(
-    null,
+    null
   )
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
@@ -68,7 +68,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   const recorderRef = React.useRef<MediaRecorder | null>(null)
   const chunksRef = React.useRef<BlobPart[]>([])
   const maxDurationRef = React.useRef<ReturnType<typeof setTimeout> | null>(
-    null,
+    null
   )
   const audioContextRef = React.useRef<AudioContext | null>(null)
   const mediaSourceRef = React.useRef<MediaStreamAudioSourceNode | null>(null)
@@ -157,9 +157,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
 
       setIsTranscribing(true)
       try {
-        const text = (
-          await transcribeChatAudio(blob, { filename })
-        ).trim()
+        const text = (await transcribeChatAudio(blob, { filename })).trim()
         if (!text.length) {
           toast.error(t("voiceEmptyTranscript"))
           return
@@ -183,7 +181,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
         if (aliveRef.current) setIsTranscribing(false)
       }
     },
-    [threadId, sendChat, setActiveThreadId, t],
+    [threadId, sendChat, setActiveThreadId, t]
   )
 
   const cancelDictation = React.useCallback(() => {
@@ -242,7 +240,8 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   }, [isTranscribing])
 
   const startDictation = React.useCallback(async () => {
-    if (isTranscribing || isStreaming || sendChat.isPending || isRecording) return
+    if (isTranscribing || isStreaming || sendChat.isPending || isRecording)
+      return
 
     if (
       typeof navigator === "undefined" ||
@@ -277,7 +276,10 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
       if (aliveRef.current) setWaveAnalyser(analyser)
 
       const mime = pickRecorderMime()
-      const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined)
+      const rec = new MediaRecorder(
+        stream,
+        mime ? { mimeType: mime } : undefined
+      )
       recorderRef.current = rec
       chunksRef.current = []
 
@@ -343,7 +345,14 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
         toast.error(t("voiceRecordingFailed"))
       }
     }
-  }, [isStreaming, sendChat.isPending, t, transcribeAndSend, isTranscribing, isRecording])
+  }, [
+    isStreaming,
+    sendChat.isPending,
+    t,
+    transcribeAndSend,
+    isTranscribing,
+    isRecording,
+  ])
 
   React.useEffect(() => {
     if (!isRecording || isTranscribing) return
@@ -430,7 +439,9 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
       return
     }
     if (next.size > MAX_FILE_BYTES) {
-      toast.error(t("fileTooLarge"), { description: t("fileTooLargeDescription") })
+      toast.error(t("fileTooLarge"), {
+        description: t("fileTooLargeDescription"),
+      })
       e.target.value = ""
       return
     }
@@ -438,13 +449,13 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   }
 
   return (
-    <div className="px-4 pb-4 pt-3 sm:px-6 sm:pb-5">
+    <div className="px-4 pt-3 pb-4 sm:px-6 sm:pb-5">
       <div
         className={cn(
           "glass-card overflow-hidden rounded-2xl transition-shadow",
           focused && !showVoicePill
             ? "border-accent/40 shadow-[0_0_0_3px_rgba(212,175,55,0.10),var(--glass-shadow-card)]"
-            : "",
+            : ""
         )}
       >
         {file ? (
@@ -468,7 +479,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
 
         {showVoicePill ? (
           <div className="px-4 py-4 sm:px-5">
-            <p className="text-muted-foreground sr-only" aria-live="polite">
+            <p className="sr-only text-muted-foreground" aria-live="polite">
               {isTranscribing ? t("voiceTranscribing") : t("voiceRecording")}
             </p>
             <VoiceRecordingPill
@@ -538,10 +549,10 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
                   <TooltipContent
                     side="top"
                     sideOffset={6}
-                    className="border-border/80 bg-popover text-popover-foreground max-w-[220px] px-3 py-2 shadow-lg"
+                    className="max-w-[220px] border-border/80 bg-popover px-3 py-2 text-popover-foreground shadow-lg"
                   >
                     <p className="text-sm font-medium">{t("voiceDictate")}</p>
-                    <p className="text-muted-foreground mt-0.5 text-xs tracking-wide">
+                    <p className="mt-0.5 text-xs tracking-wide text-muted-foreground">
                       {dictateShortcut}
                     </p>
                   </TooltipContent>
@@ -571,7 +582,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
                       "shimmer gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_3px_12px_rgba(6,78,59,0.25)] transition-transform",
                       canSend
                         ? "bg-[linear-gradient(135deg,#064e3b_0%,#0a6652_100%)] hover:-translate-y-0.5 hover:shadow-[0_5px_16px_rgba(6,78,59,0.35)]"
-                        : "bg-primary/20 text-muted-foreground shadow-none",
+                        : "bg-primary/20 text-muted-foreground shadow-none"
                     )}
                   >
                     {sendChat.isPending ? (

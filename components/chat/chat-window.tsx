@@ -67,7 +67,7 @@ export function ChatWindow() {
   const rawMessages = activeThreadId ? data?.messages : undefined
   const visibleMessages = React.useMemo(
     () => (rawMessages ?? []).filter(isVisibleThreadMessage),
-    [rawMessages],
+    [rawMessages]
   )
 
   if (!activeThreadId) {
@@ -80,15 +80,14 @@ export function ChatWindow() {
   }
 
   const messages = rawMessages ?? []
-  const showStreamingBubble = isStreaming && streamingThreadId === activeThreadId
+  const showStreamingBubble =
+    isStreaming && streamingThreadId === activeThreadId
 
   const apiErr = error instanceof ApiError ? error : null
 
   const transientNotFound =
     apiErr?.status === 404 &&
-    (showStreamingBubble ||
-      sendMutationBusy ||
-      messages.length > 0)
+    (showStreamingBubble || sendMutationBusy || messages.length > 0)
 
   const fatalError = isError && !transientNotFound
 
@@ -110,7 +109,10 @@ export function ChatWindow() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div ref={scrollerRef} className="flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+      <div
+        ref={scrollerRef}
+        className="flex-1 overflow-y-auto px-4 py-5 sm:px-6"
+      >
         {showConversationLoading ? (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Loader2 className="size-3 animate-spin" aria-hidden />
@@ -137,7 +139,9 @@ export function ChatWindow() {
             </div>
           </div>
         ) : visibleMessages.length === 0 && !showStreamingBubble ? (
-          <div className="text-xs text-muted-foreground">{t("firstMessageHint")}</div>
+          <div className="text-xs text-muted-foreground">
+            {t("firstMessageHint")}
+          </div>
         ) : (
           <div className="space-y-4">
             {visibleMessages.map((m, i) => {
