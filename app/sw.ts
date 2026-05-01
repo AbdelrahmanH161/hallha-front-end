@@ -13,7 +13,7 @@ declare global {
 declare const self: ServiceWorkerGlobalScope
 
 const apiBase = (
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"
+  process.env.NEXT_PUBLIC_API_URL ?? "https://hallha.alef-team.com"
 ).replace(/\/$/, "")
 
 const serwist = new Serwist({
