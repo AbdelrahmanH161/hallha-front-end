@@ -534,6 +534,7 @@
       },
       "sourcesHeading": "Sources",
       "sourcePage": "p. {page}",
+      "webBadge": "Web",
       "openDocument": "Open document",
       "deleteThread": "Delete conversation",
       "threadActions": "Thread actions"

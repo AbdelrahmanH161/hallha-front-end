@@ -163,22 +163,33 @@ export function ChatMessageContent({
                 id={`${anchorPrefix}-${s.id}`}
                 className="scroll-mt-24 marker:text-muted-foreground"
               >
-                {s.url ? (
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-primary no-underline hover:underline"
-                  >
-                    {s.source}
-                  </a>
-                ) : (
-                  <span className="font-medium text-foreground">{s.source}</span>
-                )}
-                <span className="text-muted-foreground">
-                  {" "}
-                  — {t("sourcePage", { page: s.page })}
+                <span className="inline-flex flex-wrap items-center gap-2">
+                  {s.url ? (
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-primary no-underline hover:underline"
+                    >
+                      {s.displayName?.trim()?.length ? s.displayName : s.source}
+                    </a>
+                  ) : (
+                    <span className="font-medium text-foreground">
+                      {s.displayName?.trim()?.length ? s.displayName : s.source}
+                    </span>
+                  )}
+                  {s.type === "web" ? (
+                    <span className="rounded-md border border-border bg-muted px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      {t("webBadge")}
+                    </span>
+                  ) : null}
                 </span>
+                {s.type !== "web" ? (
+                  <span className="text-muted-foreground">
+                    {" "}
+                    — {t("sourcePage", { page: s.page })}
+                  </span>
+                ) : null}
                 {s.url ? (
                   <span className="sr-only"> ({t("openDocument")})</span>
                 ) : null}

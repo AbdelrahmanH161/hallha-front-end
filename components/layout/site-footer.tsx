@@ -1,20 +1,21 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { Globe, Mail, ShieldCheck, ExternalLink } from "lucide-react"
+import Image from "next/image"
 
 export async function SiteFooter() {
   const t = await getTranslations("landing")
 
   const productLinks = [
     { href: "#features", label: t("nav.features") },
-    { href: "#pricing",  label: t("nav.pricing") },
+    { href: "#pricing", label: t("nav.pricing") },
     { href: "/register", label: t("footer.getStarted") },
-    { href: "/login",    label: t("nav.login") },
+    { href: "/login", label: t("nav.login") },
   ]
 
   const companyLinks = [
-    { href: "#about",   label: t("nav.about") },
-    { href: "#faq",     label: t("nav.faq") },
+    { href: "#about", label: t("nav.about") },
+    { href: "#faq", label: t("nav.faq") },
     { href: "#contact", label: t("nav.contact") },
   ]
 
@@ -26,7 +27,10 @@ export async function SiteFooter() {
   ]
 
   return (
-    <footer className="relative overflow-hidden border-t" style={{ borderColor: "var(--glass-border)" }}>
+    <footer
+      className="relative overflow-hidden border-t"
+      style={{ borderColor: "var(--glass-border)" }}
+    >
       {/* Subtle Islamic pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
@@ -42,16 +46,24 @@ export async function SiteFooter() {
           {/* Brand column */}
           <div className="space-y-5">
             <div>
-              <span className="text-2xl font-black gradient-text-gold">{t("nav.brand")}</span>
+              <Image
+                src="/logo.png"
+                alt="Hallha"
+                width={90}
+                height={90}
+                className="h-14 w-14"
+              />
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {t("footer.tagline")}
               </p>
             </div>
 
             {/* Compliance badge */}
-            <div className="inline-flex items-center gap-2 rounded-xl glass px-3.5 py-2">
+            <div className="glass inline-flex items-center gap-2 rounded-xl px-3.5 py-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
-              <span className="text-xs font-semibold text-primary">{t("footer.complianceBadge")}</span>
+              <span className="text-xs font-semibold text-primary">
+                {t("footer.complianceBadge")}
+              </span>
             </div>
 
             {/* Socials */}
@@ -61,7 +73,7 @@ export async function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg glass text-muted-foreground hover:text-primary transition-colors"
+                  className="glass flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
                 >
                   <Icon className="h-3.5 w-3.5" />
                 </a>
@@ -71,7 +83,7 @@ export async function SiteFooter() {
 
           {/* Product links */}
           <div>
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-foreground/70">
+            <h3 className="mb-4 text-sm font-bold tracking-widest text-foreground/70 uppercase">
               {t("footer.productTitle")}
             </h3>
             <ul className="space-y-2.5">
@@ -79,7 +91,7 @@ export async function SiteFooter() {
                 <li key={href}>
                   <a
                     href={href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
                     {label}
                   </a>
@@ -90,7 +102,7 @@ export async function SiteFooter() {
 
           {/* Company links */}
           <div>
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-foreground/70">
+            <h3 className="mb-4 text-sm font-bold tracking-widest text-foreground/70 uppercase">
               {t("footer.companyTitle")}
             </h3>
             <ul className="space-y-2.5">
@@ -98,7 +110,7 @@ export async function SiteFooter() {
                 <li key={href}>
                   <a
                     href={href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
                     {label}
                   </a>
@@ -109,13 +121,15 @@ export async function SiteFooter() {
 
           {/* Newsletter / contact CTA */}
           <div>
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-foreground/70">
+            <h3 className="mb-4 text-sm font-bold tracking-widest text-foreground/70 uppercase">
               {t("footer.stayUpdated")}
             </h3>
-            <p className="mb-4 text-sm text-muted-foreground">{t("footer.newsletterDesc")}</p>
+            <p className="mb-4 text-sm text-muted-foreground">
+              {t("footer.newsletterDesc")}
+            </p>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
             >
               <Mail className="h-3.5 w-3.5" />
               {t("footer.contactUs")}
@@ -130,8 +144,12 @@ export async function SiteFooter() {
         >
           <span>{t("footer.copyright")}</span>
           <div className="flex items-center gap-4">
-            <Link href="#" className="hover:text-foreground transition-colors">{t("footer.privacy")}</Link>
-            <Link href="#" className="hover:text-foreground transition-colors">{t("footer.terms")}</Link>
+            <Link href="#" className="transition-colors hover:text-foreground">
+              {t("footer.privacy")}
+            </Link>
+            <Link href="#" className="transition-colors hover:text-foreground">
+              {t("footer.terms")}
+            </Link>
           </div>
         </div>
       </div>

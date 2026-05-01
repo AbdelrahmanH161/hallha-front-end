@@ -12,7 +12,6 @@ import {
 import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 
-import { HalimAvatar } from "@/components/chat/halim-avatar"
 import { Button } from "@/components/ui/button"
 import { useSettingsDialog } from "@/lib/stores/settings-dialog"
 
