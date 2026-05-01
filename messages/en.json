@@ -490,6 +490,13 @@
       "errorTitleQuota": "Usage limit reached",
       "errorTitleRateLimit": "Too many requests",
       "firstMessageHint": "Send your first message to start this conversation.",
+      "thinking": "Thinking…",
+      "metadata": {
+        "title": "Halim chat — Islamic finance assistant",
+        "description": "Chat with Halim for Sharia compliance audits, Islamic finance guidance, and document reviews grounded in AAOIFI-aligned knowledge.",
+        "ogTitle": "Halim chat — Hallha",
+        "ogDescription": "Your AI workspace for Islamic finance compliance and Sharia auditing."
+      },
       "groups": {
         "today": "Today",
         "yesterday": "Yesterday",
@@ -501,14 +508,18 @@
         "titleArabic": "حليم",
         "subtitle": "Your AI consultant for Islamic finance, Sharia auditing, and compliance advisory.",
         "suggestions": {
-          "reviewContract": "Review a contract",
-          "reviewContractSub": "Murabaha, Ijara, Sukuk",
-          "shariaScreening": "Sharia screening",
-          "shariaScreeningSub": "Equity & fund compliance",
-          "auditChecklist": "Audit checklist",
-          "auditChecklistSub": "AAOIFI standards",
-          "zakat": "Zakat calculation",
-          "zakatSub": "Nisab & hawl guidance"
+          "reviewContract": "Structured facility agreement review",
+          "reviewContractSub": "Walk through murabaha, ijara, or sukuk-style documentation like a working group: spot riba, gharar, and ownership gaps before sign-off.",
+          "reviewContractPrompt": "I am reviewing an Islamic finance facility agreement (e.g. murabaha, tawarruq, ijara, diminishing musharaka, or sukuk) for a corporate client.\n\nPlease:\n1. Summarize the economic substance vs. the legal form and whether it resembles common AAOIFI-aligned structures.\n2. Flag clauses that could imply riba, excessive gharar (ambiguity), or invalid sales/ownership.\n3. List targeted questions we should raise with the arranger and the bank's Sharia supervisory board.\n4. Note any missing operational controls (cron jobs for sales, independent verifications, asset traceability) that auditors usually care about.\n\nAssume this is for professional compliance support—not a personal fatwa—and clearly separate general principles from contract-specific risks.",
+          "shariaScreening": "Equity & fund Sharia screening memo",
+          "shariaScreeningSub": "Due diligence narrative for issuers, ADRs, and mixed revenue: sectors, debt ratios, and non-permissible income — as investment committees expect coverage.",
+          "shariaScreeningPrompt": "We are evaluating whether to include a listed equity (or fund) in a Sharia-compliant portfolio. The company is in {sector / region} with mixed permissible and questionable revenue lines.\n\nPlease:\n1. Outline a disciplined screening workflow aligned with mainstream institutional practice (business activity, leverage/interest metrics where applicable, and non-halal revenue purification thresholds).\n2. Produce a bullet list of due diligence questions for management, IR, and the fund administrator.\n3. Highlight grey areas where policy interpretation differs across providers and where we should escalate to a qualified Sharia committee instead of relying on automated screens.\n4. Suggest how to document the decision trail for regulators or clients.\n\nReplace bracketed placeholders with reasonable assumptions if I have not specified them.",
+          "auditChecklist": "AAOIFI-style Sharia audit playbook",
+          "auditChecklistSub": "Control objectives, evidence samples, and recurring findings for internal audit of Islamic windows and full-fledged Islamic banks.",
+          "auditChecklistPrompt": "Act as a Sharia internal audit co-pilot. We are planning an AAOIFI-oriented review of our Islamic banking retail and corporate products (financing, deposits, treasury, and fee income).\n\nDeliver:\n1. A phased audit plan (scoping workshop → data requests → fieldwork → reporting) with clear objectives per product family.\n2. A checklist of controls (origination, pricing, collateral, early settlement, promotions) and examples of evidence we should request.\n3. Common findings from the market (documentation mismatch, operational shortcuts, misplaced guarantees) and how to word them in an audit observation.\n4. A one-page executive summary outline suitable for the board’s Sharia committee.\n\nKeep everything advisory and flag where local regulations may override generic guidance.",
+          "zakat": "Corporate zakat methodology briefing",
+          "zakatSub": "Trading entities: what enters the zakatable base, ḥawl, school differences, and purification — without pretending a single final ruling.",
+          "zakatPrompt": "Our company needs a structured briefing on zakat for business wealth for the current lunar year. We hold cash, trade receivables, inventory, prepayments, fixed assets used in operations, and some interest-bearing placements (we already segregate riba income for purification).\n\nPlease:\n1. Explain which balance-sheet and P&L items are typically included or excluded in trading-entity calculations, and why.\n2. Describe how ḥawl (completion of one lunar year) is commonly applied to corporate cash flows—not personal savings.\n3. Summarize where major schools differ (trading goods vs. productive assets, treatment of long-term investments) so we know when a qualified Sharia accountant or scholar is mandatory.\n4. List documentation the finance team should prepare before any number is published.\n\nDo not output a final cash zakat amount; focus on method, disclosures, and governance."
         }
       },
       "composer": {
@@ -521,19 +532,31 @@
         "fileTooLarge": "File too large",
         "fileTooLargeDescription": "Maximum size is 50MB.",
         "sendFailed": "Failed to send message",
-        "disclaimer": "Halim may make mistakes. Always verify rulings with qualified Sharia scholars."
+        "disclaimer": "Halim may make mistakes. Always verify rulings with qualified Sharia scholars.",
+        "voiceMic": "Dictate",
+        "voiceDictate": "Dictate",
+        "voiceCancelRecording": "Discard recording",
+        "voiceConfirmRecording": "Stop and transcribe",
+        "voiceRecording": "Recording…",
+        "voiceTranscribing": "Transcribing…",
+        "voiceMicDenied": "Microphone access denied",
+        "voiceMicDeniedDescription": "Allow microphone access in your browser settings to use voice input.",
+        "voiceRecordingFailed": "Could not record audio",
+        "voiceTranscriptionFailed": "Transcription failed",
+        "voiceEmptyTranscript": "No speech detected — try again.",
+        "voiceNotSupported": "Voice input is not supported in this browser."
       },
       "header": {
         "settings": "Settings",
         "toggleTheme": "Toggle theme",
-        "help": "Help",
         "openSidebar": "Open conversations",
         "closeSidebar": "Close conversations",
         "expandSidebar": "Expand sidebar",
         "collapseSidebar": "Collapse sidebar"
       },
       "sourcesHeading": "Sources",
-      "sourcePage": "p. {page}",
+      "sourcePage": "Page {page}",
+      "webBadge": "Web",
       "openDocument": "Open document",
       "deleteThread": "Delete conversation",
       "threadActions": "Thread actions"

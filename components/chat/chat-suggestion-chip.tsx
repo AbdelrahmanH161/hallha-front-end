@@ -23,15 +23,17 @@ export function ChatSuggestionChip({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "glass-card group flex flex-col items-start gap-1 rounded-xl p-4 text-start transition-all",
+        "glass-card group flex min-h-[9.5rem] flex-col items-start gap-2 rounded-xl p-4 text-start transition-all",
         "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_6px_20px_rgba(6,78,59,0.12)]",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
         "disabled:cursor-not-allowed disabled:opacity-60"
       )}
     >
       <div className="text-xl leading-none">{icon}</div>
-      <div className="text-sm font-semibold text-foreground">{label}</div>
-      <div className="text-xs text-muted-foreground">{sub}</div>
+      <div className="text-sm font-semibold leading-snug text-foreground">{label}</div>
+      <div className="text-pretty text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
+        {sub}
+      </div>
     </button>
   )
 }

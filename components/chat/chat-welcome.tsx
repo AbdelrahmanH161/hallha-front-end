@@ -18,34 +18,43 @@ export function ChatWelcome() {
   const chipsDisabled = isStreaming || sendMutationBusy
 
   const suggestions = React.useMemo(
-    () => [
-      {
-        icon: "⚖️",
-        label: t("suggestions.reviewContract"),
-        sub: t("suggestions.reviewContractSub"),
-      },
-      {
-        icon: "🔍",
-        label: t("suggestions.shariaScreening"),
-        sub: t("suggestions.shariaScreeningSub"),
-      },
-      {
-        icon: "📋",
-        label: t("suggestions.auditChecklist"),
-        sub: t("suggestions.auditChecklistSub"),
-      },
-      {
-        icon: "🧮",
-        label: t("suggestions.zakat"),
-        sub: t("suggestions.zakatSub"),
-      },
-    ],
+    () =>
+      [
+        {
+          id: "reviewContract",
+          icon: "⚖️",
+          label: t("suggestions.reviewContract"),
+          sub: t("suggestions.reviewContractSub"),
+          prompt: t("suggestions.reviewContractPrompt"),
+        },
+        {
+          id: "shariaScreening",
+          icon: "🔍",
+          label: t("suggestions.shariaScreening"),
+          sub: t("suggestions.shariaScreeningSub"),
+          prompt: t("suggestions.shariaScreeningPrompt"),
+        },
+        {
+          id: "auditChecklist",
+          icon: "📋",
+          label: t("suggestions.auditChecklist"),
+          sub: t("suggestions.auditChecklistSub"),
+          prompt: t("suggestions.auditChecklistPrompt"),
+        },
+        {
+          id: "zakat",
+          icon: "🧮",
+          label: t("suggestions.zakat"),
+          sub: t("suggestions.zakatSub"),
+          prompt: t("suggestions.zakatPrompt"),
+        },
+      ] as const,
     [t]
   )
 
-  function handleSuggestion(label: string) {
+  function handleSuggestion(prompt: string) {
     if (chipsDisabled) return
-    setComposerPrefill(label)
+    setComposerPrefill(prompt)
   }
 
   return (
@@ -67,14 +76,14 @@ export function ChatWelcome() {
         </div>
       </div>
 
-      <div className="grid w-full max-w-xl grid-cols-1 gap-2.5 sm:grid-cols-2">
+      <div className="grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
         {suggestions.map((s) => (
           <ChatSuggestionChip
-            key={s.label}
+            key={s.id}
             icon={s.icon}
             label={s.label}
             sub={s.sub}
-            onClick={() => handleSuggestion(s.label)}
+            onClick={() => handleSuggestion(s.prompt)}
             disabled={chipsDisabled}
           />
         ))}

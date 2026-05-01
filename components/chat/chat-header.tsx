@@ -1,18 +1,10 @@
 "use client"
 
 import * as React from "react"
-import {
-  HelpCircle,
-  Moon,
-  PanelLeft,
-  PanelLeftClose,
-  Settings,
-  Sun,
-} from "lucide-react"
+import { Moon, PanelLeft, PanelLeftClose, Settings, Sun } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 
-import { HalimAvatar } from "@/components/chat/halim-avatar"
 import { Button } from "@/components/ui/button"
 import { useSettingsDialog } from "@/lib/stores/settings-dialog"
 
@@ -115,16 +107,6 @@ export function ChatHeader({
           className="size-8 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur"
         >
           {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-        </Button>
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          aria-label={tHeader("help")}
-          className="size-8 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur"
-        >
-          <HelpCircle className="size-4" />
         </Button>
 
         <div className="ms-1 hidden items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary sm:inline-flex">
