@@ -34,7 +34,7 @@ export function WizardShell({
         className
       )}
     >
-      <aside className="relative hidden min-h-0 min-w-0 w-[360px] shrink-0 overflow-hidden border-r glass p-8 md:flex md:flex-col">
+      <aside className="relative hidden min-h-0 min-w-0 w-[360px] shrink-0 overflow-hidden border-r glass p-8 md:flex md:flex-col pt-20">
         <IslamicPattern opacity={0.05} />
 
         {/* Floating blobs */}
@@ -99,7 +99,7 @@ export function WizardShell({
           aria-hidden
         />
 
-        <div className="sticky top-0 z-20 flex min-w-0 shrink-0 items-center justify-between gap-3 border-b bg-background/70 px-6 py-4 backdrop-blur md:hidden">
+        <div className="sticky top-14 z-20 flex min-w-0 shrink-0 items-center justify-between gap-3 px-4 py-3 md:top-0 md:px-6 md:py-4 md:hidden">
           <div className="flex min-w-0 items-center gap-2">
             <Image
               src="/logo.png"
@@ -110,7 +110,9 @@ export function WizardShell({
             />
             <div className="min-w-0 truncate text-sm font-semibold">{t("brand")}</div>
           </div>
-          <div className="shrink-0 text-xs text-muted-foreground">{stepCounterLabel}</div>
+          <div className="shrink-0 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+            {stepCounterLabel}
+          </div>
         </div>
 
         <div className="relative min-h-0 min-w-0 flex-1 overflow-y-auto">

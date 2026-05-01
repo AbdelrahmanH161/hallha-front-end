@@ -24,7 +24,7 @@ export async function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         {/* Brand */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="group flex items-center gap-2.5">
+          <a href="/#home" className="group flex items-center gap-2.5 transition-all">
             <div className="flex h-14 w-14 items-center justify-center">
               <Image
                 src="/logo.png"
@@ -35,7 +35,7 @@ export async function SiteHeader() {
                 priority
               />
             </div>
-          </Link>
+          </a>
 
           {/* Desktop nav */}
           <nav

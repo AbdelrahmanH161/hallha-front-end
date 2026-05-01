@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useMessages } from "next-intl"
+import { useMessages, useTranslations } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -46,7 +46,7 @@ import {
   useUpdateCompanyProfileMutation,
 } from "@/lib/api/queries/organization"
 import { signUp } from "@/lib/auth/client"
-import { signUpSchema, type SignUpInput } from "@/lib/schemas/auth"
+import { createSignUpSchema, type SignUpInput } from "@/lib/schemas/auth"
 import {
   bankLinkSchema,
   companyProfileSchema,
@@ -333,6 +333,8 @@ function AccountBasicsStep({
 }) {
   const setEmail = useRegisterDraft((s) => s.setEmail)
   const draftEmail = useRegisterDraft((s) => s.email)
+  const tErrors = useTranslations("common.errors")
+  const signUpSchema = React.useMemo(() => createSignUpSchema(tErrors), [tErrors])
 
   const form = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),

@@ -45,7 +45,7 @@
       "signupLink": "Sign up",
       "badges": {
         "shariaCertified": "Shariah certified",
-        "secureEncryption": "256-bit secure encryption"
+        "aaoifiAuthority": "AAOIFI Authority"
       }
     },
     "register": {
@@ -256,8 +256,6 @@
       "register": "Get started"
     },
     "hero": {
-      "shariaFirst": "Sharia-First",
-      "certified": "Certified",
       "pill": "AI-powered Islamic finance",
       "title": "Hallilha… your financial future, on",
       "titleAccent": "Shariah-first foundations",
