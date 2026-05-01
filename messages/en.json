@@ -16,6 +16,13 @@
       "saved": "Saved"
     }
   },
+  "pwa": {
+    "offline": {
+      "title": "You are offline",
+      "description": "Check your connection, then try loading the home page again.",
+      "retry": "Back to home"
+    }
+  },
   "auth": {
     "shell": {
       "tagline": "Sharia compliance, automated.",
