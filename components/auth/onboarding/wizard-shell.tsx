@@ -113,9 +113,9 @@ export function WizardShell({
           <div className="shrink-0 text-xs text-muted-foreground">{stepCounterLabel}</div>
         </div>
 
-        <div className="relative min-h-0 min-w-0 flex-1 overflow-hidden">
-          <div className="relative mx-auto flex min-h-0 w-full min-w-0 max-w-2xl flex-1 flex-col justify-center px-6 py-10">
-            <LiquidGlassCard goldBorder className="max-h-full min-h-0 overflow-x-hidden overflow-y-auto p-6 shadow-2xl md:p-8">
+        <div className="relative min-h-0 min-w-0 flex-1 overflow-y-auto">
+          <div className="relative mx-auto flex min-h-full w-full min-w-0 max-w-2xl flex-col items-center justify-center px-6 py-10">
+            <LiquidGlassCard goldBorder className="max-h-full min-h-0 w-full overflow-x-hidden overflow-y-auto p-6 shadow-2xl md:p-8">
               {children}
             </LiquidGlassCard>
           </div>

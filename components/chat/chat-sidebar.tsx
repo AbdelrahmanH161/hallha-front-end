@@ -60,7 +60,11 @@ function groupThreads(threads: ChatThreadSummary[]) {
   return groups
 }
 
-export function ChatSidebar() {
+export type ChatSidebarPanelProps = {
+  onNavigate?: () => void
+}
+
+export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
   const t = useTranslations("app.chat")
   const [query, setQuery] = React.useState("")
   const { data: threads = [], isLoading, isError } = useChatsQuery()
@@ -73,11 +77,13 @@ export function ChatSidebar() {
   function newChat() {
     if (isStreaming) abortStreaming()
     setActiveThreadId(null)
+    onNavigate?.()
   }
 
   function selectThread(id: string) {
     if (isStreaming) abortStreaming()
     setActiveThreadId(id)
+    onNavigate?.()
   }
 
   async function deleteThread(id: string) {
@@ -98,7 +104,7 @@ export function ChatSidebar() {
   const groupOrder: GroupKey[] = ["today", "yesterday", "lastWeek", "older"]
 
   return (
-    <aside className="glass-strong relative z-10 flex h-full w-[268px] flex-shrink-0 flex-col border-e">
+    <div className="relative flex h-full min-h-0 flex-col">
       <IslamicPattern opacity={0.035} />
 
       {/* Logo */}
@@ -154,7 +160,7 @@ export function ChatSidebar() {
       </div>
 
       {/* Thread list */}
-      <div className="relative flex-1 overflow-y-auto px-2.5 pb-2">
+      <div className="relative min-h-0 flex-1 overflow-y-auto px-2.5 pb-2">
         {isLoading ? (
           <div className="flex items-center gap-2 px-2 py-3 text-xs text-muted-foreground">
             <Loader2 className="size-3 animate-spin" aria-hidden />
@@ -238,9 +244,29 @@ export function ChatSidebar() {
       </div>
 
       {/* Bottom user popover */}
-      <div className="relative border-t border-[var(--glass-border)] px-2.5 py-2">
+      <div className="relative shrink-0 border-t border-[var(--glass-border)] px-2.5 py-2">
         <ChatSidebarUserPopover />
       </div>
+    </div>
+  )
+}
+
+export type ChatSidebarProps = {
+  collapsed: boolean
+}
+
+export function ChatSidebar({ collapsed }: ChatSidebarProps) {
+  return (
+    <aside
+      className={cn(
+        "glass-strong relative z-10 hidden h-full shrink-0 flex-col border-e transition-[width,opacity] duration-200 ease-out lg:flex",
+        collapsed
+          ? "pointer-events-none w-0 overflow-hidden border-transparent opacity-0"
+          : "w-[268px] opacity-100"
+      )}
+      aria-hidden={collapsed || undefined}
+    >
+      <ChatSidebarPanel />
     </aside>
   )
 }

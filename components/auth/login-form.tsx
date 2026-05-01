@@ -113,33 +113,9 @@ export function LoginForm() {
         }}
       />
 
-      {/* Subtle Islamic ring */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07] dark:opacity-[0.05]">
-        <div className="animate-spin-slow">
-          <svg width="420" height="420" viewBox="0 0 420 420" aria-hidden>
-            <g fill="none" stroke="currentColor" className="text-accent">
-              {Array.from({ length: 24 }).map((_, i) => (
-                <line
-                  key={i}
-                  x1="210"
-                  y1="30"
-                  x2="210"
-                  y2="390"
-                  strokeWidth="0.75"
-                  transform={`rotate(${i * 15} 210 210)`}
-                />
-              ))}
-              <circle cx="210" cy="210" r="178" strokeWidth="0.75" />
-              <circle cx="210" cy="210" r="140" strokeWidth="0.75" />
-              <circle cx="210" cy="210" r="100" strokeWidth="0.75" />
-            </g>
-          </svg>
-        </div>
-      </div>
-
       <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-4 py-10">
-        <div className="w-full max-w-[420px] animate-float">
-          <LiquidGlassCard tilt goldBorder className="p-0 pt-4">
+        <div className="w-full max-w-[420px]">
+          <LiquidGlassCard goldBorder className="p-0 pt-4">
             <CardHeader className="items-center text-center">
               <div className="mb-2 grid size-16 place-items-center mx-auto">
                 <Image

@@ -76,7 +76,9 @@
         "passwordLabel": "Password",
         "passwordPlaceholder": "••••••••",
         "confirmPasswordLabel": "Confirm password",
-        "confirmPasswordPlaceholder": "••••••••"
+        "confirmPasswordPlaceholder": "••••••••",
+        "signInPrompt": "Already have an account?",
+        "signInLink": "Sign in"
       },
       "step2": {
         "title": "Company profile",
@@ -520,7 +522,11 @@
       "header": {
         "settings": "Settings",
         "toggleTheme": "Toggle theme",
-        "help": "Help"
+        "help": "Help",
+        "openSidebar": "Open conversations",
+        "closeSidebar": "Close conversations",
+        "expandSidebar": "Expand sidebar",
+        "collapseSidebar": "Collapse sidebar"
       },
       "sourcesHeading": "Sources",
       "sourcePage": "p. {page}",

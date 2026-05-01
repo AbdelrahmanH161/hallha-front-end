@@ -61,7 +61,7 @@ export function ChatWelcome() {
           </div>
         </div>
         <div className="text-center">
-          <h1 className="font-heading text-3xl font-bold leading-tight">
+          <h1 className="font-heading text-2xl font-bold leading-tight sm:text-3xl">
             <span className="gradient-text">{t("title")}</span>
             <span className="ms-2 align-middle text-base font-normal text-muted-foreground">
               {t("titleArabic")}

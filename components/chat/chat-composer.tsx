@@ -126,7 +126,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
           disabled={isStreaming && !isThisThreadStreaming}
         />
 
-        <div className="flex items-center justify-between gap-2 px-3 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2.5">
           <div className="flex items-center gap-1">
             <input
               ref={fileInputRef}
@@ -148,7 +148,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
             </Button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
             <span className="hidden text-[11px] text-muted-foreground sm:inline">
               {t("enterToSend")}
             </span>

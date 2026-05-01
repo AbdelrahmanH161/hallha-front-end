@@ -76,7 +76,9 @@
         "passwordLabel": "كلمة المرور",
         "passwordPlaceholder": "••••••••",
         "confirmPasswordLabel": "تأكيد كلمة المرور",
-        "confirmPasswordPlaceholder": "••••••••"
+        "confirmPasswordPlaceholder": "••••••••",
+        "signInPrompt": "لديك حساب بالفعل؟",
+        "signInLink": "تسجيل الدخول"
       },
       "step2": {
         "title": "ملف الشركة",
@@ -520,7 +522,11 @@
       "header": {
         "settings": "الإعدادات",
         "toggleTheme": "تبديل المظهر",
-        "help": "المساعدة"
+        "help": "المساعدة",
+        "openSidebar": "فتح المحادثات",
+        "closeSidebar": "إغلاق المحادثات",
+        "expandSidebar": "توسيع الشريط الجانبي",
+        "collapseSidebar": "طي الشريط الجانبي"
       },
       "sourcesHeading": "المصادر",
       "sourcePage": "ص. {page}",

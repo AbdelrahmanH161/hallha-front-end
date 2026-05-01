@@ -1,7 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { HelpCircle, Moon, Settings, Sun } from "lucide-react"
+import {
+  HelpCircle,
+  Moon,
+  PanelLeft,
+  PanelLeftClose,
+  Settings,
+  Sun,
+} from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 
@@ -17,7 +24,17 @@ function useIsClient() {
   )
 }
 
-export function ChatHeader() {
+export type ChatHeaderProps = {
+  onOpenMobileSidebar: () => void
+  desktopCollapsed: boolean
+  onToggleDesktopCollapse: () => void
+}
+
+export function ChatHeader({
+  onOpenMobileSidebar,
+  desktopCollapsed,
+  onToggleDesktopCollapse,
+}: ChatHeaderProps) {
   const t = useTranslations("app.chat")
   const tHeader = useTranslations("app.chat.header")
   const openSettings = useSettingsDialog((s) => s.openAt)
@@ -27,25 +44,58 @@ export function ChatHeader() {
 
   return (
     <header className="glass-nav relative z-[5] flex flex-shrink-0 items-center justify-between gap-3 border-b px-4 py-3 sm:px-5">
-      <div className="flex items-center gap-2.5">
-        <HalimAvatar size={28} />
-        <div className="leading-tight">
-          <div className="font-heading text-sm font-bold">
-            <span className="gradient-text">{t("brand")}</span>
-            <span className="ms-1.5 text-xs font-normal text-muted-foreground">
-              {t("brandArabic")}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-500">
-            <span className="animate-pulse-glow inline-block size-1.5 rounded-full bg-emerald-500" />
-            <span className="text-muted-foreground">
-              {t("tagline")} · <span className="text-emerald-500">{t("statusOnline")}</span>
-            </span>
+      <div className="flex min-w-0 items-center gap-2">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={tHeader("openSidebar")}
+          onClick={onOpenMobileSidebar}
+          className="size-8 shrink-0 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur lg:hidden"
+        >
+          <PanelLeft className="size-4" aria-hidden />
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={
+            desktopCollapsed
+              ? tHeader("expandSidebar")
+              : tHeader("collapseSidebar")
+          }
+          onClick={onToggleDesktopCollapse}
+          className="hidden size-8 shrink-0 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur lg:inline-flex"
+        >
+          {desktopCollapsed ? (
+            <PanelLeft className="size-4" aria-hidden />
+          ) : (
+            <PanelLeftClose className="size-4" aria-hidden />
+          )}
+        </Button>
+
+        <div className="flex min-w-0 items-center gap-2.5">
+          <HalimAvatar size={28} />
+          <div className="min-w-0 leading-tight">
+            <div className="font-heading text-sm font-bold">
+              <span className="gradient-text">{t("brand")}</span>
+              <span className="ms-1.5 text-xs font-normal text-muted-foreground">
+                {t("brandArabic")}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-500">
+              <span className="animate-pulse-glow inline-block size-1.5 rounded-full bg-emerald-500" />
+              <span className="text-muted-foreground">
+                {t("tagline")} ·{" "}
+                <span className="text-emerald-500">{t("statusOnline")}</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex shrink-0 items-center gap-1.5">
         <Button
           type="button"
           variant="ghost"
