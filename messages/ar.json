@@ -45,7 +45,7 @@
       "signupLink": "سجل الآن",
       "badges": {
         "shariaCertified": "معتمد شرعياً",
-        "secureEncryption": "تشفير آمن 256-بت"
+        "aaoifiAuthority": "هيئة AAOIFI"
       }
     },
     "register": {
@@ -257,15 +257,13 @@
     },
     "hero": {
       "shariaFirst": "متوافق مع الشريعة",
-      "certified": "موثوق",
+      "certified": "معتمد",
       "pill": "تمويل إسلامي مدعوم بالذكاء الاصطناعي",
       "title": "حلّلها.. مستقبلك المالي، على",
       "titleAccent": "أسس شرعية",
       "description": "المنظومة المالية الحديثة للشركات الصغيرة والمتوسطة. أتمتة الامتثال، وضمان التطهير، وتنمية ثروتك بثقة أخلاقية مطلقة.",
       "primaryCta": "ابدأ تدقيقك المجاني",
-      "secondaryCta": "شاهد عرض المنصة",
-      "shariaFirst": "الشريعة أولاً",
-      "certified": "معتمد"
+      "secondaryCta": "شاهد عرض المنصة"
     },
     "metrics": {
       "title": "درجة الصحة الشرعية",

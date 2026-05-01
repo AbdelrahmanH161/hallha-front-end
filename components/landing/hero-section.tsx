@@ -143,30 +143,37 @@ export async function HeroSection() {
           {/* Main compliance card — float wrapper keeps animate-float on
               a parent so the tilt JS can freely mutate the child's transform */}
           <div className="animate-float relative z-10 w-full max-w-sm">
-            <LiquidGlassCard tilt goldBorder className="p-6">
+            <LiquidGlassCard
+              tilt
+              goldBorder
+              className="relative overflow-hidden p-5 shadow-2xl shadow-primary/15 sm:p-6"
+            >
+              <div className="pointer-events-none absolute -top-20 -right-16 h-44 w-44 rounded-full bg-accent/10 blur-3xl" />
+
               {/* Card header */}
-              <div className="mb-5 flex items-start justify-between">
+              <div className="mb-6 flex items-start justify-between gap-4 border-b border-border/50 pb-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {t("metrics.title")}
                   </p>
-                  <p className="text-xs text-muted-foreground/70">
+                  <p className="mt-1 text-xs text-muted-foreground/70">
                     {t("metrics.subtitle")}
                   </p>
                 </div>
-                <div className="text-3xl font-black text-primary">
+                <div className="bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl leading-none font-black text-transparent">
                   {t("metrics.score")}
                 </div>
               </div>
 
               {/* Circular indicator */}
-              <div className="glass-strong relative mx-auto mb-5 flex h-44 w-44 flex-col items-center justify-center rounded-full">
+              <div className="glass-strong relative mx-auto mb-6 flex h-44 w-44 flex-col items-center justify-center rounded-full shadow-[0_0_40px_rgba(6,78,59,0.2)]">
                 {/* Ring glow */}
                 <div className="animate-pulse-glow pointer-events-none absolute inset-2 rounded-full border-2 border-accent/30" />
+                <div className="pointer-events-none absolute inset-4 rounded-full border border-primary/20" />
                 <div className="gradient-text text-4xl font-black">
                   {t("metrics.status")}
                 </div>
-                <div className="mt-1 flex items-center gap-1 text-sm font-semibold text-emerald-500">
+                <div className="mt-2 flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-sm font-semibold text-emerald-500">
                   <TrendingUp className="h-3.5 w-3.5" />
                   {t("metrics.trend")}
                 </div>
@@ -174,19 +181,19 @@ export async function HeroSection() {
 
               {/* Status items */}
               <div className="space-y-2.5">
-                <div className="glass flex items-center justify-between rounded-xl p-3">
+                <div className="glass flex items-center justify-between rounded-xl border border-emerald-500/20 p-3.5">
                   <span className="text-sm font-medium">
                     {t("metrics.item1Title")}
                   </span>
-                  <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                     {t("metrics.item1Status")}
                   </span>
                 </div>
-                <div className="glass flex items-center justify-between rounded-xl p-3">
+                <div className="glass flex items-center justify-between rounded-xl border border-amber-500/20 p-3.5">
                   <span className="text-sm font-medium">
                     {t("metrics.item2Title")}
                   </span>
-                  <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                  <span className="rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
                     {t("metrics.item2Status")}
                   </span>
                 </div>
@@ -196,12 +203,14 @@ export async function HeroSection() {
 
           {/* Floating mini badges with tilt */}
           <div
-            className="animate-float absolute -top-4 -left-4 hidden md:block"
+            className="animate-float absolute -top-5 -left-5 z-20 hidden md:block"
             style={{ animationDelay: "1s" }}
           >
-            <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
-              <span className="text-lg">🕌</span>
-              <span className="text-xs font-semibold text-primary">{t("hero.shariaFirst")}</span>
+            <LiquidGlassCard
+              tilt
+              className="flex items-center gap-2.5 rounded-2xl border border-primary/25 bg-background/60 px-3.5 py-2.5 shadow-lg shadow-primary/20 backdrop-blur"
+            >
+              <span className="text-base">🕌</span>
               <span className="text-xs font-semibold text-primary">
                 {t("hero.shariaFirst")}
               </span>
@@ -209,12 +218,14 @@ export async function HeroSection() {
           </div>
 
           <div
-            className="animate-float absolute -right-4 -bottom-4 hidden md:block"
+            className="animate-float absolute -right-5 -bottom-5 z-20 hidden md:block"
             style={{ animationDelay: "2s" }}
           >
-            <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
-              <span className="text-lg">✓</span>
-              <span className="text-xs font-semibold text-accent">{t("hero.certified")}</span>
+            <LiquidGlassCard
+              tilt
+              className="flex items-center gap-2.5 rounded-2xl border border-accent/25 bg-background/60 px-3.5 py-2.5 shadow-lg shadow-accent/20 backdrop-blur"
+            >
+              <span className="text-base text-accent">✓</span>
               <span className="text-xs font-semibold text-accent">
                 {t("hero.certified")}
               </span>

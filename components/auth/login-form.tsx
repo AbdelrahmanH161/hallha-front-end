@@ -36,7 +36,7 @@ import { IslamicPattern } from "@/components/landing/islamic-pattern"
 import { LiquidGlassCard } from "@/components/landing/liquid-glass-card"
 import { signIn } from "@/lib/auth/client"
 import { ApiError } from "@/lib/api/client"
-import { loginSchema, type LoginInput } from "@/lib/schemas/auth"
+import { createLoginSchema, type LoginInput } from "@/lib/schemas/auth"
 
 type CommonCopy = {
   errors: Record<string, string>
@@ -56,7 +56,9 @@ export function LoginForm() {
   const searchParams = useSearchParams()
   const messages = useMessages()
   const commonResolved = messages.common as CommonCopy
+  const tErrors = useTranslations("common.errors")
   const t = useTranslations("auth.login")
+  const loginSchema = React.useMemo(() => createLoginSchema(tErrors), [tErrors])
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -243,7 +245,7 @@ export function LoginForm() {
 
             <CardFooter className="flex flex-wrap items-center justify-center gap-2">
               <Badge variant="secondary">{t("badges.shariaCertified")}</Badge>
-              <Badge variant="secondary">{t("badges.secureEncryption")}</Badge>
+              <Badge variant="secondary">{t("badges.aaoifiAuthority")}</Badge>
             </CardFooter>
           </LiquidGlassCard>
         </div>
