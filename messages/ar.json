@@ -492,6 +492,13 @@
       "errorTitleQuota": "تم بلوغ حد الاستخدام",
       "errorTitleRateLimit": "طلبات كثيرة جداً",
       "firstMessageHint": "أرسل رسالتك الأولى لبدء المحادثة.",
+      "thinking": "جارٍ التفكير…",
+      "metadata": {
+        "title": "محادثة حليم — مساعد التمويل الإسلامي",
+        "description": "تحدّث مع حليم لتدقيق الامتثال الشرعي، والإرشاد في التمويل الإسلامي، ومراجعات المستندات مستندة إلى المعرفة المتوافقة مع AAOIFI.",
+        "ogTitle": "محادثة حليم — هلهـا",
+        "ogDescription": "مساحة عملك بالذكاء الاصطناعي لامتثال التمويل الإسلامي والتدقيق الشرعي."
+      },
       "groups": {
         "today": "اليوم",
         "yesterday": "أمس",
@@ -528,14 +535,13 @@
       "header": {
         "settings": "الإعدادات",
         "toggleTheme": "تبديل المظهر",
-        "help": "المساعدة",
         "openSidebar": "فتح المحادثات",
         "closeSidebar": "إغلاق المحادثات",
         "expandSidebar": "توسيع الشريط الجانبي",
         "collapseSidebar": "طي الشريط الجانبي"
       },
       "sourcesHeading": "المصادر",
-      "sourcePage": "ص. {page}",
+      "sourcePage": "صفحة {page}",
       "webBadge": "ويب",
       "openDocument": "فتح المستند",
       "deleteThread": "حذف المحادثة",

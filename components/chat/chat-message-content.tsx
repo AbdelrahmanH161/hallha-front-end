@@ -124,7 +124,7 @@ export function ChatMessageContent({
   )
 
   return (
-    <div className="markdown-content space-y-2 break-words [&_h1]:mt-2 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:mt-2 [&_h2]:text-sm [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-1.5 [&_ol]:ms-5 [&_ol]:list-decimal [&_p]:my-1.5 [&_strong]:font-semibold [&_ul]:my-1.5 [&_ul]:ms-5 [&_ul]:list-disc">
+    <div className="markdown-content min-w-0 space-y-2 break-words [&_h1]:mt-2 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:mt-2 [&_h2]:text-sm [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-1.5 [&_ol]:ms-5 [&_ol]:list-decimal [&_p]:my-1.5 [&_strong]:font-semibold [&_ul]:my-1.5 [&_ul]:ms-5 [&_ul]:list-disc">
       {parts.map((part, i) =>
         part.kind === "body" ? (
           <ReactMarkdown

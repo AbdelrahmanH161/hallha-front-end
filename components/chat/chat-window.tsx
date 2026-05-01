@@ -12,9 +12,17 @@ import { ApiError } from "@/lib/api/client"
 import {
   chatAuditStreamMutationKey,
   useChatQuery,
+  type ChatMessage as ThreadMessage,
 } from "@/lib/api/queries/chats"
+import { sourcesForAssistantFooter } from "@/lib/chat/sources-for-footer"
 import { useChatStore } from "@/lib/stores/chat"
 import { cn } from "@/lib/utils"
+
+function isVisibleThreadMessage(m: ThreadMessage): boolean {
+  if (m.role === "tool") return false
+  if (m.role === "assistant" && m.content.trim().length === 0) return false
+  return true
+}
 
 function fatalErrorTitle(apiErr: ApiError | null, t: (k: string) => string) {
   if (!apiErr) return t("errorTitleGeneric")
@@ -49,7 +57,18 @@ export function ChatWindow() {
     const el = scrollerRef.current
     if (!el) return
     el.scrollTop = el.scrollHeight
-  }, [data?.messages.length, streamingText, streamingSources.length, activeThreadId])
+  }, [
+    data?.messages.length,
+    streamingText,
+    streamingSources.length,
+    activeThreadId,
+  ])
+
+  const rawMessages = activeThreadId ? data?.messages : undefined
+  const visibleMessages = React.useMemo(
+    () => (rawMessages ?? []).filter(isVisibleThreadMessage),
+    [rawMessages],
+  )
 
   if (!activeThreadId) {
     return (
@@ -60,7 +79,7 @@ export function ChatWindow() {
     )
   }
 
-  const messages = data?.messages ?? []
+  const messages = rawMessages ?? []
   const showStreamingBubble = isStreaming && streamingThreadId === activeThreadId
 
   const apiErr = error instanceof ApiError ? error : null
@@ -83,6 +102,11 @@ export function ChatWindow() {
     apiErr?.detail ??
     (error instanceof Error ? error.message : "") ??
     t("loadMessagesFailed")
+
+  const streamingFooterSources =
+    streamingSources.length > 0
+      ? sourcesForAssistantFooter(streamingText, streamingSources)
+      : []
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -112,16 +136,20 @@ export function ChatWindow() {
               </p>
             </div>
           </div>
-        ) : messages.length === 0 && !showStreamingBubble ? (
+        ) : visibleMessages.length === 0 && !showStreamingBubble ? (
           <div className="text-xs text-muted-foreground">{t("firstMessageHint")}</div>
         ) : (
           <div className="space-y-4">
-            {messages.map((m, i) => {
+            {visibleMessages.map((m, i) => {
               const isLastAssistant =
-                m.role === "assistant" && i === messages.length - 1
+                m.role === "assistant" && i === visibleMessages.length - 1
               const threadSources = data?.sources ?? []
+              const footerSources =
+                isLastAssistant && threadSources.length > 0
+                  ? sourcesForAssistantFooter(m.content, threadSources)
+                  : []
               const sources =
-                isLastAssistant && threadSources.length > 0 ? threadSources : undefined
+                footerSources.length > 0 ? footerSources : undefined
               return (
                 <ChatMessage
                   key={`${m.role}-${i}`}
@@ -134,9 +162,11 @@ export function ChatWindow() {
             {showStreamingBubble ? (
               <ChatMessage
                 role="assistant"
-                content={streamingText || "…"}
+                content={streamingText}
                 structuredSources={
-                  streamingSources.length > 0 ? streamingSources : undefined
+                  streamingFooterSources.length > 0
+                    ? streamingFooterSources
+                    : undefined
                 }
                 pending
               />

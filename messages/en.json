@@ -492,6 +492,13 @@
       "errorTitleQuota": "Usage limit reached",
       "errorTitleRateLimit": "Too many requests",
       "firstMessageHint": "Send your first message to start this conversation.",
+      "thinking": "Thinking…",
+      "metadata": {
+        "title": "Halim chat — Islamic finance assistant",
+        "description": "Chat with Halim for Sharia compliance audits, Islamic finance guidance, and document reviews grounded in AAOIFI-aligned knowledge.",
+        "ogTitle": "Halim chat — Hallha",
+        "ogDescription": "Your AI workspace for Islamic finance compliance and Sharia auditing."
+      },
       "groups": {
         "today": "Today",
         "yesterday": "Yesterday",
@@ -528,14 +535,13 @@
       "header": {
         "settings": "Settings",
         "toggleTheme": "Toggle theme",
-        "help": "Help",
         "openSidebar": "Open conversations",
         "closeSidebar": "Close conversations",
         "expandSidebar": "Expand sidebar",
         "collapseSidebar": "Collapse sidebar"
       },
       "sourcesHeading": "Sources",
-      "sourcePage": "p. {page}",
+      "sourcePage": "Page {page}",
       "webBadge": "Web",
       "openDocument": "Open document",
       "deleteThread": "Delete conversation",

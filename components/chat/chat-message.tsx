@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { User } from "lucide-react"
+import { Loader2, User } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { ChatMessageContent } from "@/components/chat/chat-message-content"
 import { HalimAvatar } from "@/components/chat/halim-avatar"
@@ -23,9 +24,12 @@ export function ChatMessage({
   id,
   structuredSources,
 }: ChatMessageProps) {
+  const t = useTranslations("app.chat")
   const reactId = React.useId()
   const anchorPrefix = `cite-${(id ?? reactId).replace(/[^a-zA-Z0-9_-]/g, "")}`
   const isUser = role === "user"
+  const showThinkingPlaceholder =
+    !isUser && pending === true && content.trim().length === 0
 
   return (
     <div
@@ -44,13 +48,13 @@ export function ChatMessage({
 
       <div
         className={cn(
-          "flex max-w-[78%] flex-col gap-1.5",
+          "flex min-w-0 max-w-[78%] flex-col gap-1.5",
           isUser ? "items-end" : "items-start"
         )}
       >
         <div
           className={cn(
-            "px-4 py-2.5 text-sm leading-relaxed break-words",
+            "min-w-0 max-w-full px-4 py-2.5 text-sm leading-relaxed break-words",
             isUser
               ? "bubble-user whitespace-pre-wrap bg-[linear-gradient(135deg,#064e3b_0%,#0a6652_100%)] text-primary-foreground shadow-[0_4px_16px_rgba(6,78,59,0.25)]"
               : "bubble-assistant glass-card text-foreground"
@@ -65,14 +69,32 @@ export function ChatMessage({
             </>
           ) : (
             <>
-              <ChatMessageContent
-                content={content}
-                anchorPrefix={anchorPrefix}
-                structuredSources={structuredSources}
-              />
-              {pending ? (
-                <span className="ms-1 inline-block animate-pulse">▍</span>
-              ) : null}
+              {showThinkingPlaceholder ? (
+                <div
+                  className="flex items-center gap-2 text-muted-foreground"
+                  aria-live="polite"
+                  aria-busy="true"
+                >
+                  <Loader2
+                    className="size-4 shrink-0 animate-spin text-primary"
+                    aria-hidden
+                  />
+                  <span className="text-sm font-medium text-foreground/80">
+                    {t("thinking")}
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <ChatMessageContent
+                    content={content}
+                    anchorPrefix={anchorPrefix}
+                    structuredSources={structuredSources}
+                  />
+                  {pending ? (
+                    <span className="ms-1 inline-block animate-pulse">▍</span>
+                  ) : null}
+                </>
+              )}
             </>
           )}
         </div>
