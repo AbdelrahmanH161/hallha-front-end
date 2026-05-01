@@ -76,11 +76,9 @@ export function ChatHeader({
         </Button>
 
         <div className="flex min-w-0 items-center gap-2.5">
-          <HalimAvatar size={28} />
           <div className="min-w-0 leading-tight">
             <div className="font-heading text-sm font-bold">
-              <span className="gradient-text">{t("brand")}</span>
-              <span className="ms-1.5 text-xs font-normal text-muted-foreground">
+              <span className="ms-1.5 font-arabic font-normal text-muted-foreground">
                 {t("brandArabic")}
               </span>
             </div>

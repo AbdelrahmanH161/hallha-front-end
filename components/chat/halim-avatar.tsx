@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 import { cn } from "@/lib/utils"
 
 export function HalimAvatar({
@@ -7,17 +9,25 @@ export function HalimAvatar({
   size?: number
   className?: string
 }) {
+  const px = Math.round(size)
+
   return (
     <div
-      aria-hidden
-      style={{ width: size, height: size, fontSize: Math.round(size * 0.44) }}
       className={cn(
-        "grid shrink-0 place-items-center rounded-full font-serif text-primary-foreground shadow-[0_2px_8px_rgba(6,78,59,0.30)]",
-        "bg-[linear-gradient(135deg,#064e3b_0%,#0f766e_55%,#d4af37_100%)]",
+        "relative shrink-0 overflow-hidden rounded-lg bg-transparent",
         className
       )}
+      style={{ width: px, height: px }}
+      aria-hidden
     >
-      ح
+      <Image
+        src="/logo.png"
+        alt=""
+        width={px}
+        height={px}
+        className="size-full object-contain"
+        sizes={`${px}px`}
+      />
     </div>
   )
 }

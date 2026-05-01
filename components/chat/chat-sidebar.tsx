@@ -94,9 +94,7 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return threads
-    return threads.filter((th) =>
-      (th.title ?? "").toLowerCase().includes(q)
-    )
+    return threads.filter((th) => (th.title ?? "").toLowerCase().includes(q))
   }, [threads, query])
 
   const groups = React.useMemo(() => groupThreads(filtered), [filtered])
@@ -108,22 +106,14 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
       <IslamicPattern opacity={0.035} />
 
       {/* Logo */}
-      <div className="relative flex items-center gap-2.5 px-4 pb-3 pt-5">
+      <div className="relative mx-auto flex items-center gap-2.5 px-4 pt-5 pb-3">
         <Image
           src="/logo.png"
           alt={t("brand")}
-          width={36}
-          height={36}
-          className="size-9 object-contain"
+          width={48}
+          height={48}
+          className="size-12 object-contain"
         />
-        <div className="leading-tight">
-          <div className="font-heading text-lg font-bold">
-            <span className="gradient-text">{t("brand")}</span>
-          </div>
-          <div className="text-[10px] tracking-wide text-muted-foreground">
-            {t("brandArabic")} — {t("tagline")}
-          </div>
-        </div>
       </div>
 
       {/* New conversation CTA */}
@@ -152,7 +142,7 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("searchPlaceholder")}
             className={cn(
-              "w-full rounded-lg border border-[var(--glass-border-card)] bg-primary/5 py-2 pe-3 ps-9 text-xs text-foreground outline-none",
+              "w-full rounded-lg border border-[var(--glass-border-card)] bg-primary/5 py-2 ps-9 pe-3 text-xs text-foreground outline-none",
               "placeholder:text-muted-foreground focus:border-accent/40"
             )}
           />
@@ -167,16 +157,20 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
             {t("loading")}
           </div>
         ) : isError ? (
-          <div className="px-2 py-3 text-xs text-destructive">{t("loadFailed")}</div>
+          <div className="px-2 py-3 text-xs text-destructive">
+            {t("loadFailed")}
+          </div>
         ) : filtered.length === 0 ? (
-          <div className="px-2 py-3 text-xs text-muted-foreground">{t("empty")}</div>
+          <div className="px-2 py-3 text-xs text-muted-foreground">
+            {t("empty")}
+          </div>
         ) : (
           groupOrder.map((key) => {
             const items = groups[key]
             if (items.length === 0) return null
             return (
               <div key={key} className="mb-2">
-                <div className="px-1 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <div className="px-1 pt-1.5 pb-1 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
                   {t(`groups.${key}`)}
                 </div>
                 <ul className="space-y-0.5">
