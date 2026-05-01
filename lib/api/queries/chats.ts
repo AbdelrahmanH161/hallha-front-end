@@ -34,6 +34,9 @@ export const chatKeys = {
   detail: (threadId: string) => [...chatKeys.all, "detail", threadId] as const,
 }
 
+/** Shared with `useIsMutating` for send/stream lifecycle in the chat UI. */
+export const chatAuditStreamMutationKey = ["chatAuditStream"] as const
+
 export function useChatsQuery() {
   return useQuery({
     queryKey: chatKeys.list(),
@@ -91,6 +94,23 @@ export function useSendChatStream() {
   const finishStreaming = useChatStore((s) => s.finishStreaming)
 
   return useMutation({
+    mutationKey: chatAuditStreamMutationKey,
+    onMutate: async ({ threadId }) => {
+      await qc.cancelQueries({ queryKey: chatKeys.detail(threadId) })
+      const previousThread = qc.getQueryData<ChatThread | undefined>(
+        chatKeys.detail(threadId)
+      )
+      return { previousThread }
+    },
+    onError: (_err, { threadId }, context) => {
+      finishStreaming()
+      const prev = context?.previousThread
+      if (prev !== undefined) {
+        qc.setQueryData(chatKeys.detail(threadId), prev)
+      } else {
+        qc.removeQueries({ queryKey: chatKeys.detail(threadId) })
+      }
+    },
     mutationFn: async ({ threadId, message, file }: SendChatArgs) => {
       const controller = new AbortController()
       startStreaming(threadId, controller)
@@ -128,13 +148,18 @@ export function useSendChatStream() {
             lastError = detail
           },
         })
-      } finally {
+      } catch (err) {
         finishStreaming()
+        throw err
       }
 
-      if (lastError) throw new Error(lastError)
+      if (lastError) {
+        finishStreaming()
+        throw new Error(lastError)
+      }
 
       await qc.invalidateQueries({ queryKey: chatKeys.detail(threadId) })
+      finishStreaming()
       await qc.invalidateQueries({ queryKey: chatKeys.list() })
     },
   })

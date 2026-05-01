@@ -16,6 +16,13 @@
       "saved": "Saved"
     }
   },
+  "pwa": {
+    "offline": {
+      "title": "You are offline",
+      "description": "Check your connection, then try loading the home page again.",
+      "retry": "Back to home"
+    }
+  },
   "auth": {
     "shell": {
       "tagline": "Sharia compliance, automated.",
@@ -69,7 +76,9 @@
         "passwordLabel": "Password",
         "passwordPlaceholder": "••••••••",
         "confirmPasswordLabel": "Confirm password",
-        "confirmPasswordPlaceholder": "••••••••"
+        "confirmPasswordPlaceholder": "••••••••",
+        "signInPrompt": "Already have an account?",
+        "signInLink": "Sign in"
       },
       "step2": {
         "title": "Company profile",
@@ -247,6 +256,8 @@
       "register": "Get started"
     },
     "hero": {
+      "shariaFirst": "Sharia-First",
+      "certified": "Certified",
       "pill": "AI-powered Islamic finance",
       "title": "Hallilha… your financial future, on",
       "titleAccent": "Shariah-first foundations",
@@ -440,7 +451,7 @@
     "onboardingBanner": {
       "title": "Finish setting up your workspace ({count} step left)",
       "subtitle": "Complete the remaining setup steps to unlock the full experience.",
-      "cta": "Continue setup",
+      "cta": "Open settings",
       "dismiss": "Dismiss",
       "steps": {
         "company": "Company profile",
@@ -448,40 +459,162 @@
         "plan": "Plan"
       }
     },
-    "sidebar": {
-      "brand": "Hallilha",
-      "tagline": "Sharia Compliance",
-      "workspace": "Workspace"
-    },
-    "nav": {
-      "chat": "AI Auditor Chat",
-      "overview": "Overview",
-      "transactions": "Transactions"
-    },
-    "header": {
-      "title": "Sharia Compliance Intelligence"
-    },
     "userMenu": {
       "label": "Account",
       "profile": "Profile",
       "settings": "Settings",
+      "apiAccess": "API access",
+      "documentation": "Documentation",
+      "helpFeedback": "Help & feedback",
+      "themeLight": "Light mode",
+      "themeDark": "Dark mode",
+      "themeSystem": "Use system theme",
       "signOut": "Sign out",
-      "guest": "Guest"
+      "guest": "Guest",
+      "rolePro": "Pro · Sharia Auditor"
     },
     "chat": {
-      "pageTitle": "AI Auditor Chat",
-      "pageDescription": "Ask compliance questions and review AI-generated audit explanations.",
+      "brand": "Halim",
+      "brandArabic": "حليم",
+      "tagline": "Islamic Finance AI",
+      "statusOnline": "Online",
+      "aaoiAligned": "AAOIFI Aligned",
+      "newConversation": "New conversation",
+      "searchPlaceholder": "Search conversations…",
+      "untitled": "Untitled chat",
+      "loading": "Loading…",
+      "loadFailed": "Failed to load threads",
+      "empty": "No conversations yet.",
+      "loadingConversation": "Loading conversation…",
+      "loadMessagesFailed": "Failed to load messages.",
+      "errorTitleGeneric": "Couldn't load this conversation",
+      "errorTitleNotFound": "Conversation not found",
+      "errorTitleQuota": "Usage limit reached",
+      "errorTitleRateLimit": "Too many requests",
+      "firstMessageHint": "Send your first message to start this conversation.",
+      "groups": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "lastWeek": "Last week",
+        "older": "Older"
+      },
+      "welcome": {
+        "title": "Halim",
+        "titleArabic": "حليم",
+        "subtitle": "Your AI consultant for Islamic finance, Sharia auditing, and compliance advisory.",
+        "suggestions": {
+          "reviewContract": "Review a contract",
+          "reviewContractSub": "Murabaha, Ijara, Sukuk",
+          "shariaScreening": "Sharia screening",
+          "shariaScreeningSub": "Equity & fund compliance",
+          "auditChecklist": "Audit checklist",
+          "auditChecklistSub": "AAOIFI standards",
+          "zakat": "Zakat calculation",
+          "zakatSub": "Nisab & hawl guidance"
+        }
+      },
+      "composer": {
+        "placeholder": "Ask Halim about Islamic finance, Sharia auditing, or compliance…",
+        "newPlaceholder": "Start a new conversation…",
+        "enterToSend": "Enter to send",
+        "send": "Send",
+        "stop": "Stop",
+        "attach": "Attach file",
+        "fileTooLarge": "File too large",
+        "fileTooLargeDescription": "Maximum size is 50MB.",
+        "sendFailed": "Failed to send message",
+        "disclaimer": "Halim may make mistakes. Always verify rulings with qualified Sharia scholars."
+      },
+      "header": {
+        "settings": "Settings",
+        "toggleTheme": "Toggle theme",
+        "help": "Help",
+        "openSidebar": "Open conversations",
+        "closeSidebar": "Close conversations",
+        "expandSidebar": "Expand sidebar",
+        "collapseSidebar": "Collapse sidebar"
+      },
       "sourcesHeading": "Sources",
       "sourcePage": "p. {page}",
-      "openDocument": "Open document"
+      "openDocument": "Open document",
+      "deleteThread": "Delete conversation",
+      "threadActions": "Thread actions"
     },
-    "overview": {
-      "pageTitle": "Compliance Overview",
-      "pageDescription": "Monitor portfolio compliance and receive instant Sharia insights.",
-      "shariaMeter": "Sharia Meter",
-      "shariaMeterDescription": "Current score: 67% compliant (placeholder).",
-      "alerts": "Alerts",
-      "alertsDescription": "No critical violations detected."
+    "settings": {
+      "title": "Settings",
+      "description": "Manage your profile, organization, and preferences.",
+      "tabs": {
+        "profile": "Profile",
+        "organization": "Organization",
+        "preferences": "Preferences"
+      },
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "close": "Close"
+    },
+    "profile": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "signedInAs": "Signed in as",
+      "managedByProvider": "Profile data is managed by your authentication provider.",
+      "noSession": "You are not signed in.",
+      "currentPlan": "Current plan",
+      "currentPlanNone": "No active plan"
+    },
+    "organization": {
+      "intro": "Update the details collected during onboarding. Each section saves independently.",
+      "sections": {
+        "company": "Company profile",
+        "companyDescription": "Legal entity information used for compliance reporting.",
+        "bank": "Bank connection",
+        "bankDescription": "Choose the institution we use for portfolio auditing.",
+        "plan": "Plan & billing",
+        "planDescription": "Pick the Shariah compliance level that matches your business size."
+      },
+      "fields": {
+        "legalName": "Legal business name",
+        "legalNamePlaceholder": "e.g., Al Noor Holdings LLC",
+        "registrationNumber": "Registration number",
+        "registrationNumberPlaceholder": "Commercial register or employer ID",
+        "country": "Country of incorporation",
+        "countryPlaceholder": "Select a country",
+        "industry": "Primary industry",
+        "industryPlaceholder": "Select an industry",
+        "institution": "Banking institution",
+        "institutionPlaceholder": "Select an institution",
+        "billing": "Billing cycle",
+        "billingMonthly": "Monthly",
+        "billingYearly": "Yearly (-20%)",
+        "plan": "Plan"
+      },
+      "plans": {
+        "starter": "Starter",
+        "starterDescription": "Basic compliance tracking for early-stage projects.",
+        "business": "Business",
+        "businessDescription": "Real-time AI auditing and unlimited transactions.",
+        "enterprise": "Enterprise",
+        "enterpriseDescription": "Custom solutions with a dedicated Sharia advisor."
+      },
+      "saveCompany": "Save company profile",
+      "saveBank": "Save bank link",
+      "savePlan": "Save plan",
+      "savedToast": "Saved successfully",
+      "saveFailed": "Could not save"
+    },
+    "preferences": {
+      "appearance": "Appearance",
+      "appearanceDescription": "Choose how the dashboard looks for you.",
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System",
+      "language": "Language",
+      "languageDescription": "The dashboard fully supports Arabic (RTL) and English (LTR).",
+      "languageArabic": "العربية",
+      "languageEnglish": "English",
+      "languageHint": "Changing the language reloads the page so all content is re-rendered."
     }
   }
 }

@@ -16,6 +16,7 @@ import {
   Mail,
   Search,
 } from "lucide-react"
+import Link from "next/link"
 import { toast } from "sonner"
 
 import { WizardShell } from "@/components/auth/onboarding/wizard-shell"
@@ -80,6 +81,8 @@ export type RegisterWizardCopy = {
     passwordPlaceholder: string
     confirmPasswordLabel: string
     confirmPasswordPlaceholder: string
+    signInPrompt: string
+    signInLink: string
   }
   step2: {
     title: string
@@ -452,6 +455,16 @@ function AccountBasicsStep({
             {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {nextLabel}
           </Button>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            {t.signInPrompt}{" "}
+            <Link
+              className="font-medium text-primary underline-offset-4 hover:underline"
+              href="/login"
+            >
+              {t.signInLink}
+            </Link>
+          </p>
         </form>
       </Form>
     </div>

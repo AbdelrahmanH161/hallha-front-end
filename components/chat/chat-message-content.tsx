@@ -83,7 +83,7 @@ export function ChatMessageContent({
   anchorPrefix: string
   structuredSources?: RetrievedSource[]
 }) {
-  const t = useTranslations("dashboard.chat")
+  const t = useTranslations("app.chat")
   const parts = React.useMemo(() => {
     const raw = splitContent(content)
     if (structuredSources?.length) {
