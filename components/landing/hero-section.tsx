@@ -200,6 +200,8 @@ export async function HeroSection() {
             style={{ animationDelay: "1s" }}
           >
             <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
+              <span className="text-lg">🕌</span>
+              <span className="text-xs font-semibold text-primary">{t("hero.shariaFirst")}</span>
               <span className="text-xs font-semibold text-primary">
                 {t("hero.shariaFirst")}
               </span>
@@ -212,6 +214,7 @@ export async function HeroSection() {
           >
             <LiquidGlassCard tilt className="flex items-center gap-2 px-3 py-2">
               <span className="text-lg">✓</span>
+              <span className="text-xs font-semibold text-accent">{t("hero.certified")}</span>
               <span className="text-xs font-semibold text-accent">
                 {t("hero.certified")}
               </span>
