@@ -4,7 +4,7 @@ import * as React from "react"
 import { useMessages, useTranslations } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import {
   Building2,
   CreditCard,
@@ -15,6 +15,7 @@ import {
   Lock,
   Mail,
   Search,
+  User,
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -49,11 +50,11 @@ import { signUp } from "@/lib/auth/client"
 import { createSignUpSchema, type SignUpInput } from "@/lib/schemas/auth"
 import {
   bankLinkSchema,
-  companyProfileSchema,
   planSchema,
+  workspaceProfileSchema,
   type BankLinkInput,
-  type CompanyProfileInput,
   type PlanInput,
+  type WorkspaceProfileInput,
 } from "@/lib/schemas/organization"
 import { useRegisterDraft } from "@/lib/stores/register-draft"
 import { cn } from "@/lib/utils"
@@ -61,7 +62,7 @@ import { cn } from "@/lib/utils"
 export type RegisterWizardCopy = {
   steps: {
     accountBasics: string
-    companyProfile: string
+    workspaceProfile: string
     bankConnection: string
     planSelection: string
   }
@@ -87,11 +88,17 @@ export type RegisterWizardCopy = {
   step2: {
     title: string
     description: string
-    legalNameLabel: string
-    legalNamePlaceholder: string
+    workspaceKindQuestion: string
+    workspaceIndividualTitle: string
+    workspaceBusinessTitle: string
+    legalNameLabelIndividual: string
+    legalNamePlaceholderIndividual: string
+    legalNameLabelBusiness: string
+    legalNamePlaceholderBusiness: string
     registrationNumberLabel: string
     registrationNumberPlaceholder: string
-    incorporationCountryLabel: string
+    countryLabelIndividual: string
+    countryLabelBusiness: string
     incorporationCountryPlaceholder: string
     countries: readonly { value: string; label: string }[]
     industryLabel: string
@@ -113,7 +120,16 @@ export type RegisterWizardCopy = {
     billingMonthly: string
     billingYearly: string
     yearlyDiscount: string
+    billingPaidPlansNote: string
     plans: {
+      free: {
+        title: string
+        description: string
+        price: string
+        period: string
+        features: readonly { text: string; included: boolean }[]
+        cta: string
+      }
       starter: {
         title: string
         description: string
@@ -140,7 +156,7 @@ export type RegisterWizardCopy = {
         cta: string
       }
     }
-    backToCompanyProfile: string
+    backToProfile: string
   }
 }
 
@@ -181,7 +197,11 @@ export function RegisterWizard() {
   const steps = React.useMemo(
     () => [
       { key: "account", label: t.steps.accountBasics },
-      { key: "company", label: t.steps.companyProfile, description: t.step2.description },
+      {
+        key: "workspace",
+        label: t.steps.workspaceProfile,
+        description: t.step2.description,
+      },
       { key: "bank", label: t.steps.bankConnection, description: t.step3.description },
       { key: "plan", label: t.steps.planSelection },
     ],
@@ -218,7 +238,7 @@ export function RegisterWizard() {
   )
 
   return (
-    <WizardShell steps={steps} activeIndex={activeIndex}>
+    <WizardShell steps={steps} activeIndex={activeIndex} wide={activeStep === 4}>
       {activeStep === 1 ? (
         <AccountBasicsStep
           t={t.step1}
@@ -228,7 +248,7 @@ export function RegisterWizard() {
         />
       ) : null}
       {activeStep === 2 ? (
-        <CompanyProfileStep
+        <WorkspaceProfileStep
           t={t.step2}
           common={common}
           backLabel={t.buttons.back}
@@ -258,7 +278,7 @@ export function RegisterWizard() {
           t={t.step4}
           common={common}
           skipLabel={t.buttons.finishLater}
-          onBackToCompany={() => goTo(2)}
+          onBackToProfile={() => goTo(2)}
           onComplete={finish}
           onSkip={() => skipFromStep(4)}
           isSkipping={skipMutation.isPending}
@@ -473,7 +493,7 @@ function AccountBasicsStep({
   )
 }
 
-function CompanyProfileStep({
+function WorkspaceProfileStep({
   t,
   common,
   backLabel,
@@ -498,13 +518,23 @@ function CompanyProfileStep({
   const setCompany = useRegisterDraft((s) => s.setCompany)
   const mutation = useUpdateCompanyProfileMutation()
 
-  const form = useForm<CompanyProfileInput>({
-    resolver: zodResolver(companyProfileSchema),
+  const form = useForm<WorkspaceProfileInput>({
+    resolver: zodResolver(workspaceProfileSchema),
     defaultValues: draft,
     mode: "onTouched",
   })
 
-  async function onSubmit(values: CompanyProfileInput) {
+  const workspaceKind =
+    useWatch({ control: form.control, name: "workspaceKind" }) ?? draft.workspaceKind
+
+  React.useEffect(() => {
+    if (workspaceKind === "individual") {
+      form.setValue("registrationNumber", "")
+      form.clearErrors("registrationNumber")
+    }
+  }, [workspaceKind, form])
+
+  async function onSubmit(values: WorkspaceProfileInput) {
     try {
       await mutation.mutateAsync(values)
       setCompany(values)
@@ -525,19 +555,83 @@ function CompanyProfileStep({
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
           <FormField
             control={form.control}
+            name="workspaceKind"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <Field>
+                  <FieldLabel>
+                    <FieldContent>
+                      <div className="mb-2 text-sm font-medium">{t.workspaceKindQuestion}</div>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {(
+                          [
+                            {
+                              value: "individual" as const,
+                              title: t.workspaceIndividualTitle,
+                              Icon: User,
+                            },
+                            {
+                              value: "business" as const,
+                              title: t.workspaceBusinessTitle,
+                              Icon: Building2,
+                            },
+                          ] as const
+                        ).map(({ value, title, Icon: IconCmp }) => {
+                          const checked = field.value === value
+                          return (
+                            <label key={value} className="cursor-pointer">
+                              <input
+                                className="peer sr-only"
+                                type="radio"
+                                name={field.name}
+                                value={value}
+                                checked={checked}
+                                onChange={() => field.onChange(value)}
+                                disabled={isSubmitting}
+                              />
+                              <div className="flex h-full flex-col gap-2 rounded-lg border bg-background/40 p-4 text-start text-sm transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary">
+                                <IconCmp className="size-5 text-muted-foreground peer-checked:text-primary" aria-hidden />
+                                <span className="font-medium">{title}</span>
+                              </div>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </FieldContent>
+                  </FieldLabel>
+                </Field>
+                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="legalName"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel>{t.legalNameLabel}</FormLabel>
+                <FormLabel>
+                  {workspaceKind === "individual"
+                    ? t.legalNameLabelIndividual
+                    : t.legalNameLabelBusiness}
+                </FormLabel>
                 <FormControl>
                   <InputGroup>
                     <InputGroupAddon align="inline-end">
                       <InputGroupText>
-                        <Building2 className="size-4" aria-hidden />
+                        {workspaceKind === "individual" ? (
+                          <User className="size-4" aria-hidden />
+                        ) : (
+                          <Building2 className="size-4" aria-hidden />
+                        )}
                       </InputGroupText>
                     </InputGroupAddon>
                     <InputGroupInput
-                      placeholder={t.legalNamePlaceholder}
+                      placeholder={
+                        workspaceKind === "individual"
+                          ? t.legalNamePlaceholderIndividual
+                          : t.legalNamePlaceholderBusiness
+                      }
                       disabled={isSubmitting}
                       {...field}
                     />
@@ -548,38 +642,72 @@ function CompanyProfileStep({
             )}
           />
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="registrationNumber"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>{t.registrationNumberLabel}</FormLabel>
-                  <FormControl>
-                    <InputGroup>
-                      <InputGroupAddon align="inline-end">
-                        <InputGroupText>
-                          <CreditCard className="size-4" aria-hidden />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <InputGroupInput
-                        placeholder={t.registrationNumberPlaceholder}
-                        disabled={isSubmitting}
-                        {...field}
-                      />
-                    </InputGroup>
-                  </FormControl>
-                  <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-                </FormItem>
-              )}
-            />
+          {workspaceKind === "business" ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="registrationNumber"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>{t.registrationNumberLabel}</FormLabel>
+                    <FormControl>
+                      <InputGroup>
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupText>
+                            <CreditCard className="size-4" aria-hidden />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <InputGroupInput
+                          placeholder={t.registrationNumberPlaceholder}
+                          disabled={isSubmitting}
+                          {...field}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
+                  </FormItem>
+                )}
+              />
 
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>{t.countryLabelBusiness}</FormLabel>
+                    <Select
+                      value={field.value || undefined}
+                      onValueChange={field.onChange}
+                      disabled={isSubmitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={t.incorporationCountryPlaceholder} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {t.countries.map((c) => (
+                          <SelectItem key={c.value} value={c.value}>
+                            <span className="flex items-center gap-2">
+                              <Globe className="size-4" aria-hidden />
+                              {c.label}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
+                  </FormItem>
+                )}
+              />
+            </div>
+          ) : (
             <FormField
               control={form.control}
               name="country"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>{t.incorporationCountryLabel}</FormLabel>
+                  <FormLabel>{t.countryLabelIndividual}</FormLabel>
                   <Select
                     value={field.value || undefined}
                     onValueChange={field.onChange}
@@ -605,7 +733,7 @@ function CompanyProfileStep({
                 </FormItem>
               )}
             />
-          </div>
+          )}
 
           <FormField
             control={form.control}
@@ -818,7 +946,7 @@ function PlanSelectionStep({
   t,
   common,
   skipLabel,
-  onBackToCompany,
+  onBackToProfile,
   onComplete,
   onSkip,
   isSkipping,
@@ -826,7 +954,7 @@ function PlanSelectionStep({
   t: RegisterWizardCopy["step4"]
   common: CommonCopy
   skipLabel: string
-  onBackToCompany: () => void
+  onBackToProfile: () => void
   onComplete: () => void
   onSkip: () => void
   isSkipping: boolean
@@ -840,7 +968,10 @@ function PlanSelectionStep({
 
   async function submit(plan: PlanInput["plan"]) {
     try {
-      const payload: PlanInput = planSchema.parse({ plan, billing })
+      const payload: PlanInput = planSchema.parse({
+        plan,
+        billing: plan === "free" ? "monthly" : billing,
+      })
       await mutation.mutateAsync(payload)
       setPlanSelection({ plan, billing })
       toast.success(common.toast.saved)
@@ -857,7 +988,7 @@ function PlanSelectionStep({
     <div>
       <Header title={t.title} description={t.description} />
 
-      <div className="mt-6 flex items-center justify-center">
+      <div className="mt-6 flex flex-col items-center gap-2">
         <div className="inline-flex rounded-lg border bg-muted/30 p-1">
           <button
             type="button"
@@ -880,17 +1011,21 @@ function PlanSelectionStep({
             {t.billingYearly} <span className="text-primary">{t.yearlyDiscount}</span>
           </button>
         </div>
+        <p className="max-w-md px-2 text-center text-xs text-muted-foreground">
+          {t.billingPaidPlansNote}
+        </p>
       </div>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-4 xl:gap-6">
+        <PlanCard plan={t.plans.free} onChoose={() => submit("free")} disabled={isSubmitting || isSkipping} />
         <PlanCard plan={t.plans.starter} onChoose={() => submit("starter")} disabled={isSubmitting || isSkipping} />
         <PlanCard plan={t.plans.business} highlighted onChoose={() => submit("business")} disabled={isSubmitting || isSkipping} />
         <PlanCard plan={t.plans.enterprise} onChoose={() => submit("enterprise")} disabled={isSubmitting || isSkipping} />
       </div>
 
       <div className="mt-10 flex items-center justify-center gap-2">
-        <Button type="button" variant="ghost" onClick={onBackToCompany} disabled={isSubmitting || isSkipping}>
-          {t.backToCompanyProfile}
+        <Button type="button" variant="ghost" onClick={onBackToProfile} disabled={isSubmitting || isSkipping}>
+          {t.backToProfile}
         </Button>
         <Button type="button" variant="ghost" onClick={onSkip} disabled={isSubmitting || isSkipping}>
           {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
@@ -923,7 +1058,7 @@ function PlanCard({
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col rounded-2xl border bg-background/40 p-6 backdrop-blur",
+        "relative flex h-full min-w-0 flex-col rounded-2xl border bg-background/40 p-6 backdrop-blur sm:p-7",
         highlighted && "border-primary/40 shadow-xl md:-translate-y-2"
       )}
     >

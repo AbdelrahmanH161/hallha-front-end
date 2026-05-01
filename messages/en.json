@@ -26,7 +26,7 @@
   "auth": {
     "shell": {
       "tagline": "Sharia compliance, automated.",
-      "subtitle": "Join SMEs running their compliance, purification and zakat in one place.",
+      "subtitle": "Join freelancers and SMEs running compliance, purification, and zakat in one place.",
       "feature1": "Real-time Shariah auditing",
       "feature2": "Automatic purification tracking",
       "feature3": "Zakat-ready reporting",
@@ -36,7 +36,7 @@
       "title": "Welcome back",
       "subtitle": "Sign in to your compliant dashboard",
       "emailLabel": "Email address",
-      "emailPlaceholder": "name@company.com",
+      "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "forgotPassword": "Forgot your password?",
@@ -57,7 +57,7 @@
       },
       "steps": {
         "accountBasics": "Account basics",
-        "companyProfile": "Company profile",
+        "workspaceProfile": "Workspace profile",
         "bankConnection": "Bank connection",
         "planSelection": "Plan selection"
       },
@@ -72,7 +72,7 @@
         "title": "Account basics",
         "description": "Create your credentials to start setting up your compliance workspace.",
         "emailLabel": "Email address",
-        "emailPlaceholder": "name@company.com",
+        "emailPlaceholder": "you@example.com",
         "passwordLabel": "Password",
         "passwordPlaceholder": "••••••••",
         "confirmPasswordLabel": "Confirm password",
@@ -81,54 +81,107 @@
         "signInLink": "Sign in"
       },
       "step2": {
-        "title": "Company profile",
-        "description": "Enter your business details to verify Shariah compliance.",
-        "legalNameLabel": "Legal business name",
-        "legalNamePlaceholder": "e.g., Al Noor Holdings LLC",
+        "title": "Workspace profile",
+        "description": "Tell us if you work solo or as a business so we can tailor Shariah compliance for you.",
+        "workspaceKindQuestion": "How will you use Hallilha?",
+        "workspaceIndividualTitle": "Freelancer or solo professional",
+        "workspaceBusinessTitle": "Business or company",
+        "legalNameLabelIndividual": "Full name or trade name",
+        "legalNamePlaceholderIndividual": "e.g., Ahmad Al-Farsi",
+        "legalNameLabelBusiness": "Legal business name",
+        "legalNamePlaceholderBusiness": "e.g., Al Noor Holdings LLC",
         "registrationNumberLabel": "Registration number",
         "registrationNumberPlaceholder": "Commercial register or employer ID",
-        "incorporationCountryLabel": "Country of incorporation",
+        "countryLabelIndividual": "Country",
+        "countryLabelBusiness": "Country of incorporation",
         "incorporationCountryPlaceholder": "Select a country",
         "countries": [
-          {
-            "value": "ae",
-            "label": "United Arab Emirates"
-          },
-          {
-            "value": "sa",
-            "label": "Saudi Arabia"
-          },
-          {
-            "value": "uk",
-            "label": "United Kingdom"
-          },
-          {
-            "value": "us",
-            "label": "United States"
-          }
+          { "value": "ae", "label": "United Arab Emirates" },
+          { "value": "sa", "label": "Saudi Arabia" },
+          { "value": "kw", "label": "Kuwait" },
+          { "value": "bh", "label": "Bahrain" },
+          { "value": "qa", "label": "Qatar" },
+          { "value": "om", "label": "Oman" },
+          { "value": "jo", "label": "Jordan" },
+          { "value": "lb", "label": "Lebanon" },
+          { "value": "iq", "label": "Iraq" },
+          { "value": "ps", "label": "Palestine" },
+          { "value": "eg", "label": "Egypt" },
+          { "value": "ma", "label": "Morocco" },
+          { "value": "dz", "label": "Algeria" },
+          { "value": "tn", "label": "Tunisia" },
+          { "value": "ly", "label": "Libya" },
+          { "value": "sd", "label": "Sudan" },
+          { "value": "mr", "label": "Mauritania" },
+          { "value": "ye", "label": "Yemen" },
+          { "value": "dj", "label": "Djibouti" },
+          { "value": "so", "label": "Somalia" },
+          { "value": "pk", "label": "Pakistan" },
+          { "value": "bd", "label": "Bangladesh" },
+          { "value": "mv", "label": "Maldives" },
+          { "value": "id", "label": "Indonesia" },
+          { "value": "my", "label": "Malaysia" },
+          { "value": "tr", "label": "Türkiye" },
+          { "value": "ir", "label": "Iran" },
+          { "value": "ng", "label": "Nigeria" },
+          { "value": "sn", "label": "Senegal" },
+          { "value": "uk", "label": "United Kingdom" },
+          { "value": "us", "label": "United States" }
         ],
-        "industryLabel": "Primary industry",
+        "industryLabel": "Primary industry or practice",
         "industries": [
-          {
-            "value": "retail",
-            "label": "Retail"
-          },
-          {
-            "value": "tech",
-            "label": "Technology"
-          },
-          {
-            "value": "services",
-            "label": "Services"
-          }
+          { "value": "freelance", "label": "Freelance / consulting" },
+          { "value": "islamic_finance", "label": "Islamic banking & finance" },
+          { "value": "fintech", "label": "Fintech / payments" },
+          { "value": "real_estate", "label": "Real estate & property" },
+          { "value": "retail", "label": "Retail & e-commerce" },
+          { "value": "tech", "label": "Technology & software" },
+          { "value": "services", "label": "Professional services" },
+          { "value": "legal_accounting", "label": "Legal, audit & accounting" },
+          { "value": "healthcare", "label": "Healthcare & pharma" },
+          { "value": "education", "label": "Education & training" },
+          { "value": "media_creative", "label": "Media, design & creative" },
+          { "value": "hospitality", "label": "Hospitality & tourism" },
+          { "value": "logistics", "label": "Logistics & supply chain" },
+          { "value": "manufacturing", "label": "Manufacturing & industry" },
+          { "value": "construction", "label": "Construction & engineering" },
+          { "value": "agriculture", "label": "Agriculture & food" },
+          { "value": "energy", "label": "Energy & utilities" },
+          { "value": "nonprofit", "label": "Non-profit & waqf" },
+          { "value": "government", "label": "Government & public sector" },
+          { "value": "other", "label": "Other sector" }
         ]
       },
       "step3": {
         "title": "Connect your institution",
-        "description": "Securely connect your primary operating account to enable automated Shariah compliance auditing and portfolio tracking.",
+        "description": "Securely connect your primary bank account if you want live transaction auditing. You can skip this step and add it later from settings.",
         "searchPlaceholder": "Search for your bank or institution…",
         "popularInstitutionsLabel": "Popular institutions",
         "institutions": [
+          "Emirates NBD",
+          "First Abu Dhabi Bank",
+          "Abu Dhabi Islamic Bank",
+          "Dubai Islamic Bank",
+          "Mashreq Bank",
+          "Al Rajhi Bank",
+          "Saudi National Bank",
+          "Riyad Bank",
+          "Kuwait Finance House",
+          "Boubyan Bank",
+          "National Bank of Kuwait",
+          "Qatar National Bank",
+          "Commercial Bank of Qatar",
+          "Ahli Bank Qatar",
+          "Bank Muscat",
+          "National Bank of Oman",
+          "Arab Bank",
+          "Jordan Kuwait Bank",
+          "Banque Misr",
+          "Banque du Caire",
+          "Attijariwafa Bank",
+          "Bank Albilad",
+          "Emirates Islamic",
+          "Warba Bank",
           "Chase",
           "Bank of America",
           "Wells Fargo",
@@ -141,103 +194,76 @@
       },
       "step4": {
         "title": "Choose your plan",
-        "description": "Pick the Shariah compliance level and AI auditing tools that match your business size. Upgrade anytime as you grow.",
+        "description": "Start free or upgrade for higher Halim AI limits. You can change plans anytime.",
         "billingMonthly": "Monthly",
         "billingYearly": "Yearly",
         "yearlyDiscount": "-20%",
+        "billingPaidPlansNote": "Yearly pricing applies to paid plans.",
         "plans": {
+          "free": {
+            "title": "Free",
+            "description": "For freelancers and trying Halim.",
+            "price": "$0",
+            "period": "",
+            "features": [
+              { "text": "Halim AI assistant (Islamic finance & Sharia audit help)", "included": true },
+              { "text": "5 AI audit conversations per month", "included": true },
+              { "text": "Document context up to ~10 pages per conversation", "included": true },
+              { "text": "Paid features (higher limits)", "included": false }
+            ],
+            "cta": "Continue free"
+          },
           "starter": {
             "title": "Starter",
-            "description": "Basic compliance tracking for early-stage projects.",
-            "price": "$29",
+            "description": "For solo founders and light usage.",
+            "price": "$9",
             "period": "/month",
             "features": [
-              {
-                "text": "Basic portfolio scan",
-                "included": true
-              },
-              {
-                "text": "Monthly compliance reports",
-                "included": true
-              },
-              {
-                "text": "Up to 100 transactions/month",
-                "included": true
-              },
-              {
-                "text": "AI auditor chat access",
-                "included": false
-              }
+              { "text": "Halim AI assistant", "included": true },
+              { "text": "50 AI audit conversations per month", "included": true },
+              { "text": "Document context up to ~50 pages per conversation", "included": true },
+              { "text": "Everything in Free, with higher limits", "included": true }
             ],
-            "cta": "Get started"
+            "cta": "Choose Starter"
           },
           "business": {
             "title": "Business",
-            "description": "Advanced AI tools and real-time monitoring for growing SMEs.",
-            "price": "$99",
+            "description": "For SMEs and heavier audit volume.",
+            "price": "$19",
             "period": "/month",
             "popularLabel": "Most popular",
             "features": [
-              {
-                "text": "Everything in Starter, plus:",
-                "included": true
-              },
-              {
-                "text": "Real-time transaction auditing",
-                "included": true
-              },
-              {
-                "text": "Unlimited transactions",
-                "included": true
-              },
-              {
-                "text": "Full AI auditor chat access",
-                "included": true,
-                "accent": true
-              },
-              {
-                "text": "Purification calculation engine",
-                "included": true
-              }
+              { "text": "Halim AI assistant", "included": true },
+              { "text": "250 AI audit conversations per month", "included": true, "accent": true },
+              { "text": "Larger documents & more room per thread", "included": true },
+              { "text": "Shared workspace (up to 3 seats)", "included": true }
             ],
             "cta": "Choose Business"
           },
           "enterprise": {
             "title": "Enterprise",
-            "description": "Custom solutions for organizations requiring dedicated oversight.",
+            "description": "Custom limits, integrations, and support.",
             "price": "Custom",
             "period": "",
             "features": [
-              {
-                "text": "Dedicated Shariah advisor",
-                "included": true
-              },
-              {
-                "text": "Custom API integration",
-                "included": true
-              },
-              {
-                "text": "On‑prem deployment options",
-                "included": true
-              },
-              {
-                "text": "White‑label dashboard",
-                "included": true
-              }
+              { "text": "Volume tailored to your organization", "included": true },
+              { "text": "API access when you need it", "included": true },
+              { "text": "Dedicated onboarding & success", "included": true },
+              { "text": "Discuss compliance workflows with our team", "included": true }
             ],
             "cta": "Contact sales"
           }
         },
-        "backToCompanyProfile": "Back to company profile"
+        "backToProfile": "Back to workspace profile"
       }
     }
   },
   "landing": {
     "metadata": {
-      "title": "Hallilha — Sharia compliance, automated for SMEs",
-      "description": "AI-powered Islamic finance platform. Automate Shariah compliance, purification tracking, and zakat reporting in one workspace.",
+      "title": "Hallilha — Sharia compliance for freelancers and SMEs",
+      "description": "AI-powered Islamic finance platform for solo professionals and teams. Automate Shariah compliance, purification tracking, and zakat reporting in one workspace.",
       "ogTitle": "Hallilha — Sharia-first finance",
-      "ogDescription": "Real-time Sharia auditing, purification, and zakat dashboards for modern SMEs."
+      "ogDescription": "Real-time Sharia auditing, purification, and zakat dashboards for freelancers and growing businesses."
     },
     "nav": {
       "brand": "Hallilha",
@@ -259,7 +285,7 @@
       "pill": "AI-powered Islamic finance",
       "title": "Hallilha… your financial future, on",
       "titleAccent": "Shariah-first foundations",
-      "description": "A modern financial system for SMEs. Automate compliance, ensure purification, and grow wealth with complete ethical confidence.",
+      "description": "A modern financial workspace for freelancers and SMEs. Automate compliance, ensure purification, and grow wealth with ethical confidence.",
       "primaryCta": "Start your free audit",
       "secondaryCta": "Watch the platform demo",
       "shariaFirst": "Sharia-First",
@@ -278,7 +304,7 @@
     },
     "stats": {
       "items": [
-        "500+ SMEs Onboarded",
+        "500+ Freelancers & SMEs Onboarded",
         "99.8% Sharia Compliance Rate",
         "Certified by Sharia Supervisory Board",
         "Real-time Transaction Auditing",
@@ -298,7 +324,7 @@
       "point2": "Real-time purification tracking so you never unknowingly mix funds",
       "point3": "Partnered with leading Islamic finance scholars and regional banks",
       "stat1Value": "500+",
-      "stat1Label": "SMEs Served",
+      "stat1Label": "Workspaces served",
       "stat2Value": "98%",
       "stat2Label": "Avg. Compliance Score",
       "stat3Value": "12+",
@@ -309,7 +335,7 @@
     "features": {
       "sectionLabel": "Platform features",
       "title": "A complete ethical system",
-      "description": "Enterprise-grade tools made simple for SMEs to maintain 100% Shariah compliance.",
+      "description": "Enterprise-grade tools made simple for freelancers and SMEs to maintain strong Shariah hygiene.",
       "items": {
         "auditor": {
           "title": "Smart AI Auditor",
@@ -325,11 +351,11 @@
         },
         "zakat": {
           "title": "Zakat Dashboard",
-          "description": "Automatic calculations for hawl and nisab across your entire business portfolio, ready to pay."
+          "description": "Automatic calculations for hawl and nisab across your holdings and business assets, ready when you pay."
         },
         "realtime": {
           "title": "Real-time Monitoring",
-          "description": "Connect your bank accounts for live cash-flow auditing. Every transaction is scored the moment it lands."
+          "description": "Optional bank connections for live cash-flow auditing when you need it. Every synced transaction can be scored as it lands."
         },
         "secure": {
           "title": "Bank-grade Security",
@@ -345,41 +371,47 @@
       "yearly": "Yearly",
       "savings": "Save 20%",
       "tiers": {
-        "startup": {
-          "title": "Startups",
-          "price": "$49",
-          "yearlyPrice": "$39",
+        "free": {
+          "title": "Free",
+          "price": "$0",
           "features": [
-            "Basic zakat calculator",
-            "5 contract reviews/month",
-            "Manual transaction entry",
-            "Basic compliance guidelines"
+            "Halim AI assistant",
+            "5 AI audit conversations per month",
+            "Smaller documents per thread (~10 pages)",
+            "Upgrade anytime"
           ],
-          "cta": "Choose plan"
+          "cta": "Get started free"
         },
-        "growth": {
-          "title": "Growth",
-          "price": "$149",
-          "yearlyPrice": "$119",
+        "starter": {
+          "title": "Starter",
+          "price": "$9",
+          "yearlyPrice": "$7",
+          "features": [
+            "Everything in Free",
+            "50 AI audit conversations per month",
+            "Documents up to ~50 pages per thread"
+          ],
+          "cta": "Get started"
+        },
+        "business": {
+          "title": "Business",
+          "price": "$19",
+          "yearlyPrice": "$15",
           "highlightLabel": "Most popular",
           "features": [
-            "Unlimited smart auditing",
-            "Automatic purification tracking",
-            "Full contract library",
-            "Automated bank sync",
-            "Zakat & purification reports"
+            "250 AI audit conversations per month",
+            "More room for large documents",
+            "Up to 3 workspace seats"
           ],
-          "cta": "Start free trial"
+          "cta": "Get started"
         },
         "enterprise": {
           "title": "Enterprise",
           "price": "Custom",
           "features": [
-            "Dedicated Shariah advisor",
-            "Custom API integration",
-            "Multi-account management",
-            "Official compliance reports",
-            "White-label dashboard"
+            "Custom monthly limits",
+            "API access available",
+            "Security reviews & onboarding support"
           ],
           "cta": "Contact sales"
         }
@@ -393,7 +425,7 @@
       "nameLabel": "Full name",
       "namePlaceholder": "Your full name",
       "emailLabel": "Email address",
-      "emailPlaceholder": "you@company.com",
+      "emailPlaceholder": "you@example.com",
       "messageLabel": "Message",
       "messagePlaceholder": "Tell us how we can help you…",
       "submit": "Send message",
@@ -413,16 +445,16 @@
           "a": "When Hallilha detects a non-compliant income source (such as interest income from a conventional bank account), it automatically quarantines the flagged amount in a 'Purification Queue'. You can then easily donate it to a charity of your choice directly from the dashboard."
         },
         {
-          "q": "Can I connect my existing business bank account?",
-          "a": "Yes. Hallilha integrates with major banks in the MENA region via secure open-banking APIs. We use 256-bit encryption and never store your bank credentials."
+          "q": "Can I connect my bank account?",
+          "a": "Yes. Whether you use a personal account as a freelancer or a business account as an SME, Hallilha integrates with major banks in the MENA region via secure open-banking APIs when you choose to connect. We use strong encryption and never store your bank credentials."
         },
         {
           "q": "What is the Zakat Dashboard?",
-          "a": "The Zakat Dashboard automatically tracks your business's assets over the lunar year (hawl) and calculates your exact Zakat obligation based on your current nisab threshold. It generates a ready-to-pay Zakat report at year end."
+          "a": "The Zakat Dashboard tracks zakatable assets over the lunar year (hawl) and helps estimate your obligation based on current nisab thresholds—for sole traders with simple portfolios as well as larger businesses. It produces a structured report you can review with a qualified accountant or scholar before paying."
         },
         {
-          "q": "Is there a free trial?",
-          "a": "The Startup tier is permanently free for freelancers and solo founders. For Growth and Enterprise features, we offer a 14-day free trial with no credit card required."
+          "q": "Is there a free plan?",
+          "a": "Yes. The Free plan includes Halim with 5 AI audit conversations per month (see pricing for document limits). Paid plans start at $9/month for higher quotas. Contact us about Enterprise if you need custom limits or API access."
         },
         {
           "q": "What languages does Hallilha support?",
@@ -432,7 +464,7 @@
     },
     "footerNote": "All rights reserved.",
     "footer": {
-      "copyright": "© 2025 Hallilha. Audited by the Shariah Supervisory Board.",
+      "copyright": "© 2026 Hallilha. Audited by the Shariah Supervisory Board.",
       "tagline": "Your financial future, built on Shariah-first foundations.",
       "complianceBadge": "Shariah Supervisory Board Certified",
       "productTitle": "Product",
@@ -452,7 +484,7 @@
       "cta": "Open settings",
       "dismiss": "Dismiss",
       "steps": {
-        "company": "Company profile",
+        "profile": "Workspace profile",
         "bank": "Bank connection",
         "plan": "Plan"
       }
@@ -563,10 +595,10 @@
     },
     "settings": {
       "title": "Settings",
-      "description": "Manage your profile, organization, and preferences.",
+      "description": "Manage your profile, workspace, and preferences.",
       "tabs": {
         "profile": "Profile",
-        "organization": "Organization",
+        "organization": "Workspace",
         "preferences": "Preferences"
       },
       "save": "Save changes",
@@ -587,21 +619,29 @@
     "organization": {
       "intro": "Update the details collected during onboarding. Each section saves independently.",
       "sections": {
-        "company": "Company profile",
-        "companyDescription": "Legal entity information used for compliance reporting.",
+        "workspace": "Workspace profile",
+        "workspaceDescription": "Whether you work solo or as a company, keep these details accurate for compliance.",
         "bank": "Bank connection",
         "bankDescription": "Choose the institution we use for portfolio auditing.",
         "plan": "Plan & billing",
-        "planDescription": "Pick the Shariah compliance level that matches your business size."
+        "planDescription": "Includes Free, Starter ($9/mo), Business ($19/mo), and Enterprise."
+      },
+      "workspaceKinds": {
+        "individual": "Freelancer or solo professional",
+        "business": "Business or company"
       },
       "fields": {
-        "legalName": "Legal business name",
-        "legalNamePlaceholder": "e.g., Al Noor Holdings LLC",
+        "workspaceKind": "Workspace type",
+        "legalNameIndividual": "Full name or trade name",
+        "legalNamePlaceholderIndividual": "e.g., Ahmad Al-Farsi",
+        "legalNameBusiness": "Legal business name",
+        "legalNamePlaceholderBusiness": "e.g., Al Noor Holdings LLC",
         "registrationNumber": "Registration number",
         "registrationNumberPlaceholder": "Commercial register or employer ID",
-        "country": "Country of incorporation",
+        "countryIndividual": "Country",
+        "countryBusiness": "Country of incorporation",
         "countryPlaceholder": "Select a country",
-        "industry": "Primary industry",
+        "industry": "Primary industry or practice",
         "industryPlaceholder": "Select an industry",
         "institution": "Banking institution",
         "institutionPlaceholder": "Select an institution",
@@ -611,14 +651,16 @@
         "plan": "Plan"
       },
       "plans": {
+        "free": "Free",
+        "freeDescription": "5 Halim AI conversations/mo — ideal for freelancers.",
         "starter": "Starter",
-        "starterDescription": "Basic compliance tracking for early-stage projects.",
+        "starterDescription": "50 AI conversations/mo and larger documents.",
         "business": "Business",
-        "businessDescription": "Real-time AI auditing and unlimited transactions.",
+        "businessDescription": "250 AI conversations/mo and up to 3 seats.",
         "enterprise": "Enterprise",
-        "enterpriseDescription": "Custom solutions with a dedicated Sharia advisor."
+        "enterpriseDescription": "Custom limits and API — contact us."
       },
-      "saveCompany": "Save company profile",
+      "saveWorkspace": "Save workspace profile",
       "saveBank": "Save bank link",
       "savePlan": "Save plan",
       "savedToast": "Saved successfully",

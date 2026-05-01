@@ -13,10 +13,10 @@ const DISMISS_KEY = "hallha-onboarding-banner-dismissed-at"
 const DISMISS_TTL_MS = 24 * 60 * 60 * 1000
 
 type StepStatus = {
-  key: "company" | "bank" | "plan"
+  key: "profile" | "bank" | "plan"
   done: boolean
   Icon: typeof Building2
-  labelKey: "company" | "bank" | "plan"
+  labelKey: "profile" | "bank" | "plan"
 }
 
 export function OnboardingBanner() {
@@ -37,12 +37,18 @@ export function OnboardingBanner() {
 
   if (!org || org.onboardingCompleted || dismissed) return null
 
+  const isBusinessWorkspace = org.workspaceKind !== "individual"
+
   const steps: StepStatus[] = [
     {
-      key: "company",
-      done: Boolean(org.legalName && org.industry),
+      key: "profile",
+      done: Boolean(
+        org.legalName &&
+          org.industry &&
+          (!isBusinessWorkspace || org.registrationNumber)
+      ),
       Icon: Building2,
-      labelKey: "company",
+      labelKey: "profile",
     },
     {
       key: "bank",
@@ -52,7 +58,10 @@ export function OnboardingBanner() {
     },
     {
       key: "plan",
-      done: Boolean(org.plan && org.plan !== "free"),
+      done: Boolean(
+        (org.onboardingStep ?? 0) >= 4 ||
+          Boolean(org.plan && org.plan !== "free")
+      ),
       Icon: CreditCard,
       labelKey: "plan",
     },

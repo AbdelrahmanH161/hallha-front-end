@@ -19,12 +19,17 @@ export async function PricingSection() {
 
   const tiers = [
     {
-      ...tiersRaw.startup!,
+      ...tiersRaw.free!,
+      period: "",
+      variant: "outline" as const,
+    },
+    {
+      ...tiersRaw.starter!,
       period: t("pricing.period"),
       variant: "outline" as const,
     },
     {
-      ...tiersRaw.growth!,
+      ...tiersRaw.business!,
       period: t("pricing.period"),
       variant: "primary" as const,
     },

@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { apiFetch } from "@/lib/api/client"
 import type {
   BankLinkInput,
-  CompanyProfileInput,
   PlanInput,
+  WorkspaceProfileInput,
 } from "@/lib/schemas/organization"
 
 export type Organization = {
@@ -21,6 +21,7 @@ export type Organization = {
   billingCycle?: "monthly" | "yearly"
   onboardingStep?: number
   onboardingCompleted?: boolean
+  workspaceKind?: "individual" | "business"
   [key: string]: unknown
 }
 
@@ -41,7 +42,7 @@ export function useOrganizationQuery() {
 export function useUpdateCompanyProfileMutation() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: CompanyProfileInput) =>
+    mutationFn: (data: WorkspaceProfileInput) =>
       apiFetch<{ ok: true; organization: Organization }>("/organizations/me", {
         method: "PATCH",
         body: data,

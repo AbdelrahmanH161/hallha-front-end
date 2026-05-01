@@ -4,7 +4,7 @@ import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -35,11 +35,11 @@ import {
 } from "@/lib/api/queries/organization"
 import {
   bankLinkSchema,
-  companyProfileSchema,
   planSchema,
+  workspaceProfileSchema,
   type BankLinkInput,
-  type CompanyProfileInput,
   type PlanInput,
+  type WorkspaceProfileInput,
 } from "@/lib/schemas/organization"
 import { cn } from "@/lib/utils"
 
@@ -67,7 +67,7 @@ export function OrganizationTab() {
     <div className="space-y-6 py-2">
       <p className="text-sm text-muted-foreground">{t("intro")}</p>
 
-      <CompanySection />
+      <WorkspaceSection />
       <Separator />
       <BankSection />
       <Separator />
@@ -76,7 +76,7 @@ export function OrganizationTab() {
   )
 }
 
-function CompanySection() {
+function WorkspaceSection() {
   const t = useTranslations("app.organization")
   const tStep = useTranslations("auth.register.step2")
   const tCommon = useTranslations("common")
@@ -86,9 +86,13 @@ function CompanySection() {
   const countries = (tStep.raw("countries") as LabelValue[]) ?? []
   const industries = (tStep.raw("industries") as LabelValue[]) ?? []
 
-  const form = useForm<CompanyProfileInput>({
-    resolver: zodResolver(companyProfileSchema),
+  const resolvedKind =
+    org?.workspaceKind === "individual" ? "individual" : "business"
+
+  const form = useForm<WorkspaceProfileInput>({
+    resolver: zodResolver(workspaceProfileSchema),
     defaultValues: {
+      workspaceKind: resolvedKind,
       legalName: org?.legalName ?? "",
       registrationNumber: org?.registrationNumber ?? "",
       country: org?.country ?? "",
@@ -97,16 +101,40 @@ function CompanySection() {
     mode: "onTouched",
   })
 
+  const workspaceKind =
+    useWatch({
+      control: form.control,
+      name: "workspaceKind",
+      defaultValue: resolvedKind,
+    }) ?? resolvedKind
+
+  React.useEffect(() => {
+    if (workspaceKind === "individual") {
+      form.setValue("registrationNumber", "")
+      form.clearErrors("registrationNumber")
+    }
+  }, [workspaceKind, form])
+
   React.useEffect(() => {
     if (!org) return
+    const kind =
+      org.workspaceKind === "individual" ? "individual" : "business"
     form.reset({
+      workspaceKind: kind,
       legalName: org.legalName ?? "",
-      registrationNumber: org.registrationNumber ?? "",
+      registrationNumber:
+        kind === "individual" ? "" : (org.registrationNumber ?? ""),
       country: org.country ?? "",
       industry: org.industry ?? "",
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [org?.legalName, org?.registrationNumber, org?.country, org?.industry])
+  }, [
+    org?.workspaceKind,
+    org?.legalName,
+    org?.registrationNumber,
+    org?.country,
+    org?.industry,
+  ])
 
   function resolveError(message?: string) {
     if (!message) return undefined
@@ -114,7 +142,7 @@ function CompanySection() {
     return message
   }
 
-  async function onSubmit(values: CompanyProfileInput) {
+  async function onSubmit(values: WorkspaceProfileInput) {
     try {
       await mutation.mutateAsync(values)
       toast.success(t("savedToast"))
@@ -128,8 +156,8 @@ function CompanySection() {
   return (
     <section className="space-y-3">
       <SectionHeading
-        title={t("sections.company")}
-        description={t("sections.companyDescription")}
+        title={t("sections.workspace")}
+        description={t("sections.workspaceDescription")}
       />
 
       <Form {...form}>
@@ -140,13 +168,64 @@ function CompanySection() {
         >
           <FormField
             control={form.control}
+            name="workspaceKind"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>{t("fields.workspaceKind")}</FormLabel>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(
+                    [
+                      {
+                        value: "individual" as const,
+                        title: t("workspaceKinds.individual"),
+                      },
+                      {
+                        value: "business" as const,
+                        title: t("workspaceKinds.business"),
+                      },
+                    ] as const
+                  ).map(({ value, title }) => {
+                    const checked = field.value === value
+                    return (
+                      <label key={value} className="cursor-pointer">
+                        <input
+                          className="peer sr-only"
+                          type="radio"
+                          name={field.name}
+                          value={value}
+                          checked={checked}
+                          onChange={() => field.onChange(value)}
+                          disabled={isSubmitting}
+                        />
+                        <div className="rounded-lg border bg-background/40 p-3 text-center text-sm font-medium transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary">
+                          {title}
+                        </div>
+                      </label>
+                    )
+                  })}
+                </div>
+                <FormMessage>{resolveError(fieldState.error?.message)}</FormMessage>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="legalName"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel>{t("fields.legalName")}</FormLabel>
+                <FormLabel>
+                  {workspaceKind === "individual"
+                    ? t("fields.legalNameIndividual")
+                    : t("fields.legalNameBusiness")}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={t("fields.legalNamePlaceholder")}
+                    placeholder={
+                      workspaceKind === "individual"
+                        ? t("fields.legalNamePlaceholderIndividual")
+                        : t("fields.legalNamePlaceholderBusiness")
+                    }
                     disabled={isSubmitting}
                     {...field}
                   />
@@ -158,33 +237,68 @@ function CompanySection() {
             )}
           />
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="registrationNumber"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.registrationNumber")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("fields.registrationNumberPlaceholder")}
-                      disabled={isSubmitting}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage>
-                    {resolveError(fieldState.error?.message)}
-                  </FormMessage>
-                </FormItem>
-              )}
-            />
+          {workspaceKind === "business" ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="registrationNumber"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>{t("fields.registrationNumber")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t("fields.registrationNumberPlaceholder")}
+                        disabled={isSubmitting}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage>
+                      {resolveError(fieldState.error?.message)}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
 
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>{t("fields.countryBusiness")}</FormLabel>
+                    <Select
+                      value={field.value || undefined}
+                      onValueChange={field.onChange}
+                      disabled={isSubmitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue
+                            placeholder={t("fields.countryPlaceholder")}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {countries.map((c) => (
+                          <SelectItem key={c.value} value={c.value}>
+                            {c.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage>
+                      {resolveError(fieldState.error?.message)}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
+            </div>
+          ) : (
             <FormField
               control={form.control}
               name="country"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.country")}</FormLabel>
+                  <FormLabel>{t("fields.countryIndividual")}</FormLabel>
                   <Select
                     value={field.value || undefined}
                     onValueChange={field.onChange}
@@ -211,7 +325,7 @@ function CompanySection() {
                 </FormItem>
               )}
             />
-          </div>
+          )}
 
           <FormField
             control={form.control}
@@ -251,7 +365,7 @@ function CompanySection() {
               {isSubmitting ? (
                 <Loader2 className="size-4 animate-spin" aria-hidden />
               ) : null}
-              {t("saveCompany")}
+              {t("saveWorkspace")}
             </Button>
           </div>
         </form>
@@ -356,7 +470,7 @@ function PlanSection() {
   const form = useForm<PlanInput>({
     resolver: zodResolver(planSchema),
     defaultValues: {
-      plan: (org?.plan as PlanInput["plan"]) ?? "starter",
+      plan: (org?.plan as PlanInput["plan"]) ?? "free",
       billing: org?.billingCycle ?? "monthly",
     },
     mode: "onTouched",
@@ -365,7 +479,7 @@ function PlanSection() {
   React.useEffect(() => {
     if (!org) return
     form.reset({
-      plan: (org.plan as PlanInput["plan"]) ?? "starter",
+      plan: (org.plan as PlanInput["plan"]) ?? "free",
       billing: org.billingCycle ?? "monthly",
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -381,11 +495,17 @@ function PlanSection() {
   }
 
   const isSubmitting = mutation.isPending || form.formState.isSubmitting
-  const billing = form.watch("billing")
-  const plan = form.watch("plan")
+  const billing = useWatch({ control: form.control, name: "billing" }) ?? "monthly"
+  const plan =
+    useWatch({ control: form.control, name: "plan" }) ?? ("free" as PlanInput["plan"])
 
   const plans: { id: PlanInput["plan"]; title: string; description: string }[] =
     [
+      {
+        id: "free",
+        title: t("plans.free"),
+        description: t("plans.freeDescription"),
+      },
       {
         id: "starter",
         title: t("plans.starter"),
@@ -445,7 +565,7 @@ function PlanSection() {
             <div className="text-xs font-medium text-muted-foreground">
               {t("fields.plan")}
             </div>
-            <div className="mt-1.5 grid gap-3 md:grid-cols-3">
+            <div className="mt-1.5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {plans.map((p) => {
                 const checked = plan === p.id
                 return (

@@ -1,7 +1,10 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 
+export type WorkspaceKind = "individual" | "business"
+
 export type CompanyDraft = {
+  workspaceKind: WorkspaceKind
   legalName: string
   registrationNumber: string
   country: string
@@ -13,7 +16,7 @@ export type BankDraft = {
 }
 
 export type PlanDraft = {
-  plan: "starter" | "business" | "enterprise" | null
+  plan: "free" | "starter" | "business" | "enterprise" | null
   billing: "monthly" | "yearly"
 }
 
@@ -30,6 +33,7 @@ type RegisterDraftState = {
 }
 
 const initialCompany: CompanyDraft = {
+  workspaceKind: "individual",
   legalName: "",
   registrationNumber: "",
   country: "",
@@ -52,7 +56,9 @@ export const useRegisterDraft = create<RegisterDraftState>()(
       setBank: (data) =>
         set((state) => ({ bank: { ...state.bank, ...data } })),
       setPlanSelection: (data) =>
-        set((state) => ({ planSelection: { ...state.planSelection, ...data } })),
+        set((state) => ({
+          planSelection: { ...state.planSelection, ...data },
+        })),
       reset: () =>
         set({
           email: null,
@@ -64,8 +70,35 @@ export const useRegisterDraft = create<RegisterDraftState>()(
     {
       name: "hallha-register-draft",
       storage: createJSONStorage(() =>
-        typeof window !== "undefined" ? sessionStorage : (undefined as unknown as Storage)
+        typeof window !== "undefined"
+          ? sessionStorage
+          : (undefined as unknown as Storage)
       ),
+      merge: (persistedState, currentState) => {
+        const p = persistedState as Partial<RegisterDraftState> | undefined
+        if (!p) return currentState
+        const coercedCompany: CompanyDraft = {
+          ...initialCompany,
+          ...currentState.company,
+          ...p.company,
+          workspaceKind:
+            p.company?.workspaceKind === "business"
+              ? "business"
+              : "individual",
+        }
+        return {
+          ...currentState,
+          ...p,
+          email: p.email ?? currentState.email,
+          company: coercedCompany,
+          bank: { ...initialBank, ...currentState.bank, ...p.bank },
+          planSelection: {
+            ...initialPlan,
+            ...currentState.planSelection,
+            ...p.planSelection,
+          },
+        }
+      },
     }
   )
 )

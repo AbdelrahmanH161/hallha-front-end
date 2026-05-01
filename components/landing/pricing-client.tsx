@@ -87,7 +87,7 @@ export function PricingSectionClient({
       </ScrollReveal>
 
       {/* Tier cards */}
-      <div className="mx-auto grid max-w-5xl items-start gap-6 md:grid-cols-3 md:gap-8">
+      <div className="mx-auto grid max-w-6xl items-start gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6 xl:gap-8">
         {tiers.map((tier, i) => (
           <ScrollReveal
             key={tier.title}
