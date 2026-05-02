@@ -23,7 +23,7 @@ export function ChatSuggestionChip({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "glass-card group flex min-h-[9.5rem] flex-col items-start gap-2 rounded-xl p-4 text-start transition-all",
+        "glass-card group flex min-h-[7rem] flex-col items-start gap-2 rounded-xl p-4 text-start transition-all sm:min-h-[9.5rem]",
         "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_6px_20px_rgba(6,78,59,0.12)]",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
         "disabled:cursor-not-allowed disabled:opacity-60"

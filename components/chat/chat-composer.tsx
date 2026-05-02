@@ -449,7 +449,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
   }
 
   return (
-    <div className="px-4 pt-3 pb-4 sm:px-6 sm:pb-5">
+    <div className="px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-[max(1.25rem,env(safe-area-inset-bottom,0px))]">
       <div
         className={cn(
           "glass-card overflow-hidden rounded-2xl transition-shadow",
@@ -559,7 +559,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
                 </Tooltip>
               </div>
 
-              <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:gap-3">
                 <span className="hidden text-[11px] text-muted-foreground sm:inline">
                   {t("enterToSend")}
                 </span>
@@ -568,7 +568,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
                     type="button"
                     variant="outline"
                     onClick={abortStreaming}
-                    className="gap-2"
+                    className="w-full gap-2 sm:w-auto"
                   >
                     <Square className="size-4" aria-hidden />
                     {t("stop")}
@@ -579,7 +579,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
                     onClick={handleSend}
                     disabled={!canSend}
                     className={cn(
-                      "shimmer gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_3px_12px_rgba(6,78,59,0.25)] transition-transform",
+                      "shimmer w-full shrink-0 gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[0_3px_12px_rgba(6,78,59,0.25)] transition-transform sm:w-auto",
                       canSend
                         ? "bg-[linear-gradient(135deg,#064e3b_0%,#0a6652_100%)] hover:-translate-y-0.5 hover:shadow-[0_5px_16px_rgba(6,78,59,0.35)]"
                         : "bg-primary/20 text-muted-foreground shadow-none"

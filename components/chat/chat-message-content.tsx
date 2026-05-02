@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl"
 import remarkGfm from "remark-gfm"
 
 import type { RetrievedSource } from "@/lib/types/retrieved-source"
+import { cn } from "@/lib/utils"
 
 const SOURCES_HEADING_RE =
   /(?:^|\n)(?:\s*(?:#+\s*)?(?:\*\*)?\s*Sources\s*(?:\*\*)?:?\s*)\n/i
@@ -74,6 +75,66 @@ function leadingCitationNumber(node: React.ReactNode): string | null {
   return m?.[1] ?? null
 }
 
+function overflowMarkdownComponents(
+  mapCell: (children: React.ReactNode) => React.ReactNode
+): Pick<
+  Components,
+  "table" | "thead" | "tbody" | "tr" | "th" | "td" | "pre" | "code"
+> {
+  return {
+    table: ({ children }) => (
+      <div className="my-2 max-w-full overflow-x-auto rounded-md border border-border">
+        <table className="w-full min-w-0 border-collapse text-sm">{children}</table>
+      </div>
+    ),
+    thead: ({ children }) => <thead className="bg-muted/50">{children}</thead>,
+    tbody: ({ children }) => <tbody>{children}</tbody>,
+    tr: ({ children }) => (
+      <tr className="border-b border-border last:border-b-0">{children}</tr>
+    ),
+    th: ({ children }) => (
+      <th className="border border-border px-2 py-1.5 text-start font-semibold text-foreground">
+        {mapCell(children)}
+      </th>
+    ),
+    td: ({ children }) => (
+      <td className="border border-border px-2 py-1.5 align-top text-foreground">
+        {mapCell(children)}
+      </td>
+    ),
+    pre: ({ children }) => (
+      <div className="my-2 max-w-full overflow-x-auto rounded-md border border-border bg-muted/40">
+        <pre className="m-0 p-3 text-xs leading-relaxed text-foreground">{children}</pre>
+      </div>
+    ),
+    code: ({
+      inline,
+      className,
+      children,
+      ...props
+    }: React.ComponentPropsWithoutRef<"code"> & { inline?: boolean }) => {
+      if (inline) {
+        return (
+          <code
+            className="rounded bg-muted/80 px-1 py-px font-mono text-[0.875em] wrap-break-word text-foreground"
+            {...props}
+          >
+            {children}
+          </code>
+        )
+      }
+      return (
+        <code
+          className={cn("block min-w-0 font-mono text-sm text-foreground", className)}
+          {...props}
+        >
+          {children}
+        </code>
+      )
+    },
+  }
+}
+
 export function ChatMessageContent({
   content,
   anchorPrefix,
@@ -96,7 +157,7 @@ export function ChatMessageContent({
     () => ({
       p: ({ children }) => <p>{walkChildren(children, anchorPrefix)}</p>,
       li: ({ children }) => <li>{walkChildren(children, anchorPrefix)}</li>,
-      td: ({ children }) => <td>{walkChildren(children, anchorPrefix)}</td>,
+      ...overflowMarkdownComponents((ch) => walkChildren(ch, anchorPrefix)),
     }),
     [anchorPrefix]
   )
@@ -119,12 +180,13 @@ export function ChatMessageContent({
           </p>
         )
       },
+      ...overflowMarkdownComponents((ch) => ch),
     }),
     [anchorPrefix]
   )
 
   return (
-    <div className="markdown-content min-w-0 space-y-2 break-words [&_h1]:mt-2 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:mt-2 [&_h2]:text-sm [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-1.5 [&_ol]:ms-5 [&_ol]:list-decimal [&_p]:my-1.5 [&_strong]:font-semibold [&_ul]:my-1.5 [&_ul]:ms-5 [&_ul]:list-disc">
+    <div className="markdown-content min-w-0 space-y-2 wrap-break-word [&_h1]:mt-2 [&_h1]:text-base [&_h1]:font-semibold [&_h2]:mt-2 [&_h2]:text-sm [&_h2]:font-semibold [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-1.5 [&_ol]:ms-5 [&_ol]:list-decimal [&_p]:my-1.5 [&_strong]:font-semibold [&_ul]:my-1.5 [&_ul]:ms-5 [&_ul]:list-disc">
       {parts.map((part, i) =>
         part.kind === "body" ? (
           <ReactMarkdown

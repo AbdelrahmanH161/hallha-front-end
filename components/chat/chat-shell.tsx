@@ -51,7 +51,7 @@ export function ChatShell() {
         />
 
         <div className="relative flex min-h-0 flex-1 flex-col">
-          <div className="px-4 pt-3 sm:px-6 sm:pt-4">
+          <div className="px-4 pt-2 sm:px-6 sm:pt-4">
             <OnboardingBanner />
           </div>
           <ChatWindow />

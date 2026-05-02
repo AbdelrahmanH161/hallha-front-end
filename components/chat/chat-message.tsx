@@ -48,13 +48,13 @@ export function ChatMessage({
 
       <div
         className={cn(
-          "flex min-w-0 max-w-[78%] flex-col gap-1.5",
+          "flex min-w-0 max-w-[calc(100%-2.75rem)] flex-col gap-1.5 sm:max-w-[78%]",
           isUser ? "items-end" : "items-start"
         )}
       >
         <div
           className={cn(
-            "min-w-0 max-w-full px-4 py-2.5 text-sm leading-relaxed break-words",
+            "min-w-0 max-w-full px-3 py-2.5 text-sm leading-relaxed break-words sm:px-4",
             isUser
               ? "bubble-user whitespace-pre-wrap bg-[linear-gradient(135deg,#064e3b_0%,#0a6652_100%)] text-primary-foreground shadow-[0_4px_16px_rgba(6,78,59,0.25)]"
               : "bubble-assistant glass-card text-foreground"

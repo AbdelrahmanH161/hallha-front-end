@@ -58,8 +58,8 @@ export function ChatWelcome() {
   }
 
   return (
-    <div className="animate-fade-up flex flex-1 flex-col items-center justify-center gap-8 px-6 py-2">
-      <div className="flex flex-col items-center gap-3">
+    <div className="animate-fade-up flex min-h-0 flex-1 flex-col items-center justify-center gap-4 overflow-y-auto overscroll-y-contain px-6 py-2 [scrollbar-gutter:stable] sm:gap-8 sm:py-4">
+      <div className="flex shrink-0 flex-col items-center gap-3">
         <div className="relative">
           <div className="animate-pulse-glow pointer-events-none absolute -inset-3 rounded-2xl bg-[radial-gradient(circle,rgba(6,78,59,0.18)_0%,transparent_70%)]" />
           <HalimAvatar size={68} />
@@ -71,7 +71,7 @@ export function ChatWelcome() {
         </div>
       </div>
 
-      <div className="grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid w-full max-w-3xl shrink-0 grid-cols-1 gap-3 sm:grid-cols-2">
         {suggestions.map((s) => (
           <ChatSuggestionChip
             key={s.id}

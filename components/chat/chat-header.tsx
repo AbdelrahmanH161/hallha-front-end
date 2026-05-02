@@ -35,7 +35,7 @@ export function ChatHeader({
   const isDark = resolvedTheme === "dark"
 
   return (
-    <header className="glass-nav relative z-[5] flex flex-shrink-0 items-center justify-between gap-3 border-b px-4 py-3 sm:px-5">
+    <header className="glass-nav relative z-[5] flex flex-shrink-0 items-center justify-between gap-3 border-b px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] sm:px-5">
       <div className="flex min-w-0 items-center gap-2">
         <Button
           type="button"
@@ -45,7 +45,7 @@ export function ChatHeader({
           onClick={onOpenMobileSidebar}
           className="size-8 shrink-0 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur lg:hidden"
         >
-          <PanelLeft className="size-4" aria-hidden />
+          <PanelLeft className="size-4 rtl:rotate-180" aria-hidden />
         </Button>
 
         <Button
@@ -61,7 +61,7 @@ export function ChatHeader({
           className="hidden size-8 shrink-0 rounded-md border border-[var(--glass-border-card)] bg-[var(--glass-bg)] backdrop-blur lg:inline-flex"
         >
           {desktopCollapsed ? (
-            <PanelLeft className="size-4" aria-hidden />
+            <PanelLeft className="size-4 rtl:rotate-180" aria-hidden />
           ) : (
             <PanelLeftClose className="size-4" aria-hidden />
           )}
@@ -74,10 +74,11 @@ export function ChatHeader({
                 {t("brandArabic")}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-500">
-              <span className="animate-pulse-glow inline-block size-1.5 rounded-full bg-emerald-500" />
-              <span className="text-muted-foreground">
-                {t("tagline")} ·{" "}
+            <div className="flex min-w-0 items-start gap-1.5 text-[10px] font-medium text-emerald-500">
+              <span className="animate-pulse-glow mt-0.5 inline-block size-1.5 shrink-0 rounded-full bg-emerald-500" />
+              <span className="min-w-0 leading-snug text-muted-foreground line-clamp-2">
+                {t("tagline")}
+                <span className="max-sm:hidden"> · </span>{" "}
                 <span className="text-emerald-500">{t("statusOnline")}</span>
               </span>
             </div>
