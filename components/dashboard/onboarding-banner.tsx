@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArrowRight, Building2, CreditCard, Landmark, X } from "lucide-react"
+import { ArrowRight, Building2, ClipboardList, CreditCard, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
@@ -13,18 +13,17 @@ const DISMISS_KEY = "hallha-onboarding-banner-dismissed-at"
 const DISMISS_TTL_MS = 24 * 60 * 60 * 1000
 
 type StepStatus = {
-  key: "profile" | "bank" | "plan"
+  key: "context" | "profile" | "plan"
   done: boolean
   Icon: typeof Building2
-  labelKey: "profile" | "bank" | "plan"
+  labelKey: "context" | "profile" | "plan"
 }
 
 export function OnboardingBanner() {
   const t = useTranslations("app.onboardingBanner")
   const openSettings = useSettingsDialog((s) => s.openAt)
   const [dismissed, setDismissed] = React.useState(() => {
-    const raw =
-      typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
+    const raw = typeof window !== "undefined" ? localStorage.getItem(DISMISS_KEY) : null
     const dismissedAt = raw ? Number(raw) : 0
     return Date.now() - dismissedAt < DISMISS_TTL_MS
   })
@@ -37,35 +36,34 @@ export function OnboardingBanner() {
 
   if (!org || org.onboardingCompleted || dismissed) return null
 
+  const contextDone = Boolean(org.contextSummary)
   const isBusinessWorkspace = org.workspaceKind !== "individual"
+  const profileDone =
+    Boolean(org.legalName && org.industry && (!isBusinessWorkspace || org.registrationNumber))
+  const planDone =
+    Boolean((org.onboardingStep ?? 0) >= 5 || ((org.plan && org.plan !== "free") ?? false))
 
   const steps: StepStatus[] = [
     {
+      key: "context",
+      done: contextDone,
+      Icon: ClipboardList,
+      labelKey: "context",
+    },
+    {
       key: "profile",
-      done: Boolean(
-        org.legalName &&
-          org.industry &&
-          (!isBusinessWorkspace || org.registrationNumber)
-      ),
+      done: profileDone,
       Icon: Building2,
       labelKey: "profile",
     },
     {
-      key: "bank",
-      done: Boolean(org.bankInstitutionId),
-      Icon: Landmark,
-      labelKey: "bank",
-    },
-    {
       key: "plan",
-      done: Boolean(
-        (org.onboardingStep ?? 0) >= 4 ||
-          Boolean(org.plan && org.plan !== "free")
-      ),
+      done: planDone,
       Icon: CreditCard,
       labelKey: "plan",
     },
   ]
+
   const remaining = steps.filter((s) => !s.done).length
   if (remaining === 0) return null
 
@@ -82,9 +80,7 @@ export function OnboardingBanner() {
 
       <div className="flex flex-col gap-3 pe-8 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold">
-            {t("title", { count: remaining })}
-          </h3>
+          <h3 className="text-sm font-semibold">{t("title", { count: remaining })}</h3>
           <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
           <ul className="mt-2 flex flex-wrap gap-2 text-xs">
             {steps.map((s) => (

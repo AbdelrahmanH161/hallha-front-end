@@ -1,6 +1,11 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 
+import type {
+  AuditorOnboardingInput,
+  BusinessOnboardingInput,
+} from "@/lib/schemas/onboarding"
+
 export type WorkspaceKind = "individual" | "business"
 
 export type CompanyDraft = {
@@ -11,23 +16,43 @@ export type CompanyDraft = {
   industry: string
 }
 
-export type BankDraft = {
-  institutionId: string | null
-}
-
 export type PlanDraft = {
   plan: "free" | "starter" | "business" | "enterprise" | null
   billing: "monthly" | "yearly"
 }
 
+/** Persona routing for onboarding (persisted locally until server sync). */
+export type DraftUserPath = "business" | "auditor" | null
+
+const DRAFT_VERSION = 2
+
+export const initialBusinessAnswers: BusinessOnboardingInput = {
+  industry: "fintech",
+  targetAudience: "b2b",
+  revenueModel: "subscription",
+  paymentMethods: [],
+}
+
+export const initialAuditorAnswers: AuditorOnboardingInput = {
+  specialization: "general",
+  standards: ["aaoifi"],
+  useCase: "consultantClientContracts",
+}
+
 type RegisterDraftState = {
+  _version: number
   email: string | null
+  /** Local-only until POST /organizations/me/persona */
+  userPath: DraftUserPath
+  businessAnswers: BusinessOnboardingInput
+  auditorAnswers: AuditorOnboardingInput
   company: CompanyDraft
-  bank: BankDraft
   planSelection: PlanDraft
   setEmail: (email: string) => void
+  setUserPath: (path: "business" | "auditor") => void
+  setBusinessAnswers: (data: Partial<BusinessOnboardingInput>) => void
+  setAuditorAnswers: (data: Partial<AuditorOnboardingInput>) => void
   setCompany: (data: Partial<CompanyDraft>) => void
-  setBank: (data: Partial<BankDraft>) => void
   setPlanSelection: (data: Partial<PlanDraft>) => void
   reset: () => void
 }
@@ -40,31 +65,47 @@ const initialCompany: CompanyDraft = {
   industry: "",
 }
 
-const initialBank: BankDraft = { institutionId: null }
 const initialPlan: PlanDraft = { plan: null, billing: "monthly" }
+
+const initialState = {
+  _version: DRAFT_VERSION,
+  email: null as string | null,
+  userPath: null as DraftUserPath,
+  businessAnswers: initialBusinessAnswers,
+  auditorAnswers: initialAuditorAnswers,
+  company: initialCompany,
+  planSelection: initialPlan,
+}
 
 export const useRegisterDraft = create<RegisterDraftState>()(
   persist(
     (set) => ({
-      email: null,
-      company: initialCompany,
-      bank: initialBank,
-      planSelection: initialPlan,
+      ...initialState,
       setEmail: (email) => set({ email }),
+      setUserPath: (path) =>
+        set(() => ({
+          userPath: path,
+          ...(path === "business"
+            ? { auditorAnswers: { ...initialAuditorAnswers } }
+            : { businessAnswers: { ...initialBusinessAnswers } }),
+        })),
+      setBusinessAnswers: (data) =>
+        set((state) => ({
+          businessAnswers: { ...state.businessAnswers, ...data },
+        })),
+      setAuditorAnswers: (data) =>
+        set((state) => ({
+          auditorAnswers: { ...state.auditorAnswers, ...data },
+        })),
       setCompany: (data) =>
         set((state) => ({ company: { ...state.company, ...data } })),
-      setBank: (data) =>
-        set((state) => ({ bank: { ...state.bank, ...data } })),
       setPlanSelection: (data) =>
         set((state) => ({
           planSelection: { ...state.planSelection, ...data },
         })),
       reset: () =>
         set({
-          email: null,
-          company: initialCompany,
-          bank: initialBank,
-          planSelection: initialPlan,
+          ...initialState,
         }),
     }),
     {
@@ -86,16 +127,47 @@ export const useRegisterDraft = create<RegisterDraftState>()(
               ? "business"
               : "individual",
         }
+
+        let businessAnswers = currentState.businessAnswers
+        let auditorAnswers = currentState.auditorAnswers
+
+        const rawVersion =
+          "_version" in p && typeof p._version === "number"
+            ? p._version
+            : 1
+
+        if (rawVersion < DRAFT_VERSION) {
+          businessAnswers = { ...initialBusinessAnswers }
+          auditorAnswers = { ...initialAuditorAnswers }
+        } else if (rawVersion >= DRAFT_VERSION) {
+          businessAnswers = {
+            ...initialBusinessAnswers,
+            ...currentState.businessAnswers,
+            ...(p.businessAnswers ?? {}),
+          }
+          auditorAnswers = {
+            ...initialAuditorAnswers,
+            ...currentState.auditorAnswers,
+            ...(p.auditorAnswers ?? {}),
+          }
+        }
+
         return {
           ...currentState,
           ...p,
+          _version: DRAFT_VERSION,
           email: p.email ?? currentState.email,
+          userPath:
+            p.userPath === "business" || p.userPath === "auditor"
+              ? p.userPath
+              : currentState.userPath,
           company: coercedCompany,
-          bank: { ...initialBank, ...currentState.bank, ...p.bank },
+          businessAnswers,
+          auditorAnswers,
           planSelection: {
             ...initialPlan,
             ...currentState.planSelection,
-            ...p.planSelection,
+            ...(p.planSelection ?? {}),
           },
         }
       },

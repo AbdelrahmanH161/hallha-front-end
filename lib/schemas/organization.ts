@@ -25,13 +25,6 @@ export const workspaceProfileSchema = z
 
 export type WorkspaceProfileInput = z.infer<typeof workspaceProfileSchema>
 
-export const bankLinkSchema = z.object({
-  institutionId: z.string().min(1, { message: "required" }),
-  sandbox: z.literal(true).default(true),
-})
-
-export type BankLinkInput = z.infer<typeof bankLinkSchema>
-
 export const planSchema = z.object({
   plan: z.enum(["free", "starter", "business", "enterprise"]),
   billing: z.enum(["monthly", "yearly"]),

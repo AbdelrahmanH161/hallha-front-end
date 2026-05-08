@@ -6,7 +6,8 @@
       "passwordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
       "passwordsMustMatch": "كلمتا المرور غير متطابقتين",
       "unknown": "حدث خطأ غير متوقع. حاول مرة أخرى.",
-      "network": "تعذّر الاتصال بالخادم."
+      "network": "تعذّر الاتصال بالخادم.",
+      "selectAtLeastOne": "اختر خياراً واحداً على الأقل"
     },
     "toast": {
       "loginSuccess": "تم تسجيل الدخول بنجاح",
@@ -57,9 +58,12 @@
       },
       "steps": {
         "accountBasics": "أساسيات الحساب",
-        "workspaceProfile": "ملف مساحة العمل",
-        "bankConnection": "ربط البنك",
-        "planSelection": "اختيار الخطة"
+        "personaPath": "مسارك",
+        "personaQuestions": "السياق",
+        "businessQuestions": "سياق العمل التجاري",
+        "workspaceProfile": "الملف الشخصي",
+        "auditorQuestions": "الخبرة",
+        "planSelection": "الخطة"
       },
       "buttons": {
         "back": "رجوع",
@@ -96,101 +100,214 @@
         "countryLabelBusiness": "بلد التأسيس",
         "incorporationCountryPlaceholder": "اختر دولة",
         "countries": [
-          { "value": "ae", "label": "الإمارات العربية المتحدة" },
-          { "value": "sa", "label": "المملكة العربية السعودية" },
-          { "value": "kw", "label": "الكويت" },
-          { "value": "bh", "label": "البحرين" },
-          { "value": "qa", "label": "قطر" },
-          { "value": "om", "label": "سلطنة عُمان" },
-          { "value": "jo", "label": "الأردن" },
-          { "value": "lb", "label": "لبنان" },
-          { "value": "iq", "label": "العراق" },
-          { "value": "ps", "label": "فلسطين" },
-          { "value": "eg", "label": "مصر" },
-          { "value": "ma", "label": "المغرب" },
-          { "value": "dz", "label": "الجزائر" },
-          { "value": "tn", "label": "تونس" },
-          { "value": "ly", "label": "ليبيا" },
-          { "value": "sd", "label": "السودان" },
-          { "value": "mr", "label": "موريتانيا" },
-          { "value": "ye", "label": "اليمن" },
-          { "value": "dj", "label": "جيبوتي" },
-          { "value": "so", "label": "الصومال" },
-          { "value": "pk", "label": "باكستان" },
-          { "value": "bd", "label": "بنغلاديش" },
-          { "value": "mv", "label": "المالديف" },
-          { "value": "id", "label": "إندونيسيا" },
-          { "value": "my", "label": "ماليزيا" },
-          { "value": "tr", "label": "تركيا" },
-          { "value": "ir", "label": "إيران" },
-          { "value": "ng", "label": "نيجيريا" },
-          { "value": "sn", "label": "السنغال" },
-          { "value": "uk", "label": "المملكة المتحدة" },
-          { "value": "us", "label": "الولايات المتحدة" }
+          {
+            "value": "ae",
+            "label": "الإمارات العربية المتحدة"
+          },
+          {
+            "value": "sa",
+            "label": "المملكة العربية السعودية"
+          },
+          {
+            "value": "kw",
+            "label": "الكويت"
+          },
+          {
+            "value": "bh",
+            "label": "البحرين"
+          },
+          {
+            "value": "qa",
+            "label": "قطر"
+          },
+          {
+            "value": "om",
+            "label": "سلطنة عُمان"
+          },
+          {
+            "value": "jo",
+            "label": "الأردن"
+          },
+          {
+            "value": "lb",
+            "label": "لبنان"
+          },
+          {
+            "value": "iq",
+            "label": "العراق"
+          },
+          {
+            "value": "ps",
+            "label": "فلسطين"
+          },
+          {
+            "value": "eg",
+            "label": "مصر"
+          },
+          {
+            "value": "ma",
+            "label": "المغرب"
+          },
+          {
+            "value": "dz",
+            "label": "الجزائر"
+          },
+          {
+            "value": "tn",
+            "label": "تونس"
+          },
+          {
+            "value": "ly",
+            "label": "ليبيا"
+          },
+          {
+            "value": "sd",
+            "label": "السودان"
+          },
+          {
+            "value": "mr",
+            "label": "موريتانيا"
+          },
+          {
+            "value": "ye",
+            "label": "اليمن"
+          },
+          {
+            "value": "dj",
+            "label": "جيبوتي"
+          },
+          {
+            "value": "so",
+            "label": "الصومال"
+          },
+          {
+            "value": "pk",
+            "label": "باكستان"
+          },
+          {
+            "value": "bd",
+            "label": "بنغلاديش"
+          },
+          {
+            "value": "mv",
+            "label": "المالديف"
+          },
+          {
+            "value": "id",
+            "label": "إندونيسيا"
+          },
+          {
+            "value": "my",
+            "label": "ماليزيا"
+          },
+          {
+            "value": "tr",
+            "label": "تركيا"
+          },
+          {
+            "value": "ir",
+            "label": "إيران"
+          },
+          {
+            "value": "ng",
+            "label": "نيجيريا"
+          },
+          {
+            "value": "sn",
+            "label": "السنغال"
+          },
+          {
+            "value": "uk",
+            "label": "المملكة المتحدة"
+          },
+          {
+            "value": "us",
+            "label": "الولايات المتحدة"
+          }
         ],
         "industryLabel": "القطاع أو الممارسة الرئيسية",
         "industries": [
-          { "value": "freelance", "label": "عمل حر / استشارات" },
-          { "value": "islamic_finance", "label": "مصرفية وتمويل إسلامي" },
-          { "value": "fintech", "label": "تقنية مالية ومدفوعات" },
-          { "value": "real_estate", "label": "عقارات وأصول" },
-          { "value": "retail", "label": "تجزئة وتجارة إلكترونية" },
-          { "value": "tech", "label": "تكنولوجيا وبرمجيات" },
-          { "value": "services", "label": "خدمات مهنية" },
-          { "value": "legal_accounting", "label": "قانون ومراجعة ومحاسبة" },
-          { "value": "healthcare", "label": "رعاية صحية وأدوية" },
-          { "value": "education", "label": "تعليم وتدريب" },
-          { "value": "media_creative", "label": "إعلام وتصميم وإبداع" },
-          { "value": "hospitality", "label": "ضيافة وسياحة" },
-          { "value": "logistics", "label": "لوجستيات وتوريد" },
-          { "value": "manufacturing", "label": "تصنيع وصناعة" },
-          { "value": "construction", "label": "إنشاءات وهندسة" },
-          { "value": "agriculture", "label": "زراعة وأغذية" },
-          { "value": "energy", "label": "طاقة ومرافق" },
-          { "value": "nonprofit", "label": "غير ربحي وأوقاف" },
-          { "value": "government", "label": "حكومة وقطاع عام" },
-          { "value": "other", "label": "قطاع آخر" }
+          {
+            "value": "freelance",
+            "label": "عمل حر / استشارات"
+          },
+          {
+            "value": "islamic_finance",
+            "label": "مصرفية وتمويل إسلامي"
+          },
+          {
+            "value": "fintech",
+            "label": "تقنية مالية ومدفوعات"
+          },
+          {
+            "value": "real_estate",
+            "label": "عقارات وأصول"
+          },
+          {
+            "value": "retail",
+            "label": "تجزئة وتجارة إلكترونية"
+          },
+          {
+            "value": "tech",
+            "label": "تكنولوجيا وبرمجيات"
+          },
+          {
+            "value": "services",
+            "label": "خدمات مهنية"
+          },
+          {
+            "value": "legal_accounting",
+            "label": "قانون ومراجعة ومحاسبة"
+          },
+          {
+            "value": "healthcare",
+            "label": "رعاية صحية وأدوية"
+          },
+          {
+            "value": "education",
+            "label": "تعليم وتدريب"
+          },
+          {
+            "value": "media_creative",
+            "label": "إعلام وتصميم وإبداع"
+          },
+          {
+            "value": "hospitality",
+            "label": "ضيافة وسياحة"
+          },
+          {
+            "value": "logistics",
+            "label": "لوجستيات وتوريد"
+          },
+          {
+            "value": "manufacturing",
+            "label": "تصنيع وصناعة"
+          },
+          {
+            "value": "construction",
+            "label": "إنشاءات وهندسة"
+          },
+          {
+            "value": "agriculture",
+            "label": "زراعة وأغذية"
+          },
+          {
+            "value": "energy",
+            "label": "طاقة ومرافق"
+          },
+          {
+            "value": "nonprofit",
+            "label": "غير ربحي وأوقاف"
+          },
+          {
+            "value": "government",
+            "label": "حكومة وقطاع عام"
+          },
+          {
+            "value": "other",
+            "label": "قطاع آخر"
+          }
         ]
-      },
-      "step3": {
-        "title": "قم بربط مؤسستك",
-        "description": "اربط حسابك البنكي الرئيسي إذا أردت تدقيق المعاملات المباشر. يمكنك تخطي هذه الخطوة وإضافتها لاحقاً من الإعدادات.",
-        "searchPlaceholder": "ابحث عن البنك أو المؤسسة الخاصة بك...",
-        "popularInstitutionsLabel": "مؤسسات شائعة",
-        "institutions": [
-          "بنك الإمارات دبي الوطني",
-          "بنك أبوظبي الأول",
-          "مصرف أبوظبي الإسلامي",
-          "دبي الإسلامي",
-          "بنك المشرق",
-          "مصرف الراجحي",
-          "البنك الأهلي السعودي",
-          "بنك الرياض",
-          "بنك البلاد",
-          "بيت التمويل الكويتي",
-          "بنك بوبيان",
-          "بنك الكويت الوطني",
-          "بنك قطر الوطني",
-          "البنك التجاري القطري",
-          "البنك الأهلي قطر",
-          "بنك مسقط",
-          "البنك الوطني العماني",
-          "البنك العربي",
-          "بنك الأردن والكويت",
-          "بنك مصر",
-          "بنك القاهرة",
-          "التجاري وفا بنك",
-          "مصرف الإمارات الإسلامي",
-          "مصرف وربة",
-          "تشيس",
-          "بنك أوف أمريكا",
-          "ولز فارجو",
-          "سيتي",
-          "يو إس بانك"
-        ],
-        "viewAll": "عرض الكل",
-        "sandboxCta": "الاتصال عبر واجهة برمجة تطبيقات Sandbox",
-        "plaidNote": "مؤمن بواسطة Plaid. نحن لا نخزن أبدًا بيانات اعتماد تسجيل الدخول الخاصة بك."
       },
       "step4": {
         "title": "اختر خطتك",
@@ -206,10 +323,22 @@
             "price": "$0",
             "period": "",
             "features": [
-              { "text": "مساعد حليم الذكي (إرشاد التمويل الإسلامي والتدقيق الشرعي)", "included": true },
-              { "text": "٥ محادثات تدقيق بالذكاء الاصطناعي شهرياً", "included": true },
-              { "text": "سياق مستند حتى نحو ١٠ صفحات لكل محادثة", "included": true },
-              { "text": "مزايا الخطط المدفوعة (حدود أعلى)", "included": false }
+              {
+                "text": "مساعد حليم الذكي (إرشاد التمويل الإسلامي والتدقيق الشرعي)",
+                "included": true
+              },
+              {
+                "text": "٥ محادثات تدقيق بالذكاء الاصطناعي شهرياً",
+                "included": true
+              },
+              {
+                "text": "سياق مستند حتى نحو ١٠ صفحات لكل محادثة",
+                "included": true
+              },
+              {
+                "text": "مزايا الخطط المدفوعة (حدود أعلى)",
+                "included": false
+              }
             ],
             "cta": "المتابعة مجاناً"
           },
@@ -219,10 +348,22 @@
             "price": "$9",
             "period": "/شهر",
             "features": [
-              { "text": "مساعد حليم الذكي", "included": true },
-              { "text": "٥٠ محادثة تدقيق بالذكاء الاصطناعي شهرياً", "included": true },
-              { "text": "سياق مستند حتى نحو ٥٠ صفحة لكل محادثة", "included": true },
-              { "text": "كل مزايا المجانية بحدود أعلى", "included": true }
+              {
+                "text": "مساعد حليم الذكي",
+                "included": true
+              },
+              {
+                "text": "٥٠ محادثة تدقيق بالذكاء الاصطناعي شهرياً",
+                "included": true
+              },
+              {
+                "text": "سياق مستند حتى نحو ٥٠ صفحة لكل محادثة",
+                "included": true
+              },
+              {
+                "text": "كل مزايا المجانية بحدود أعلى",
+                "included": true
+              }
             ],
             "cta": "اختر الناشئة"
           },
@@ -233,10 +374,23 @@
             "period": "/شهر",
             "popularLabel": "الأكثر شيوعاً",
             "features": [
-              { "text": "مساعد حليم الذكي", "included": true },
-              { "text": "٢٥٠ محادثة تدقيق بالذكاء الاصطناعي شهرياً", "included": true, "accent": true },
-              { "text": "مساحة أكبر للمستندات والمحادثات", "included": true },
-              { "text": "مساحة عمل مشتركة (حتى ٣ مقاعد)", "included": true }
+              {
+                "text": "مساعد حليم الذكي",
+                "included": true
+              },
+              {
+                "text": "٢٥٠ محادثة تدقيق بالذكاء الاصطناعي شهرياً",
+                "included": true,
+                "accent": true
+              },
+              {
+                "text": "مساحة أكبر للمستندات والمحادثات",
+                "included": true
+              },
+              {
+                "text": "مساحة عمل مشتركة (حتى ٣ مقاعد)",
+                "included": true
+              }
             ],
             "cta": "اختر النمو"
           },
@@ -246,16 +400,139 @@
             "price": "مخصص",
             "period": "",
             "features": [
-              { "text": "حجم استخدام يُنسَّق مع مؤسستك", "included": true },
-              { "text": "وصول API عند الحاجة", "included": true },
-              { "text": "تهيئة ونجاح عملاء مخصصان", "included": true },
-              { "text": "مناقشة مسارات الامتثال مع فريقنا", "included": true }
+              {
+                "text": "حجم استخدام يُنسَّق مع مؤسستك",
+                "included": true
+              },
+              {
+                "text": "وصول API عند الحاجة",
+                "included": true
+              },
+              {
+                "text": "تهيئة ونجاح عملاء مخصصان",
+                "included": true
+              },
+              {
+                "text": "مناقشة مسارات الامتثال مع فريقنا",
+                "included": true
+              }
             ],
             "cta": "اتصل بالمبيعات"
           }
         },
         "backToProfile": "العودة إلى ملف مساحة العمل"
-      }
+      },
+      "personaStep": {
+        "title": "كيف ستستخدم المنصّة؟",
+        "description": "التزام المؤسسة أو عميل خارجي بحاجة لمراجعة شرعية؟ نخصّص المسار لكل حالة.",
+        "businessTitle": "نشاط تجاري أو حر مستقلّ",
+        "businessSubtitle": "مسار تدفّق الأموال وسلاسل الدفع",
+        "auditorTitle": "مراجع شرعي",
+        "auditorSubtitle": "المراجعات والمراجعين والمزوّفين المتوقّعة"
+      },
+      "synthesisOverlay": {
+        "title": "يجري تجهيز خلاصة الذكاء…",
+        "subtitle": "خلاصة سياقية قصيرة من إجاباتك — قد تأخذ بضع ثوانٍ."
+      },
+      "businessQuestions": {
+        "title": "صف تدفّق أموالك",
+        "subtitle": "كلما كان الوصف أوضح، كان تحليل حليم أدق لما يهدّد الالتزام.",
+        "hint": "ليست أحكاماً شرعية — فقط لتوجيه المراجعة.",
+        "blocks": {
+          "money": "الصناعة والجمهور",
+          "revenue": "نموذج الإيراد",
+          "payments": "طرق تحصيل ودفع الأموال"
+        },
+        "labels": {
+          "industry": "القطاع",
+          "targetAudience": "الجمهور",
+          "revenueModel": "نموذج الإيراد",
+          "paymentMethods": "طرق الدفع أو التسوية"
+        },
+        "options": {
+          "industry": {
+            "fintech": "Fintech",
+            "realEstate": "عقارات",
+            "ecommerce": "E‑commerce",
+            "investment": "استثمار",
+            "lending": "تمويل",
+            "insurance": "تأمين / تكافل",
+            "other": "أخرى"
+          },
+          "targetAudience": {
+            "b2b": "B2B",
+            "b2c": "B2C",
+            "b2b2c": "B2B2C"
+          },
+          "revenueModel": {
+            "subscription": "اشتراك",
+            "commission": "عمولة",
+            "markup": "تسعيرة بزيادة",
+            "transactionFee": "رسوم كلّ عملية",
+            "interestSpread": "هامش شبيه بالفائدة (يُراجع بحذر شرعًا)",
+            "other": "آخرى"
+          },
+          "paymentMethods": {
+            "installments": "أقساط",
+            "digitalGateways": "بوابات دفع رقمية",
+            "cash": "نقد",
+            "wireTransfer": "تحويل بنكي",
+            "crypto": "Crypto assets"
+          }
+        }
+      },
+      "auditorQuestions": {
+        "title": "خبراتك ومستواك",
+        "subtitle": "نُقيّد أسلوب المراجعة وإحالات المعايير وفق ذلك.",
+        "hint": "غير قائمة أساتذة؛ فقط سياق لأداة المراجعة.",
+        "blocks": {
+          "specialization": "التخصّص الوظيفي",
+          "standards": "المعايير والمدارس المرجّعة",
+          "use": "الاستخدام النموذجي"
+        },
+        "labels": {
+          "specialization": "التخصّص الأساسي",
+          "standards": "المعايير / المدارس المرجّعة (متعددة)",
+          "useCase": "السيناريوهات الشائعة"
+        },
+        "options": {
+          "specialization": {
+            "banking": "مصرفية",
+            "crypto": "Crypto / digital assets",
+            "insuranceTakaful": "Takaful",
+            "capitalMarkets": "أسواق رأسمال",
+            "realEstate": "عقارات وجري الأصول",
+            "general": "عام"
+          },
+          "standards": {
+            "aaoifi": "AAOIFI",
+            "nationalLaws": "قوانين محلية",
+            "hanafi": "حنفي",
+            "maliki": "Maliki",
+            "shafii": "Shāfi‘ī",
+            "hanbali": "Ḥanbalī"
+          },
+          "useCase": {
+            "consultantClientContracts": "مراجعات طرف ثالث",
+            "internalCompliance": "امتثال داخلي",
+            "training": "مواد وتدريب",
+            "other": "آخرى"
+          }
+        }
+      },
+      "auditorSuccess": {
+        "title": "كلّ شيء جاهز لمناقشتك مع حليم",
+        "subtitle": "قمنا بمزامنة سياقك للمراجعات الفورية.",
+        "cta": "الانتقال للوحة",
+        "skipLink": "تخطَّ المؤقت"
+      },
+      "businessSuccess": {
+        "title": "تم اختيار الخطة وفق إعداد عملك.",
+        "subtitle": "سيظهر ذلك في تجربة حليم ولوحة الزيارات.",
+        "cta": "ابدأ في لوحة المراجعة",
+        "skipLink": "اكتمال لاحقاً"
+      },
+      "loadingBranch": "جارِ استعادة مسار التسجيل…"
     }
   },
   "landing": {
@@ -484,9 +761,10 @@
       "cta": "فتح الإعدادات",
       "dismiss": "إغلاق",
       "steps": {
-        "profile": "ملف مساحة العمل",
+        "profile": "الملف المؤسسي",
         "bank": "ربط البنك",
-        "plan": "الخطة"
+        "plan": "الخطة",
+        "context": "السياق"
       }
     },
     "userMenu": {
@@ -501,7 +779,10 @@
       "themeSystem": "حسب إعداد النظام",
       "signOut": "تسجيل الخروج",
       "guest": "زائر",
-      "rolePro": "Pro · مدقق شرعي"
+      "rolePro": "Pro · مدقق شرعي",
+      "roleBusinessFreelancer": "مساحة عمل تجارية",
+      "roleShariaAuditor": "مراجع شرعي",
+      "roleDefault": "عضو في حَلّها"
     },
     "chat": {
       "brand": "Halim",
@@ -621,8 +902,6 @@
       "sections": {
         "workspace": "ملف مساحة العمل",
         "workspaceDescription": "سواءً عملت كفرد أو كشركة، حافظ على دقة هذه البيانات للامتثال.",
-        "bank": "ربط البنك",
-        "bankDescription": "اختر المؤسسة المصرفية التي نستخدمها لتدقيق المحفظة.",
         "plan": "الخطة والفوترة",
         "planDescription": "تشمل مجانية، الناشئة (٩$/شهر)، النمو (١٩$/شهر)، والمؤسسات."
       },

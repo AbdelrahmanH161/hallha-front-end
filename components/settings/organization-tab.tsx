@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -29,18 +28,10 @@ import { Separator } from "@/components/ui/separator"
 import { ApiError } from "@/lib/api/client"
 import {
   useChoosePlanMutation,
-  useLinkBankMutation,
   useOrganizationQuery,
   useUpdateCompanyProfileMutation,
 } from "@/lib/api/queries/organization"
-import {
-  bankLinkSchema,
-  planSchema,
-  workspaceProfileSchema,
-  type BankLinkInput,
-  type PlanInput,
-  type WorkspaceProfileInput,
-} from "@/lib/schemas/organization"
+import { planSchema, workspaceProfileSchema, type PlanInput, type WorkspaceProfileInput } from "@/lib/schemas/organization"
 import { cn } from "@/lib/utils"
 
 type LabelValue = { value: string; label: string }
@@ -68,8 +59,6 @@ export function OrganizationTab() {
       <p className="text-sm text-muted-foreground">{t("intro")}</p>
 
       <WorkspaceSection />
-      <Separator />
-      <BankSection />
       <Separator />
       <PlanSection />
     </div>
@@ -374,93 +363,7 @@ function WorkspaceSection() {
   )
 }
 
-function BankSection() {
-  const { data: org } = useOrganizationQuery()
-  return (
-    <BankSectionInner
-      key={org?.bankInstitutionId ?? ""}
-      initialInstitutionId={org?.bankInstitutionId ?? ""}
-    />
-  )
-}
 
-function BankSectionInner({
-  initialInstitutionId,
-}: {
-  initialInstitutionId: string
-}) {
-  const t = useTranslations("app.organization")
-  const tStep = useTranslations("auth.register.step3")
-  const mutation = useLinkBankMutation()
-
-  const institutions: string[] = (tStep.raw("institutions") as string[]) ?? []
-  const options: LabelValue[] = institutions.map((label) => ({
-    value: label.toLowerCase().replace(/\s+/g, "-"),
-    label,
-  }))
-
-  const [institutionId, setInstitutionId] =
-    React.useState<string>(initialInstitutionId)
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!institutionId) return
-    try {
-      const payload: BankLinkInput = bankLinkSchema.parse({
-        institutionId,
-        sandbox: true,
-      })
-      await mutation.mutateAsync(payload)
-      toast.success(t("savedToast"))
-    } catch (err) {
-      toast.error(t("saveFailed"), { description: describeError(err) })
-    }
-  }
-
-  const isSubmitting = mutation.isPending
-
-  return (
-    <section className="space-y-3">
-      <SectionHeading
-        title={t("sections.bank")}
-        description={t("sections.bankDescription")}
-      />
-
-      <form className="space-y-4" onSubmit={onSubmit} noValidate>
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">
-            {t("fields.institution")}
-          </Label>
-          <Select
-            value={institutionId || undefined}
-            onValueChange={setInstitutionId}
-            disabled={isSubmitting}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("fields.institutionPlaceholder")} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((c) => (
-                <SelectItem key={c.value} value={c.value}>
-                  {c.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex justify-end">
-          <Button type="submit" disabled={isSubmitting || !institutionId}>
-            {isSubmitting ? (
-              <Loader2 className="size-4 animate-spin" aria-hidden />
-            ) : null}
-            {t("saveBank")}
-          </Button>
-        </div>
-      </form>
-    </section>
-  )
-}
 
 function PlanSection() {
   const t = useTranslations("app.organization")

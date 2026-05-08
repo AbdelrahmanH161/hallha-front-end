@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/popover"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { signOut, useSession } from "@/lib/auth/client"
+import { useOrganizationQuery } from "@/lib/api/queries/organization"
 import { useSettingsDialog } from "@/lib/stores/settings-dialog"
 import { cn } from "@/lib/utils"
 
@@ -42,6 +43,7 @@ export function ChatSidebarUserPopover() {
   const t = useTranslations("app.userMenu")
   const [open, setOpen] = React.useState(false)
   const { data: session } = useSession()
+  const { data: org } = useOrganizationQuery()
   const openSettings = useSettingsDialog((s) => s.openAt)
   const router = useRouter()
   const { resolvedTheme, setTheme } = useTheme()
@@ -50,7 +52,12 @@ export function ChatSidebarUserPopover() {
 
   const user = session?.user
   const displayName = user?.name || user?.email || t("guest")
-  const role = t("rolePro")
+  const subtitle =
+    org?.userType === "business" ?
+      t("roleBusinessFreelancer")
+    : org?.userType === "auditor" ?
+      t("roleShariaAuditor")
+    : t("roleDefault")
 
   function handle(action: () => void) {
     setOpen(false)
@@ -82,7 +89,7 @@ export function ChatSidebarUserPopover() {
           </Avatar>
           <div className="min-w-0 flex-1 leading-tight">
             <div className="truncate text-xs font-semibold">{displayName}</div>
-            <div className="truncate text-[10px] text-muted-foreground">{role}</div>
+            <div className="truncate text-[10px] text-muted-foreground">{subtitle}</div>
           </div>
           <ChevronUp
             className={cn(
@@ -107,7 +114,7 @@ export function ChatSidebarUserPopover() {
           </Avatar>
           <div className="min-w-0">
             <div className="truncate text-xs font-semibold">{displayName}</div>
-            <div className="truncate text-[10px] text-muted-foreground">{role}</div>
+            <div className="truncate text-[10px] text-muted-foreground">{subtitle}</div>
           </div>
         </div>
 

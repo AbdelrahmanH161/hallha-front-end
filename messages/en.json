@@ -6,7 +6,8 @@
       "passwordMin": "Password must be at least 8 characters",
       "passwordsMustMatch": "Passwords do not match",
       "unknown": "Something went wrong. Please try again.",
-      "network": "Could not reach the server."
+      "network": "Could not reach the server.",
+      "selectAtLeastOne": "Pick at least one option"
     },
     "toast": {
       "loginSuccess": "Signed in successfully",
@@ -57,9 +58,12 @@
       },
       "steps": {
         "accountBasics": "Account basics",
+        "personaPath": "Who you are",
+        "personaQuestions": "Context",
+        "businessQuestions": "Money flow profile",
         "workspaceProfile": "Workspace profile",
-        "bankConnection": "Bank connection",
-        "planSelection": "Plan selection"
+        "auditorQuestions": "Expertise",
+        "planSelection": "Plan"
       },
       "buttons": {
         "back": "Back",
@@ -96,101 +100,214 @@
         "countryLabelBusiness": "Country of incorporation",
         "incorporationCountryPlaceholder": "Select a country",
         "countries": [
-          { "value": "ae", "label": "United Arab Emirates" },
-          { "value": "sa", "label": "Saudi Arabia" },
-          { "value": "kw", "label": "Kuwait" },
-          { "value": "bh", "label": "Bahrain" },
-          { "value": "qa", "label": "Qatar" },
-          { "value": "om", "label": "Oman" },
-          { "value": "jo", "label": "Jordan" },
-          { "value": "lb", "label": "Lebanon" },
-          { "value": "iq", "label": "Iraq" },
-          { "value": "ps", "label": "Palestine" },
-          { "value": "eg", "label": "Egypt" },
-          { "value": "ma", "label": "Morocco" },
-          { "value": "dz", "label": "Algeria" },
-          { "value": "tn", "label": "Tunisia" },
-          { "value": "ly", "label": "Libya" },
-          { "value": "sd", "label": "Sudan" },
-          { "value": "mr", "label": "Mauritania" },
-          { "value": "ye", "label": "Yemen" },
-          { "value": "dj", "label": "Djibouti" },
-          { "value": "so", "label": "Somalia" },
-          { "value": "pk", "label": "Pakistan" },
-          { "value": "bd", "label": "Bangladesh" },
-          { "value": "mv", "label": "Maldives" },
-          { "value": "id", "label": "Indonesia" },
-          { "value": "my", "label": "Malaysia" },
-          { "value": "tr", "label": "Türkiye" },
-          { "value": "ir", "label": "Iran" },
-          { "value": "ng", "label": "Nigeria" },
-          { "value": "sn", "label": "Senegal" },
-          { "value": "uk", "label": "United Kingdom" },
-          { "value": "us", "label": "United States" }
+          {
+            "value": "ae",
+            "label": "United Arab Emirates"
+          },
+          {
+            "value": "sa",
+            "label": "Saudi Arabia"
+          },
+          {
+            "value": "kw",
+            "label": "Kuwait"
+          },
+          {
+            "value": "bh",
+            "label": "Bahrain"
+          },
+          {
+            "value": "qa",
+            "label": "Qatar"
+          },
+          {
+            "value": "om",
+            "label": "Oman"
+          },
+          {
+            "value": "jo",
+            "label": "Jordan"
+          },
+          {
+            "value": "lb",
+            "label": "Lebanon"
+          },
+          {
+            "value": "iq",
+            "label": "Iraq"
+          },
+          {
+            "value": "ps",
+            "label": "Palestine"
+          },
+          {
+            "value": "eg",
+            "label": "Egypt"
+          },
+          {
+            "value": "ma",
+            "label": "Morocco"
+          },
+          {
+            "value": "dz",
+            "label": "Algeria"
+          },
+          {
+            "value": "tn",
+            "label": "Tunisia"
+          },
+          {
+            "value": "ly",
+            "label": "Libya"
+          },
+          {
+            "value": "sd",
+            "label": "Sudan"
+          },
+          {
+            "value": "mr",
+            "label": "Mauritania"
+          },
+          {
+            "value": "ye",
+            "label": "Yemen"
+          },
+          {
+            "value": "dj",
+            "label": "Djibouti"
+          },
+          {
+            "value": "so",
+            "label": "Somalia"
+          },
+          {
+            "value": "pk",
+            "label": "Pakistan"
+          },
+          {
+            "value": "bd",
+            "label": "Bangladesh"
+          },
+          {
+            "value": "mv",
+            "label": "Maldives"
+          },
+          {
+            "value": "id",
+            "label": "Indonesia"
+          },
+          {
+            "value": "my",
+            "label": "Malaysia"
+          },
+          {
+            "value": "tr",
+            "label": "Türkiye"
+          },
+          {
+            "value": "ir",
+            "label": "Iran"
+          },
+          {
+            "value": "ng",
+            "label": "Nigeria"
+          },
+          {
+            "value": "sn",
+            "label": "Senegal"
+          },
+          {
+            "value": "uk",
+            "label": "United Kingdom"
+          },
+          {
+            "value": "us",
+            "label": "United States"
+          }
         ],
         "industryLabel": "Primary industry or practice",
         "industries": [
-          { "value": "freelance", "label": "Freelance / consulting" },
-          { "value": "islamic_finance", "label": "Islamic banking & finance" },
-          { "value": "fintech", "label": "Fintech / payments" },
-          { "value": "real_estate", "label": "Real estate & property" },
-          { "value": "retail", "label": "Retail & e-commerce" },
-          { "value": "tech", "label": "Technology & software" },
-          { "value": "services", "label": "Professional services" },
-          { "value": "legal_accounting", "label": "Legal, audit & accounting" },
-          { "value": "healthcare", "label": "Healthcare & pharma" },
-          { "value": "education", "label": "Education & training" },
-          { "value": "media_creative", "label": "Media, design & creative" },
-          { "value": "hospitality", "label": "Hospitality & tourism" },
-          { "value": "logistics", "label": "Logistics & supply chain" },
-          { "value": "manufacturing", "label": "Manufacturing & industry" },
-          { "value": "construction", "label": "Construction & engineering" },
-          { "value": "agriculture", "label": "Agriculture & food" },
-          { "value": "energy", "label": "Energy & utilities" },
-          { "value": "nonprofit", "label": "Non-profit & waqf" },
-          { "value": "government", "label": "Government & public sector" },
-          { "value": "other", "label": "Other sector" }
+          {
+            "value": "freelance",
+            "label": "Freelance / consulting"
+          },
+          {
+            "value": "islamic_finance",
+            "label": "Islamic banking & finance"
+          },
+          {
+            "value": "fintech",
+            "label": "Fintech / payments"
+          },
+          {
+            "value": "real_estate",
+            "label": "Real estate & property"
+          },
+          {
+            "value": "retail",
+            "label": "Retail & e-commerce"
+          },
+          {
+            "value": "tech",
+            "label": "Technology & software"
+          },
+          {
+            "value": "services",
+            "label": "Professional services"
+          },
+          {
+            "value": "legal_accounting",
+            "label": "Legal, audit & accounting"
+          },
+          {
+            "value": "healthcare",
+            "label": "Healthcare & pharma"
+          },
+          {
+            "value": "education",
+            "label": "Education & training"
+          },
+          {
+            "value": "media_creative",
+            "label": "Media, design & creative"
+          },
+          {
+            "value": "hospitality",
+            "label": "Hospitality & tourism"
+          },
+          {
+            "value": "logistics",
+            "label": "Logistics & supply chain"
+          },
+          {
+            "value": "manufacturing",
+            "label": "Manufacturing & industry"
+          },
+          {
+            "value": "construction",
+            "label": "Construction & engineering"
+          },
+          {
+            "value": "agriculture",
+            "label": "Agriculture & food"
+          },
+          {
+            "value": "energy",
+            "label": "Energy & utilities"
+          },
+          {
+            "value": "nonprofit",
+            "label": "Non-profit & waqf"
+          },
+          {
+            "value": "government",
+            "label": "Government & public sector"
+          },
+          {
+            "value": "other",
+            "label": "Other sector"
+          }
         ]
-      },
-      "step3": {
-        "title": "Connect your institution",
-        "description": "Securely connect your primary bank account if you want live transaction auditing. You can skip this step and add it later from settings.",
-        "searchPlaceholder": "Search for your bank or institution…",
-        "popularInstitutionsLabel": "Popular institutions",
-        "institutions": [
-          "Emirates NBD",
-          "First Abu Dhabi Bank",
-          "Abu Dhabi Islamic Bank",
-          "Dubai Islamic Bank",
-          "Mashreq Bank",
-          "Al Rajhi Bank",
-          "Saudi National Bank",
-          "Riyad Bank",
-          "Kuwait Finance House",
-          "Boubyan Bank",
-          "National Bank of Kuwait",
-          "Qatar National Bank",
-          "Commercial Bank of Qatar",
-          "Ahli Bank Qatar",
-          "Bank Muscat",
-          "National Bank of Oman",
-          "Arab Bank",
-          "Jordan Kuwait Bank",
-          "Banque Misr",
-          "Banque du Caire",
-          "Attijariwafa Bank",
-          "Bank Albilad",
-          "Emirates Islamic",
-          "Warba Bank",
-          "Chase",
-          "Bank of America",
-          "Wells Fargo",
-          "Citi",
-          "US Bank"
-        ],
-        "viewAll": "View all",
-        "sandboxCta": "Connect via Sandbox API",
-        "plaidNote": "Secured by Plaid. We never store your login credentials."
       },
       "step4": {
         "title": "Choose your plan",
@@ -206,10 +323,22 @@
             "price": "$0",
             "period": "",
             "features": [
-              { "text": "Halim AI assistant (Islamic finance & Sharia audit help)", "included": true },
-              { "text": "5 AI audit conversations per month", "included": true },
-              { "text": "Document context up to ~10 pages per conversation", "included": true },
-              { "text": "Paid features (higher limits)", "included": false }
+              {
+                "text": "Halim AI assistant (Islamic finance & Sharia audit help)",
+                "included": true
+              },
+              {
+                "text": "5 AI audit conversations per month",
+                "included": true
+              },
+              {
+                "text": "Document context up to ~10 pages per conversation",
+                "included": true
+              },
+              {
+                "text": "Paid features (higher limits)",
+                "included": false
+              }
             ],
             "cta": "Continue free"
           },
@@ -219,10 +348,22 @@
             "price": "$9",
             "period": "/month",
             "features": [
-              { "text": "Halim AI assistant", "included": true },
-              { "text": "50 AI audit conversations per month", "included": true },
-              { "text": "Document context up to ~50 pages per conversation", "included": true },
-              { "text": "Everything in Free, with higher limits", "included": true }
+              {
+                "text": "Halim AI assistant",
+                "included": true
+              },
+              {
+                "text": "50 AI audit conversations per month",
+                "included": true
+              },
+              {
+                "text": "Document context up to ~50 pages per conversation",
+                "included": true
+              },
+              {
+                "text": "Everything in Free, with higher limits",
+                "included": true
+              }
             ],
             "cta": "Choose Starter"
           },
@@ -233,10 +374,23 @@
             "period": "/month",
             "popularLabel": "Most popular",
             "features": [
-              { "text": "Halim AI assistant", "included": true },
-              { "text": "250 AI audit conversations per month", "included": true, "accent": true },
-              { "text": "Larger documents & more room per thread", "included": true },
-              { "text": "Shared workspace (up to 3 seats)", "included": true }
+              {
+                "text": "Halim AI assistant",
+                "included": true
+              },
+              {
+                "text": "250 AI audit conversations per month",
+                "included": true,
+                "accent": true
+              },
+              {
+                "text": "Larger documents & more room per thread",
+                "included": true
+              },
+              {
+                "text": "Shared workspace (up to 3 seats)",
+                "included": true
+              }
             ],
             "cta": "Choose Business"
           },
@@ -246,16 +400,139 @@
             "price": "Custom",
             "period": "",
             "features": [
-              { "text": "Volume tailored to your organization", "included": true },
-              { "text": "API access when you need it", "included": true },
-              { "text": "Dedicated onboarding & success", "included": true },
-              { "text": "Discuss compliance workflows with our team", "included": true }
+              {
+                "text": "Volume tailored to your organization",
+                "included": true
+              },
+              {
+                "text": "API access when you need it",
+                "included": true
+              },
+              {
+                "text": "Dedicated onboarding & success",
+                "included": true
+              },
+              {
+                "text": "Discuss compliance workflows with our team",
+                "included": true
+              }
             ],
             "cta": "Contact sales"
           }
         },
         "backToProfile": "Back to workspace profile"
-      }
+      },
+      "personaStep": {
+        "title": "Choose your Halim profile",
+        "description": "Help Halim prioritize industry risks versus scholar-level review cues.",
+        "businessTitle": "Business / freelancer",
+        "businessSubtitle": "Operational context for commercial compliance audits.",
+        "auditorTitle": "Sharia auditor",
+        "auditorSubtitle": "Standards-forward contract review workflows."
+      },
+      "synthesisOverlay": {
+        "title": "Personalising Halim for you…",
+        "subtitle": "We generate a concise context paragraph you can revisit in settings anytime."
+      },
+      "businessQuestions": {
+        "title": "How money flows in your workspace",
+        "subtitle": "Industry, audience, and payment rails pinpoint common Sharia risk patterns.",
+        "hint": "This is contextual background, not a fatwa outcome.",
+        "blocks": {
+          "money": "Industry & audience",
+          "revenue": "Revenue model",
+          "payments": "Payments & settlement"
+        },
+        "labels": {
+          "industry": "Primary industry",
+          "targetAudience": "Target audience",
+          "revenueModel": "Revenue model",
+          "paymentMethods": "Payment / settlement methods"
+        },
+        "options": {
+          "industry": {
+            "fintech": "Fintech",
+            "realEstate": "Real estate",
+            "ecommerce": "E‑commerce",
+            "investment": "Investment / AMC",
+            "lending": "Lending",
+            "insurance": "Insurance / takaful",
+            "other": "Other"
+          },
+          "targetAudience": {
+            "b2b": "B2B",
+            "b2c": "B2C",
+            "b2b2c": "B2B2C"
+          },
+          "revenueModel": {
+            "subscription": "Subscription",
+            "commission": "Commission",
+            "markup": "Markup / resale",
+            "transactionFee": "Transaction fee",
+            "interestSpread": "Benchmark spreads (often sensitive)",
+            "other": "Other"
+          },
+          "paymentMethods": {
+            "installments": "Installments",
+            "digitalGateways": "Digital gateways",
+            "cash": "Cash",
+            "wireTransfer": "Bank transfer",
+            "crypto": "Crypto assets"
+          }
+        }
+      },
+      "auditorQuestions": {
+        "title": "Your expertise & standards focus",
+        "subtitle": "Halim aligns terminology (AAOIFI-first, national law overlays, classical madhhab nuance where relevant).",
+        "hint": "Operational context—not a scholarly credential vault.",
+        "blocks": {
+          "specialization": "Domain focus",
+          "standards": "Referenced standards",
+          "use": "Typical engagement"
+        },
+        "labels": {
+          "specialization": "Practice focus",
+          "standards": "Anchored frameworks (multi-select)",
+          "useCase": "Typical use-case"
+        },
+        "options": {
+          "specialization": {
+            "banking": "Banking",
+            "crypto": "Crypto / digital assets",
+            "insuranceTakaful": "Takaful",
+            "capitalMarkets": "Capital markets",
+            "realEstate": "Real estate portfolios",
+            "general": "Generalist"
+          },
+          "standards": {
+            "aaoifi": "AAOIFI",
+            "nationalLaws": "National law overlays",
+            "hanafi": "Hanafi nuances",
+            "maliki": "Maliki",
+            "shafii": "Shāfi‘ī",
+            "hanbali": "Ḥanbalī"
+          },
+          "useCase": {
+            "consultantClientContracts": "Outbound client mandates",
+            "internalCompliance": "Inside risk / policy teams",
+            "training": "Curriculum QA",
+            "other": "Other"
+          }
+        }
+      },
+      "auditorSuccess": {
+        "title": "You're ready—open Halim in the lounge",
+        "subtitle": "We've synced reviewer context onto your auditor workspace.",
+        "cta": "Go to dashboard",
+        "skipLink": "Skip the countdown"
+      },
+      "businessSuccess": {
+        "title": "Plan saved—we'll shape audit tone to your runway.",
+        "subtitle": "Higher Halim quotas unlock automatically when Stripe marks your upgrade.",
+        "cta": "Jump into auditing",
+        "skipLink": "Finish later via settings"
+      },
+      "loadingBranch": "Resolving onboarding path…"
     }
   },
   "landing": {
@@ -486,7 +763,8 @@
       "steps": {
         "profile": "Workspace profile",
         "bank": "Bank connection",
-        "plan": "Plan"
+        "plan": "Plan",
+        "context": "Context"
       }
     },
     "userMenu": {
@@ -501,7 +779,10 @@
       "themeSystem": "Use system theme",
       "signOut": "Sign out",
       "guest": "Guest",
-      "rolePro": "Pro · Sharia Auditor"
+      "rolePro": "Pro · Sharia Auditor",
+      "roleBusinessFreelancer": "Business workspace",
+      "roleShariaAuditor": "Sharia auditor",
+      "roleDefault": "Hallha member"
     },
     "chat": {
       "brand": "Halim",
@@ -621,8 +902,6 @@
       "sections": {
         "workspace": "Workspace profile",
         "workspaceDescription": "Whether you work solo or as a company, keep these details accurate for compliance.",
-        "bank": "Bank connection",
-        "bankDescription": "Choose the institution we use for portfolio auditing.",
         "plan": "Plan & billing",
         "planDescription": "Includes Free, Starter ($9/mo), Business ($19/mo), and Enterprise."
       },

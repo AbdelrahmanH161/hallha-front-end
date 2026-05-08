@@ -1,229 +1,137 @@
 "use client"
 
 import * as React from "react"
-import { useMessages, useTranslations } from "next-intl"
-import { useRouter, useSearchParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useWatch } from "react-hook-form"
-import {
-  Building2,
-  CreditCard,
-  Globe,
-  KeyRound,
-  Landmark,
-  Loader2,
-  Lock,
-  Mail,
-  Search,
-  User,
-} from "lucide-react"
 import Link from "next/link"
+import { useMessages } from "next-intl"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
+import { AccountBasicsStep } from "@/components/auth/onboarding/account-basics-step"
+import { AuditorQuestionsStep } from "@/components/auth/onboarding/auditor-questions-step"
+import { BusinessQuestionsStep } from "@/components/auth/onboarding/business-questions-step"
+import { PersonaPathStep } from "@/components/auth/onboarding/persona-path-step"
+import { PlanSelectionStep } from "@/components/auth/onboarding/plan-selection-step"
+import { WorkspaceProfileStep } from "@/components/auth/onboarding/workspace-profile-step"
 import { WizardShell } from "@/components/auth/onboarding/wizard-shell"
 import { Button } from "@/components/ui/button"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
+import type { CommonCopy } from "@/components/auth/onboarding/onboarding-shared"
+import type { DraftUserPath } from "@/lib/stores/register-draft"
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { ApiError } from "@/lib/api/client"
-import {
-  useChoosePlanMutation,
-  useLinkBankMutation,
+  organizationKeys,
+  useOrganizationQuery,
   useSkipOnboardingMutation,
-  useUpdateCompanyProfileMutation,
 } from "@/lib/api/queries/organization"
-import { signUp } from "@/lib/auth/client"
-import { createSignUpSchema, type SignUpInput } from "@/lib/schemas/auth"
-import {
-  bankLinkSchema,
-  planSchema,
-  workspaceProfileSchema,
-  type BankLinkInput,
-  type PlanInput,
-  type WorkspaceProfileInput,
-} from "@/lib/schemas/organization"
+import { useQueryClient } from "@tanstack/react-query"
 import { useRegisterDraft } from "@/lib/stores/register-draft"
-import { cn } from "@/lib/utils"
 
-export type RegisterWizardCopy = {
-  steps: {
-    accountBasics: string
-    workspaceProfile: string
-    bankConnection: string
-    planSelection: string
-  }
-  buttons: {
-    back: string
-    continue: string
-    next: string
-    skip: string
-    finishLater: string
-  }
-  step1: {
-    title: string
-    description: string
-    emailLabel: string
-    emailPlaceholder: string
-    passwordLabel: string
-    passwordPlaceholder: string
-    confirmPasswordLabel: string
-    confirmPasswordPlaceholder: string
-    signInPrompt: string
-    signInLink: string
-  }
-  step2: {
-    title: string
-    description: string
-    workspaceKindQuestion: string
-    workspaceIndividualTitle: string
-    workspaceBusinessTitle: string
-    legalNameLabelIndividual: string
-    legalNamePlaceholderIndividual: string
-    legalNameLabelBusiness: string
-    legalNamePlaceholderBusiness: string
-    registrationNumberLabel: string
-    registrationNumberPlaceholder: string
-    countryLabelIndividual: string
-    countryLabelBusiness: string
-    incorporationCountryPlaceholder: string
-    countries: readonly { value: string; label: string }[]
-    industryLabel: string
-    industries: readonly { value: string; label: string }[]
-  }
-  step3: {
-    title: string
-    description: string
-    searchPlaceholder: string
-    popularInstitutionsLabel: string
-    institutions: readonly string[]
-    viewAll: string
-    sandboxCta: string
-    plaidNote: string
-  }
-  step4: {
-    title: string
-    description: string
-    billingMonthly: string
-    billingYearly: string
-    yearlyDiscount: string
-    billingPaidPlansNote: string
-    plans: {
-      free: {
-        title: string
-        description: string
-        price: string
-        period: string
-        features: readonly { text: string; included: boolean }[]
-        cta: string
-      }
-      starter: {
-        title: string
-        description: string
-        price: string
-        period: string
-        features: readonly { text: string; included: boolean }[]
-        cta: string
-      }
-      business: {
-        title: string
-        description: string
-        price: string
-        period: string
-        popularLabel: string
-        features: readonly { text: string; included: boolean; accent?: boolean }[]
-        cta: string
-      }
-      enterprise: {
-        title: string
-        description: string
-        price: string
-        period: string
-        features: readonly { text: string; included: boolean }[]
-        cta: string
-      }
-    }
-    backToProfile: string
-  }
+/** Business wizard URL steps reach 6 for success splash; Auditor reaches 4. */
+const BUSINESS_MAX_STEP = 6
+const AUDITOR_MAX_STEP = 4
+
+type StepItem = {
+  key: string
+  label: string
+  description?: string
 }
 
-const TOTAL_STEPS = 4
-
-type CommonCopy = {
-  errors: Record<string, string>
-  toast: Record<string, string>
-}
-
-function clampStep(value: number) {
+function clamp(value: number, max: number) {
   if (!Number.isFinite(value)) return 1
-  return Math.min(Math.max(Math.floor(value), 1), TOTAL_STEPS)
-}
-
-function resolveErrorKey(key: string | undefined, common: CommonCopy): string | undefined {
-  if (!key) return undefined
-  const errors = common.errors as Record<string, string>
-  return errors[key] ?? key
-}
-
-function describeError(err: unknown, common: CommonCopy): string {
-  if (err instanceof ApiError) return err.detail
-  if (err instanceof Error) return err.message
-  return common.errors.unknown
+  return Math.min(Math.max(Math.floor(value), 1), max)
 }
 
 export function RegisterWizard() {
   const router = useRouter()
   const params = useSearchParams()
+  const pathname = usePathname()
   const messages = useMessages()
-  const t = messages.auth.register as unknown as RegisterWizardCopy
   const common = messages.common as CommonCopy
-  const stepParam = params.get("step")
-  const activeStep = clampStep(stepParam ? Number(stepParam) : 1)
-  const activeIndex = activeStep - 1
+  const qc = useQueryClient()
+  const { data: org, isFetched } = useOrganizationQuery()
+  const draftPath = useRegisterDraft((s) => s.userPath)
+  const reset = useRegisterDraft((s) => s.reset)
 
-  const steps = React.useMemo(
-    () => [
-      { key: "account", label: t.steps.accountBasics },
-      {
-        key: "workspace",
-        label: t.steps.workspaceProfile,
-        description: t.step2.description,
-      },
-      { key: "bank", label: t.steps.bankConnection, description: t.step3.description },
-      { key: "plan", label: t.steps.planSelection },
-    ],
-    [t]
-  )
+  const branch: DraftUserPath = (org?.userType as DraftUserPath) ?? draftPath
+  const isAuditorBranch = branch === "auditor"
+  const maxStep = branch === null ? BUSINESS_MAX_STEP : isAuditorBranch ? AUDITOR_MAX_STEP : BUSINESS_MAX_STEP
+
+  const stepFromUrl = clamp(Number(params.get("step") ?? 1), maxStep)
+  const [successMode, setSuccessMode] = React.useState<"auditor" | "business" | null>(null)
+
+  React.useEffect(() => {
+    if (!pathname?.startsWith("/register")) return
+    if (!isFetched) return
+    if (successMode) return
+    if (org?.onboardingCompleted) router.replace("/dashboard")
+  }, [pathname, isFetched, org?.onboardingCompleted, router, successMode])
+
+  const register = messages.auth.register as Record<string, unknown>
+  const tButtons =
+    typeof register.buttons === "object" && register.buttons ?
+      (register.buttons as Record<string, string>)
+    : {}
+
+  const steps = React.useMemo((): StepItem[] => {
+    const baseSteps = typeof register.steps === "object" && register.steps ? (register.steps as Record<string, string>) : {}
+    if (branch === null) {
+      return [
+        { key: "account", label: baseSteps.accountBasics ?? "" },
+        { key: "persona", label: baseSteps.personaPath ?? "" },
+        { key: "personaQ", label: baseSteps.personaQuestions ?? "" },
+      ]
+    }
+    if (isAuditorBranch) {
+      return [
+        { key: "account", label: baseSteps.accountBasics ?? "" },
+        { key: "persona", label: baseSteps.personaPath ?? "" },
+        { key: "auditorQ", label: baseSteps.auditorQuestions ?? "" },
+      ]
+    }
+    return [
+      { key: "account", label: baseSteps.accountBasics ?? "" },
+      { key: "persona", label: baseSteps.personaPath ?? "" },
+      { key: "businessQ", label: baseSteps.businessQuestions ?? "" },
+      { key: "workspace", label: baseSteps.workspaceProfile ?? "" },
+      { key: "plan", label: baseSteps.planSelection ?? "" },
+    ]
+  }, [branch, isAuditorBranch, register.steps])
+
+  const activeIndex = Math.min(stepFromUrl - 1, steps.length - 1)
 
   const goTo = React.useCallback(
     (step: number) => {
-      const next = clampStep(step)
-      const sp = new URLSearchParams(params)
+      const next = clamp(step, maxStep)
+      const sp = new URLSearchParams(params.toString())
       sp.set("step", String(next))
       router.push(`?${sp.toString()}`)
     },
-    [params, router]
+    [maxStep, params, router]
   )
+
+  React.useEffect(() => {
+    if (stepFromUrl > maxStep) goTo(maxStep)
+  }, [goTo, maxStep, stepFromUrl])
+
+  /** Deep-link guard: persona questions without a saved path can't render */
+  React.useEffect(() => {
+    if (!isFetched) return
+    if (stepFromUrl >= 3 && draftPath === null && !org?.userType && stepFromUrl < 900) goTo(2)
+  }, [draftPath, goTo, isFetched, org?.userType, stepFromUrl])
 
   const finish = React.useCallback(() => {
     router.push("/dashboard")
   }, [router])
 
+  React.useEffect(() => {
+    if (!successMode) return undefined
+    const timer = window.setTimeout(() => {
+      qc.invalidateQueries({ queryKey: organizationKeys.me }).catch(() => {})
+      finish()
+    }, 1200)
+    return () => window.clearTimeout(timer)
+  }, [finish, qc, successMode])
+
   const skipMutation = useSkipOnboardingMutation()
-  const reset = useRegisterDraft((s) => s.reset)
   const skipFromStep = React.useCallback(
     async (fromStep: number) => {
       try {
@@ -231,882 +139,118 @@ export function RegisterWizard() {
         reset()
         finish()
       } catch (err) {
-        toast.error(common.errors.unknown, { description: describeError(err, common) })
+        toast.error(common.errors.unknown, { description: err instanceof Error ? err.message : common.errors.unknown })
       }
     },
-    [skipMutation, reset, finish, common]
+    [skipMutation, reset, finish, common.errors]
   )
 
-  return (
-    <WizardShell steps={steps} activeIndex={activeIndex} wide={activeStep === 4}>
-      {activeStep === 1 ? (
-        <AccountBasicsStep
-          t={t.step1}
-          common={common}
-          nextLabel={t.buttons.continue}
-          onSuccess={() => goTo(2)}
-        />
-      ) : null}
-      {activeStep === 2 ? (
-        <WorkspaceProfileStep
-          t={t.step2}
-          common={common}
-          backLabel={t.buttons.back}
-          nextLabel={t.buttons.continue}
-          skipLabel={t.buttons.skip}
-          onBack={() => goTo(1)}
-          onSuccess={() => goTo(3)}
-          onSkip={() => skipFromStep(2)}
-          isSkipping={skipMutation.isPending}
-        />
-      ) : null}
-      {activeStep === 3 ? (
-        <BankConnectionStep
-          t={t.step3}
-          common={common}
-          backLabel={t.buttons.back}
-          nextLabel={t.buttons.next}
-          skipLabel={t.buttons.skip}
-          onBack={() => goTo(2)}
-          onSuccess={() => goTo(4)}
-          onSkip={() => skipFromStep(3)}
-          isSkipping={skipMutation.isPending}
-        />
-      ) : null}
-      {activeStep === 4 ? (
-        <PlanSelectionStep
-          t={t.step4}
-          common={common}
-          skipLabel={t.buttons.finishLater}
-          onBackToProfile={() => goTo(2)}
-          onComplete={finish}
-          onSkip={() => skipFromStep(4)}
-          isSkipping={skipMutation.isPending}
-        />
-      ) : null}
-    </WizardShell>
-  )
-}
+  const wide = stepFromUrl === 5 && branch === "business"
 
-function Header({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="mb-6 text-center">
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-    </div>
-  )
-}
-
-function FooterNav({
-  backLabel,
-  nextLabel,
-  skipLabel,
-  onBack,
-  onSkip,
-  isSubmitting,
-  isSkipping,
-}: {
-  backLabel: string
-  nextLabel: string
-  skipLabel?: string
-  onBack: () => void
-  onSkip?: () => void
-  isSubmitting: boolean
-  isSkipping?: boolean
-}) {
-  return (
-    <div className="mt-8 flex items-center justify-between gap-3 border-t pt-6">
-      <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting || isSkipping}>
-        {backLabel}
-      </Button>
-      <div className="flex items-center gap-2">
-        {onSkip && skipLabel ? (
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={onSkip}
-            disabled={isSubmitting || isSkipping}
-          >
-            {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-            {skipLabel}
+  if (successMode) {
+    const copy =
+      successMode === "auditor" ? (register.auditorSuccess as Record<string, string>) : (register.businessSuccess as Record<string, string>)
+    return (
+      <WizardShell steps={steps} activeIndex={steps.length - 1} wide={false}>
+        <div className="mx-auto max-w-md space-y-6 text-center">
+          <h1 className="text-2xl font-semibold">{String(copy?.title ?? "")}</h1>
+          <p className="text-sm text-muted-foreground">{String(copy?.subtitle ?? "")}</p>
+          <Button className="w-full font-semibold" onClick={finish}>
+            {String(copy?.cta ?? "")}
           </Button>
-        ) : null}
-        <Button type="submit" className="font-semibold" disabled={isSubmitting || isSkipping}>
-          {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-          {nextLabel}
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-function AccountBasicsStep({
-  t,
-  common,
-  nextLabel,
-  onSuccess,
-}: {
-  t: RegisterWizardCopy["step1"]
-  common: CommonCopy
-  nextLabel: string
-  onSuccess: () => void
-}) {
-  const setEmail = useRegisterDraft((s) => s.setEmail)
-  const draftEmail = useRegisterDraft((s) => s.email)
-  const tErrors = useTranslations("common.errors")
-  const signUpSchema = React.useMemo(() => createSignUpSchema(tErrors), [tErrors])
-
-  const form = useForm<SignUpInput>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: { email: draftEmail ?? "", password: "", confirmPassword: "" },
-    mode: "onTouched",
-  })
-
-  const isSubmitting = form.formState.isSubmitting
-
-  async function onSubmit(values: SignUpInput) {
-    try {
-      const localPart = values.email.split("@")[0] ?? "user"
-      const result = await signUp.email({
-        email: values.email,
-        password: values.password,
-        name: localPart,
-      })
-      if (result.error) {
-        toast.error(common.toast.signupFailed, {
-          description: result.error.message ?? undefined,
-        })
-        return
-      }
-      setEmail(values.email)
-      toast.success(common.toast.signupSuccess)
-      onSuccess()
-    } catch (err) {
-      toast.error(common.toast.signupFailed, { description: describeError(err, common) })
-    }
-  }
-
-  return (
-    <div>
-      <Header title={t.title} description={t.description} />
-
-      <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>{t.emailLabel}</FormLabel>
-                <FormControl>
-                  <InputGroup>
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupText>
-                        <Mail className="size-4" aria-hidden />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      type="email"
-                      placeholder={t.emailPlaceholder}
-                      autoComplete="email"
-                      disabled={isSubmitting}
-                      {...field}
-                    />
-                  </InputGroup>
-                </FormControl>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>{t.passwordLabel}</FormLabel>
-                <FormControl>
-                  <InputGroup>
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupText>
-                        <KeyRound className="size-4" aria-hidden />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      type="password"
-                      placeholder={t.passwordPlaceholder}
-                      autoComplete="new-password"
-                      disabled={isSubmitting}
-                      {...field}
-                    />
-                  </InputGroup>
-                </FormControl>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>{t.confirmPasswordLabel}</FormLabel>
-                <FormControl>
-                  <InputGroup>
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupText>
-                        <Lock className="size-4" aria-hidden />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      type="password"
-                      placeholder={t.confirmPasswordPlaceholder}
-                      autoComplete="new-password"
-                      disabled={isSubmitting}
-                      {...field}
-                    />
-                  </InputGroup>
-                </FormControl>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit" className="mt-2 w-full font-semibold" disabled={isSubmitting}>
-            {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-            {nextLabel}
-          </Button>
-
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            {t.signInPrompt}{" "}
-            <Link
-              className="font-medium text-primary underline-offset-4 hover:underline"
-              href="/login"
-            >
-              {t.signInLink}
+          <p className="text-xs text-muted-foreground">
+            <Link href="/dashboard" className="text-primary underline">
+              {String(copy?.skipLink ?? "")}
             </Link>
           </p>
-        </form>
-      </Form>
-    </div>
-  )
-}
-
-function WorkspaceProfileStep({
-  t,
-  common,
-  backLabel,
-  nextLabel,
-  skipLabel,
-  onBack,
-  onSuccess,
-  onSkip,
-  isSkipping,
-}: {
-  t: RegisterWizardCopy["step2"]
-  common: CommonCopy
-  backLabel: string
-  nextLabel: string
-  skipLabel: string
-  onBack: () => void
-  onSuccess: () => void
-  onSkip: () => void
-  isSkipping: boolean
-}) {
-  const draft = useRegisterDraft((s) => s.company)
-  const setCompany = useRegisterDraft((s) => s.setCompany)
-  const mutation = useUpdateCompanyProfileMutation()
-
-  const form = useForm<WorkspaceProfileInput>({
-    resolver: zodResolver(workspaceProfileSchema),
-    defaultValues: draft,
-    mode: "onTouched",
-  })
-
-  const workspaceKind =
-    useWatch({ control: form.control, name: "workspaceKind" }) ?? draft.workspaceKind
-
-  React.useEffect(() => {
-    if (workspaceKind === "individual") {
-      form.setValue("registrationNumber", "")
-      form.clearErrors("registrationNumber")
-    }
-  }, [workspaceKind, form])
-
-  async function onSubmit(values: WorkspaceProfileInput) {
-    try {
-      await mutation.mutateAsync(values)
-      setCompany(values)
-      toast.success(common.toast.saved)
-      onSuccess()
-    } catch (err) {
-      toast.error(common.errors.unknown, { description: describeError(err, common) })
-    }
+        </div>
+      </WizardShell>
+    )
   }
 
-  const isSubmitting = mutation.isPending || form.formState.isSubmitting
+  const loadingGuard =
+    stepFromUrl >= 3 && branch === null && isFetched && !draftPath && !org?.userType ? (
+      <div className="flex flex-col items-center justify-center gap-4 py-12">
+        <Loader2 className="size-10 animate-spin text-muted-foreground" aria-hidden />
+        <p className="text-center text-sm text-muted-foreground">{String((register.loadingBranch as string) ?? "")}</p>
+      </div>
+    ) : null
 
   return (
-    <div>
-      <Header title={t.title} description={t.description} />
+    <WizardShell steps={steps} activeIndex={activeIndex >= 0 ? activeIndex : 0} wide={wide}>
+      {stepFromUrl === 1 ?
+        <AccountBasicsStep
+          common={common}
+          messages={messages as unknown as Record<string, unknown>}
+          nextLabel={tButtons.continue ?? "Continue"}
+          onSuccess={() => goTo(2)}
+        />
+      : null}
 
-      <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-          <FormField
-            control={form.control}
-            name="workspaceKind"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <Field>
-                  <FieldLabel>
-                    <FieldContent>
-                      <div className="mb-2 text-sm font-medium">{t.workspaceKindQuestion}</div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {(
-                          [
-                            {
-                              value: "individual" as const,
-                              title: t.workspaceIndividualTitle,
-                              Icon: User,
-                            },
-                            {
-                              value: "business" as const,
-                              title: t.workspaceBusinessTitle,
-                              Icon: Building2,
-                            },
-                          ] as const
-                        ).map(({ value, title, Icon: IconCmp }) => {
-                          const checked = field.value === value
-                          return (
-                            <label key={value} className="cursor-pointer">
-                              <input
-                                className="peer sr-only"
-                                type="radio"
-                                name={field.name}
-                                value={value}
-                                checked={checked}
-                                onChange={() => field.onChange(value)}
-                                disabled={isSubmitting}
-                              />
-                              <div className="flex h-full flex-col gap-2 rounded-lg border bg-background/40 p-4 text-start text-sm transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary">
-                                <IconCmp className="size-5 text-muted-foreground peer-checked:text-primary" aria-hidden />
-                                <span className="font-medium">{title}</span>
-                              </div>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    </FieldContent>
-                  </FieldLabel>
-                </Field>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
+      {stepFromUrl === 2 ?
+        <PersonaPathStep
+          common={common}
+          messages={messages as unknown as Record<string, unknown>}
+          onPathSaved={() => goTo(3)}
+        />
+      : null}
 
-          <FormField
-            control={form.control}
-            name="legalName"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>
-                  {workspaceKind === "individual"
-                    ? t.legalNameLabelIndividual
-                    : t.legalNameLabelBusiness}
-                </FormLabel>
-                <FormControl>
-                  <InputGroup>
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupText>
-                        {workspaceKind === "individual" ? (
-                          <User className="size-4" aria-hidden />
-                        ) : (
-                          <Building2 className="size-4" aria-hidden />
-                        )}
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      placeholder={
-                        workspaceKind === "individual"
-                          ? t.legalNamePlaceholderIndividual
-                          : t.legalNamePlaceholderBusiness
-                      }
-                      disabled={isSubmitting}
-                      {...field}
-                    />
-                  </InputGroup>
-                </FormControl>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
+      {stepFromUrl === 3 && branch === "business" ?
+        <BusinessQuestionsStep
+          common={common}
+          messages={messages as unknown as Record<string, unknown>}
+          backLabel={tButtons.back ?? "Back"}
+          continueLabel={tButtons.continue ?? "Continue"}
+          onBack={() => goTo(2)}
+          onSuccess={() => {
+            qc.setQueryData(organizationKeys.me, (prev) =>
+              prev && typeof prev === "object" ? { ...prev, userType: "business", onboardingStep: 3 } : prev
+            )
+            goTo(4)
+          }}
+        />
+      : null}
 
-          {workspaceKind === "business" ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="registrationNumber"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>{t.registrationNumberLabel}</FormLabel>
-                    <FormControl>
-                      <InputGroup>
-                        <InputGroupAddon align="inline-end">
-                          <InputGroupText>
-                            <CreditCard className="size-4" aria-hidden />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <InputGroupInput
-                          placeholder={t.registrationNumberPlaceholder}
-                          disabled={isSubmitting}
-                          {...field}
-                        />
-                      </InputGroup>
-                    </FormControl>
-                    <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-                  </FormItem>
-                )}
-              />
+      {stepFromUrl === 3 && branch === "auditor" ?
+        <AuditorQuestionsStep
+          common={common}
+          messages={messages as unknown as Record<string, unknown>}
+          backLabel={tButtons.back ?? "Back"}
+          continueLabel={tButtons.continue ?? "Continue"}
+          onBack={() => goTo(2)}
+          onSuccess={() => {
+            setSuccessMode("auditor")
+          }}
+        />
+      : null}
 
-              <FormField
-                control={form.control}
-                name="country"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>{t.countryLabelBusiness}</FormLabel>
-                    <Select
-                      value={field.value || undefined}
-                      onValueChange={field.onChange}
-                      disabled={isSubmitting}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={t.incorporationCountryPlaceholder} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {t.countries.map((c) => (
-                          <SelectItem key={c.value} value={c.value}>
-                            <span className="flex items-center gap-2">
-                              <Globe className="size-4" aria-hidden />
-                              {c.label}
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
-          ) : (
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>{t.countryLabelIndividual}</FormLabel>
-                  <Select
-                    value={field.value || undefined}
-                    onValueChange={field.onChange}
-                    disabled={isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t.incorporationCountryPlaceholder} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {t.countries.map((c) => (
-                        <SelectItem key={c.value} value={c.value}>
-                          <span className="flex items-center gap-2">
-                            <Globe className="size-4" aria-hidden />
-                            {c.label}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-                </FormItem>
-              )}
-            />
-          )}
+      {stepFromUrl === 4 && branch === "business" ?
+        <WorkspaceProfileStep
+          t={messages.auth.register.step2 as React.ComponentProps<typeof WorkspaceProfileStep>["t"]}
+          common={common}
+          backLabel={tButtons.back ?? "Back"}
+          nextLabel={tButtons.continue ?? "Continue"}
+          skipLabel={tButtons.skip ?? "Skip"}
+          onBack={() => goTo(3)}
+          onSuccess={() => goTo(5)}
+          onSkip={() => void skipFromStep(4)}
+          isSkipping={skipMutation.isPending}
+        />
+      : null}
 
-          <FormField
-            control={form.control}
-            name="industry"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <Field>
-                  <FieldLabel>
-                    <FieldContent>
-                      <div className="flex items-center gap-2">
-                        <Landmark className="size-4 text-muted-foreground" aria-hidden />
-                        <span>{t.industryLabel}</span>
-                      </div>
-                      <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
-                        {t.industries.map((industry) => {
-                          const checked = field.value === industry.value
-                          return (
-                            <label key={industry.value} className="cursor-pointer">
-                              <input
-                                className="peer sr-only"
-                                type="radio"
-                                name={field.name}
-                                value={industry.value}
-                                checked={checked}
-                                onChange={() => field.onChange(industry.value)}
-                                disabled={isSubmitting}
-                              />
-                              <div className="rounded-lg border bg-background/40 px-3 py-3 text-center text-sm transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary">
-                                {industry.label}
-                              </div>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    </FieldContent>
-                  </FieldLabel>
-                </Field>
-                <FormMessage>{resolveErrorKey(fieldState.error?.message, common)}</FormMessage>
-              </FormItem>
-            )}
-          />
+      {stepFromUrl === 5 && branch === "business" ?
+        <PlanSelectionStep
+          common={common}
+          messages={messages as unknown as Record<string, unknown>}
+          skipLabel={tButtons.finishLater ?? "Later"}
+          onBackToProfile={() => goTo(4)}
+          onCompleteChoice={() => setSuccessMode("business")}
+          onSkip={() => void skipFromStep(5)}
+          isSkipping={skipMutation.isPending}
+        />
+      : null}
 
-          <FooterNav
-            backLabel={backLabel}
-            nextLabel={nextLabel}
-            skipLabel={skipLabel}
-            onBack={onBack}
-            onSkip={onSkip}
-            isSubmitting={isSubmitting}
-            isSkipping={isSkipping}
-          />
-        </form>
-      </Form>
-    </div>
-  )
-}
-
-function BankConnectionStep({
-  t,
-  common,
-  backLabel,
-  nextLabel,
-  skipLabel,
-  onBack,
-  onSuccess,
-  onSkip,
-  isSkipping,
-}: {
-  t: RegisterWizardCopy["step3"]
-  common: CommonCopy
-  backLabel: string
-  nextLabel: string
-  skipLabel: string
-  onBack: () => void
-  onSuccess: () => void
-  onSkip: () => void
-  isSkipping: boolean
-}) {
-  const draft = useRegisterDraft((s) => s.bank)
-  const setBank = useRegisterDraft((s) => s.setBank)
-  const mutation = useLinkBankMutation()
-
-  const [selected, setSelected] = React.useState<string | null>(draft.institutionId)
-  const [search, setSearch] = React.useState("")
-
-  const filtered = React.useMemo(
-    () => t.institutions.filter((name) => name.toLowerCase().includes(search.toLowerCase())),
-    [t.institutions, search]
-  )
-
-  async function submit(institutionId: string) {
-    try {
-      const payload: BankLinkInput = bankLinkSchema.parse({
-        institutionId,
-        sandbox: true,
-      })
-      await mutation.mutateAsync(payload)
-      setBank({ institutionId })
-      toast.success(common.toast.saved)
-      onSuccess()
-    } catch (err) {
-      toast.error(common.errors.unknown, { description: describeError(err, common) })
-    }
-  }
-
-  const isSubmitting = mutation.isPending
-
-  return (
-    <div>
-      <Header title={t.title} description={t.description} />
-
-      <div className="space-y-6">
-        <InputGroup className="h-10">
-          <InputGroupAddon align="inline-end">
-            <InputGroupText>
-              <Search className="size-4" aria-hidden />
-            </InputGroupText>
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder={t.searchPlaceholder}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-
-        <div>
-          <div className="mb-3 text-xs font-medium tracking-wide text-muted-foreground">
-            {t.popularInstitutionsLabel}
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {filtered.map((name) => {
-              const isActive = selected === name
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setSelected(name)}
-                  disabled={isSubmitting}
-                  className={cn(
-                    "group rounded-lg border bg-background/40 p-4 text-center transition-colors hover:bg-muted/30 hover:border-primary/40",
-                    isActive && "border-primary bg-primary/10"
-                  )}
-                >
-                  <div className="mx-auto grid size-10 place-items-center rounded-full bg-card shadow-sm">
-                    <Landmark className="size-5 text-muted-foreground group-hover:text-primary" aria-hidden />
-                  </div>
-                  <div className="mt-3 text-xs font-medium">{name}</div>
-                </button>
-              )
-            })}
-            <button
-              type="button"
-              className="group rounded-lg border bg-background/40 p-4 text-center transition-colors hover:bg-muted/30 hover:border-primary/40"
-              disabled
-            >
-              <div className="mx-auto grid size-10 place-items-center rounded-full bg-card shadow-sm">
-                <span className="text-xs text-muted-foreground">⋯</span>
-              </div>
-              <div className="mt-3 text-xs font-medium">{t.viewAll}</div>
-            </button>
-          </div>
-        </div>
-
-        <div className="border-t pt-6">
-          <Button
-            type="button"
-            className="w-full font-semibold"
-            disabled={!selected || isSubmitting}
-            onClick={() => selected && submit(selected)}
-          >
-            {isSubmitting ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-            {t.sandboxCta}
-          </Button>
-          <p className="mt-3 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Lock className="size-3.5" aria-hidden />
-            {t.plaidNote}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-8 flex items-center justify-between gap-3 border-t pt-6">
-        <Button type="button" variant="ghost" onClick={onBack} disabled={isSubmitting || isSkipping}>
-          {backLabel}
-        </Button>
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={onSkip}
-            disabled={isSubmitting || isSkipping}
-          >
-            {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-            {skipLabel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onSuccess}
-            disabled={isSubmitting || isSkipping}
-          >
-            {nextLabel}
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function PlanSelectionStep({
-  t,
-  common,
-  skipLabel,
-  onBackToProfile,
-  onComplete,
-  onSkip,
-  isSkipping,
-}: {
-  t: RegisterWizardCopy["step4"]
-  common: CommonCopy
-  skipLabel: string
-  onBackToProfile: () => void
-  onComplete: () => void
-  onSkip: () => void
-  isSkipping: boolean
-}) {
-  const draft = useRegisterDraft((s) => s.planSelection)
-  const setPlanSelection = useRegisterDraft((s) => s.setPlanSelection)
-  const reset = useRegisterDraft((s) => s.reset)
-  const mutation = useChoosePlanMutation()
-
-  const [billing, setBilling] = React.useState<"monthly" | "yearly">(draft.billing)
-
-  async function submit(plan: PlanInput["plan"]) {
-    try {
-      const payload: PlanInput = planSchema.parse({
-        plan,
-        billing: plan === "free" ? "monthly" : billing,
-      })
-      await mutation.mutateAsync(payload)
-      setPlanSelection({ plan, billing })
-      toast.success(common.toast.saved)
-      reset()
-      onComplete()
-    } catch (err) {
-      toast.error(common.errors.unknown, { description: describeError(err, common) })
-    }
-  }
-
-  const isSubmitting = mutation.isPending
-
-  return (
-    <div>
-      <Header title={t.title} description={t.description} />
-
-      <div className="mt-6 flex flex-col items-center gap-2">
-        <div className="inline-flex rounded-lg border bg-muted/30 p-1">
-          <button
-            type="button"
-            onClick={() => setBilling("monthly")}
-            className={cn(
-              "rounded-md px-4 py-2 text-sm transition-colors",
-              billing === "monthly" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {t.billingMonthly}
-          </button>
-          <button
-            type="button"
-            onClick={() => setBilling("yearly")}
-            className={cn(
-              "rounded-md px-4 py-2 text-sm transition-colors",
-              billing === "yearly" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {t.billingYearly} <span className="text-primary">{t.yearlyDiscount}</span>
-          </button>
-        </div>
-        <p className="max-w-md px-2 text-center text-xs text-muted-foreground">
-          {t.billingPaidPlansNote}
-        </p>
-      </div>
-
-      <div className="mt-10 grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-4 xl:gap-6">
-        <PlanCard plan={t.plans.free} onChoose={() => submit("free")} disabled={isSubmitting || isSkipping} />
-        <PlanCard plan={t.plans.starter} onChoose={() => submit("starter")} disabled={isSubmitting || isSkipping} />
-        <PlanCard plan={t.plans.business} highlighted onChoose={() => submit("business")} disabled={isSubmitting || isSkipping} />
-        <PlanCard plan={t.plans.enterprise} onChoose={() => submit("enterprise")} disabled={isSubmitting || isSkipping} />
-      </div>
-
-      <div className="mt-10 flex items-center justify-center gap-2">
-        <Button type="button" variant="ghost" onClick={onBackToProfile} disabled={isSubmitting || isSkipping}>
-          {t.backToProfile}
-        </Button>
-        <Button type="button" variant="ghost" onClick={onSkip} disabled={isSubmitting || isSkipping}>
-          {isSkipping ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-          {skipLabel}
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-function PlanCard({
-  plan,
-  highlighted = false,
-  disabled = false,
-  onChoose,
-}: {
-  plan: {
-    title: string
-    description: string
-    price: string
-    period: string
-    popularLabel?: string
-    features: readonly { text: string; included: boolean; accent?: boolean }[]
-    cta: string
-  }
-  highlighted?: boolean
-  disabled?: boolean
-  onChoose: () => void
-}) {
-  return (
-    <div
-      className={cn(
-        "relative flex h-full min-w-0 flex-col rounded-2xl border bg-background/40 p-6 backdrop-blur sm:p-7",
-        highlighted && "border-primary/40 shadow-xl md:-translate-y-2"
-      )}
-    >
-      {highlighted && plan.popularLabel ? (
-        <div className="absolute left-4 top-4 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-bold text-primary">
-          {plan.popularLabel}
-        </div>
-      ) : null}
-
-      <div className={cn("mb-5", highlighted && plan.popularLabel ? "mt-6" : "")}>
-        <div className={cn("text-lg font-semibold", highlighted ? "text-primary" : "text-foreground")}>
-          {plan.title}
-        </div>
-        <div className="mt-2 text-sm text-muted-foreground">{plan.description}</div>
-
-        <div className="mt-5 flex items-baseline gap-2">
-          <div className="text-4xl font-semibold tracking-tight">{plan.price}</div>
-          {plan.period ? <div className="text-sm text-muted-foreground">{plan.period}</div> : null}
-        </div>
-      </div>
-
-      <div className="my-4 h-px w-full bg-border" />
-
-      <ul className="flex-1 space-y-3 text-sm">
-        {plan.features.map((feature) => (
-          <li
-            key={feature.text}
-            className={cn(
-              "flex items-start gap-2",
-              feature.included ? "text-muted-foreground" : "text-muted-foreground/60 line-through"
-            )}
-          >
-            <span className={cn("mt-0.5 inline-flex size-5 items-center justify-center rounded-full", feature.included ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
-              {feature.included ? "✓" : "–"}
-            </span>
-            <span className={cn(feature.accent && "text-accent")}>{feature.text}</span>
-          </li>
-        ))}
-      </ul>
-
-      <Button
-        className="mt-6 w-full"
-        variant={highlighted ? "default" : "outline"}
-        onClick={onChoose}
-        disabled={disabled}
-      >
-        {plan.cta}
-      </Button>
-    </div>
+      {loadingGuard}
+    </WizardShell>
   )
 }
