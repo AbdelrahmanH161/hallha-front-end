@@ -244,6 +244,14 @@ export function ChatMessageContent({
                     <span className="rounded-md border border-border bg-muted px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                       {t("webBadge")}
                     </span>
+                  ) : s.scope === "client" ? (
+                    <span className="rounded-md border border-primary/30 bg-primary/10 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-primary">
+                      Client document
+                    </span>
+                  ) : s.scope === "global" ? (
+                    <span className="rounded-md border border-accent/40 bg-accent/10 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-accent-foreground">
+                      AAOIFI
+                    </span>
                   ) : null}
                 </span>
                 {s.type !== "web" ? (

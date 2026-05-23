@@ -10,11 +10,17 @@ import { OnboardingBanner } from "@/components/dashboard/onboarding-banner"
 import { IslamicPattern } from "@/components/landing/islamic-pattern"
 import { useDirection } from "@/components/ui/direction"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
+import { useChatStore } from "@/lib/stores/chat"
 import { cn } from "@/lib/utils"
 
-export function ChatShell() {
+export function ChatShell({ clientId = null }: { clientId?: string | null } = {}) {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [desktopCollapsed, setDesktopCollapsed] = React.useState(false)
+  const setActiveThreadId = useChatStore((s) => s.setActiveThreadId)
+
+  React.useEffect(() => {
+    setActiveThreadId(null)
+  }, [clientId, setActiveThreadId])
   const dir = useDirection()
   const sheetSide = dir === "rtl" ? "right" : "left"
   const tHeader = useTranslations("app.chat.header")
@@ -35,11 +41,14 @@ export function ChatShell() {
           )}
         >
           <SheetTitle className="sr-only">{tHeader("openSidebar")}</SheetTitle>
-          <ChatSidebarPanel onNavigate={() => setMobileOpen(false)} />
+          <ChatSidebarPanel
+            clientId={clientId}
+            onNavigate={() => setMobileOpen(false)}
+          />
         </SheetContent>
       </Sheet>
 
-      <ChatSidebar collapsed={desktopCollapsed} />
+      <ChatSidebar collapsed={desktopCollapsed} clientId={clientId} />
 
       <main className="relative z-[1] flex min-w-0 flex-1 flex-col overflow-hidden">
         <ChatHeader
@@ -54,7 +63,7 @@ export function ChatShell() {
           <div className="px-4 pt-2 sm:px-6 sm:pt-4">
             <OnboardingBanner />
           </div>
-          <ChatWindow />
+          <ChatWindow clientId={clientId} />
         </div>
       </main>
     </div>

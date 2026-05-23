@@ -30,18 +30,23 @@ export type ChatThread = {
 
 export const chatKeys = {
   all: ["chats"] as const,
-  list: () => [...chatKeys.all, "list"] as const,
+  list: (clientId?: string | null) =>
+    [...chatKeys.all, "list", clientId ?? null] as const,
   detail: (threadId: string) => [...chatKeys.all, "detail", threadId] as const,
 }
 
 /** Shared with `useIsMutating` for send/stream lifecycle in the chat UI. */
 export const chatAuditStreamMutationKey = ["chatAuditStream"] as const
 
-export function useChatsQuery() {
+export function useChatsQuery(clientId?: string | null) {
+  const query =
+    clientId === undefined ? "" : `?clientId=${encodeURIComponent(clientId ?? "null")}`
   return useQuery({
-    queryKey: chatKeys.list(),
+    queryKey: chatKeys.list(clientId ?? null),
     queryFn: () =>
-      apiFetch<{ threads: ChatThreadSummary[] }>("/chats").then((r) => r.threads),
+      apiFetch<{ threads: ChatThreadSummary[] }>(`/chats${query}`).then(
+        (r) => r.threads
+      ),
   })
 }
 
@@ -74,7 +79,7 @@ export function useDeleteChatMutation() {
         method: "DELETE",
       }),
     onSuccess: (_data, threadId) => {
-      qc.invalidateQueries({ queryKey: chatKeys.list() })
+      qc.invalidateQueries({ queryKey: chatKeys.all })
       qc.removeQueries({ queryKey: chatKeys.detail(threadId) })
     },
   })
@@ -82,6 +87,7 @@ export function useDeleteChatMutation() {
 
 type SendChatArgs = {
   threadId: string
+  clientId?: string | null
   message?: string
   file?: File | null
 }
@@ -111,7 +117,7 @@ export function useSendChatStream() {
         qc.removeQueries({ queryKey: chatKeys.detail(threadId) })
       }
     },
-    mutationFn: async ({ threadId, message, file }: SendChatArgs) => {
+    mutationFn: async ({ threadId, clientId, message, file }: SendChatArgs) => {
       const controller = new AbortController()
       startStreaming(threadId, controller)
 
@@ -139,6 +145,7 @@ export function useSendChatStream() {
       try {
         await streamChatAudit({
           threadId,
+          clientId,
           message,
           file,
           signal: controller.signal,
@@ -160,7 +167,7 @@ export function useSendChatStream() {
 
       await qc.invalidateQueries({ queryKey: chatKeys.detail(threadId) })
       finishStreaming()
-      await qc.invalidateQueries({ queryKey: chatKeys.list() })
+      await qc.invalidateQueries({ queryKey: chatKeys.all })
     },
   })
 }

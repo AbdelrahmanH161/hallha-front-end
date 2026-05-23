@@ -5,13 +5,14 @@ export type SseEvent = { event: string; data: unknown }
 
 export type StreamChatAuditOptions = {
   threadId: string
+  clientId?: string | null
   message?: string
   file?: File | null
   signal?: AbortSignal
-  onMeta?: (data: { thread_id: string }) => void
+  onMeta?: (data: { thread_id: string; client_id?: string | null }) => void
   onToken?: (text: string) => void
   onSources?: (sources: RetrievedSource[]) => void
-  onDone?: (data: { thread_id: string }) => void
+  onDone?: (data: { thread_id: string; client_id?: string | null }) => void
   onError?: (detail: string) => void
 }
 
@@ -37,6 +38,7 @@ function parseEventBlock(block: string): SseEvent | null {
 
 export async function streamChatAudit({
   threadId,
+  clientId,
   message,
   file,
   signal,
@@ -48,6 +50,7 @@ export async function streamChatAudit({
 }: StreamChatAuditOptions): Promise<void> {
   const form = new FormData()
   form.set("thread_id", threadId)
+  if (clientId) form.set("client_id", clientId)
   if (message) form.set("message", message)
   if (file) form.set("file", file, file.name)
 

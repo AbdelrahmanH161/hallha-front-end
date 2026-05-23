@@ -38,7 +38,7 @@ function fatalErrorTitle(apiErr: ApiError | null, t: (k: string) => string) {
   }
 }
 
-export function ChatWindow() {
+export function ChatWindow({ clientId = null }: { clientId?: string | null } = {}) {
   const t = useTranslations("app.chat")
   const activeThreadId = useChatStore((s) => s.activeThreadId)
   const streamingThreadId = useChatStore((s) => s.streamingThreadId)
@@ -74,7 +74,7 @@ export function ChatWindow() {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <ChatWelcome />
-        <ChatComposer threadId={null} />
+        <ChatComposer threadId={null} clientId={clientId} />
       </div>
     )
   }
@@ -179,7 +179,7 @@ export function ChatWindow() {
         )}
       </div>
 
-      <ChatComposer threadId={activeThreadId} />
+      <ChatComposer threadId={activeThreadId} clientId={clientId} />
     </div>
   )
 }

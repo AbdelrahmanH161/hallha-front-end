@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { AccountBasicsStep } from "@/components/auth/onboarding/account-basics-step"
 import { AuditorQuestionsStep } from "@/components/auth/onboarding/auditor-questions-step"
 import { BusinessQuestionsStep } from "@/components/auth/onboarding/business-questions-step"
+import { FirstClientStep } from "@/components/auth/onboarding/first-client-step"
 import { PersonaPathStep } from "@/components/auth/onboarding/persona-path-step"
 import { PlanSelectionStep } from "@/components/auth/onboarding/plan-selection-step"
 import { WorkspaceProfileStep } from "@/components/auth/onboarding/workspace-profile-step"
@@ -25,9 +26,9 @@ import {
 import { useQueryClient } from "@tanstack/react-query"
 import { useRegisterDraft } from "@/lib/stores/register-draft"
 
-/** Business wizard URL steps reach 6 for success splash; Auditor reaches 4. */
+/** Business wizard URL steps reach 6 for success splash; Auditor reaches 5 (added first-client step). */
 const BUSINESS_MAX_STEP = 6
-const AUDITOR_MAX_STEP = 4
+const AUDITOR_MAX_STEP = 5
 
 type StepItem = {
   key: string
@@ -85,6 +86,7 @@ export function RegisterWizard() {
         { key: "account", label: baseSteps.accountBasics ?? "" },
         { key: "persona", label: baseSteps.personaPath ?? "" },
         { key: "auditorQ", label: baseSteps.auditorQuestions ?? "" },
+        { key: "firstClient", label: baseSteps.firstClient ?? "First client" },
       ]
     }
     return [
@@ -218,9 +220,20 @@ export function RegisterWizard() {
           backLabel={tButtons.back ?? "Back"}
           continueLabel={tButtons.continue ?? "Continue"}
           onBack={() => goTo(2)}
-          onSuccess={() => {
-            setSuccessMode("auditor")
-          }}
+          onSuccess={() => goTo(4)}
+        />
+      : null}
+
+      {stepFromUrl === 4 && branch === "auditor" ?
+        <FirstClientStep
+          common={common}
+          backLabel={tButtons.back ?? "Back"}
+          continueLabel={tButtons.continue ?? "Continue"}
+          skipLabel={tButtons.skip ?? "Skip"}
+          onBack={() => goTo(3)}
+          onSuccess={() => setSuccessMode("auditor")}
+          onSkip={() => void skipFromStep(4)}
+          isSkipping={skipMutation.isPending}
         />
       : null}
 

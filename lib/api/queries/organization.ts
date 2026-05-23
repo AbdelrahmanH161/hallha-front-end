@@ -133,3 +133,25 @@ export function useSubmitAuditorOnboardingMutation() {
     },
   })
 }
+
+export type FirstClientInput = {
+  name: string
+  industry?: string
+}
+
+export function useSubmitFirstClientMutation() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: FirstClientInput) =>
+      apiFetch<{
+        ok: true
+        organization: Organization
+        client: { id: string; name: string; industry: string | null }
+      }>("/organizations/me/onboarding/first-client", { method: "POST", body }),
+    onSuccess: (data) => {
+      qc.setQueryData(organizationKeys.me, data.organization)
+      qc.invalidateQueries({ queryKey: organizationKeys.me })
+      qc.invalidateQueries({ queryKey: ["clients"] })
+    },
+  })
+}

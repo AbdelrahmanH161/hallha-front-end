@@ -47,7 +47,13 @@ function useDictateShortcutLabel() {
   }, [])
 }
 
-export function ChatComposer({ threadId }: { threadId: string | null }) {
+export function ChatComposer({
+  threadId,
+  clientId = null,
+}: {
+  threadId: string | null
+  clientId?: string | null
+}) {
   const t = useTranslations("app.chat.composer")
   const dictateShortcut = useDictateShortcutLabel()
   const [message, setMessage] = React.useState("")
@@ -166,6 +172,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
         if (!threadId) setActiveThreadId(targetId)
         await sendChat.mutateAsync({
           threadId: targetId,
+          clientId,
           message: text,
           file: attachmentDuringVoiceRef.current,
         })
@@ -181,7 +188,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
         if (aliveRef.current) setIsTranscribing(false)
       }
     },
-    [threadId, sendChat, setActiveThreadId, t]
+    [threadId, clientId, sendChat, setActiveThreadId, t]
   )
 
   const cancelDictation = React.useCallback(() => {
@@ -405,6 +412,7 @@ export function ChatComposer({ threadId }: { threadId: string | null }) {
     if (!threadId) setActiveThreadId(targetId)
     const payload = {
       threadId: targetId,
+      clientId,
       message: message.trim() || undefined,
       file,
     }

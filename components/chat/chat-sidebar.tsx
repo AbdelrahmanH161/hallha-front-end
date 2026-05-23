@@ -2,7 +2,10 @@
 
 import * as React from "react"
 import Image from "next/image"
+import Link from "next/link"
 import {
+  ArrowLeft,
+  Briefcase,
   Loader2,
   MessageSquarePlus,
   MoreVertical,
@@ -10,6 +13,8 @@ import {
   Trash2,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+
+import { useClientQuery } from "@/lib/api/queries/clients"
 
 import { ChatSidebarUserPopover } from "@/components/chat/chat-sidebar-user-popover"
 import { IslamicPattern } from "@/components/landing/islamic-pattern"
@@ -62,12 +67,14 @@ function groupThreads(threads: ChatThreadSummary[]) {
 
 export type ChatSidebarPanelProps = {
   onNavigate?: () => void
+  clientId?: string | null
 }
 
-export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
+export function ChatSidebarPanel({ onNavigate, clientId = null }: ChatSidebarPanelProps) {
   const t = useTranslations("app.chat")
   const [query, setQuery] = React.useState("")
-  const { data: threads = [], isLoading, isError } = useChatsQuery()
+  const { data: threads = [], isLoading, isError } = useChatsQuery(clientId)
+  const { data: scopedClient } = useClientQuery(clientId)
   const activeThreadId = useChatStore((s) => s.activeThreadId)
   const setActiveThreadId = useChatStore((s) => s.setActiveThreadId)
   const isStreaming = useChatStore((s) => s.isStreaming)
@@ -115,6 +122,37 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
           className="size-12 object-contain"
         />
       </div>
+
+      {/* Scoped client banner */}
+      {clientId ? (
+        <div className="relative mx-3 mb-2 rounded-lg border border-primary/20 bg-primary/[0.06] p-2.5">
+          <Link
+            href="/clients"
+            className="mb-1 flex items-center gap-1 text-[10px] font-medium text-muted-foreground hover:text-foreground"
+            onClick={onNavigate}
+          >
+            <ArrowLeft className="size-3" aria-hidden />
+            Back to clients
+          </Link>
+          <div className="truncate text-xs font-semibold text-primary">
+            {scopedClient?.name ?? "Client chat"}
+          </div>
+          <div className="truncate text-[10px] text-muted-foreground">
+            Scoped to this audited client
+          </div>
+        </div>
+      ) : (
+        <div className="relative px-3 pb-2">
+          <Link
+            href="/clients"
+            onClick={onNavigate}
+            className="flex items-center gap-2 rounded-lg border border-transparent px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/[0.06]"
+          >
+            <Briefcase className="size-4 text-muted-foreground" aria-hidden />
+            Audited clients
+          </Link>
+        </div>
+      )}
 
       {/* New conversation CTA */}
       <div className="relative px-3 pb-3">
@@ -247,9 +285,10 @@ export function ChatSidebarPanel({ onNavigate }: ChatSidebarPanelProps) {
 
 export type ChatSidebarProps = {
   collapsed: boolean
+  clientId?: string | null
 }
 
-export function ChatSidebar({ collapsed }: ChatSidebarProps) {
+export function ChatSidebar({ collapsed, clientId = null }: ChatSidebarProps) {
   return (
     <aside
       className={cn(
@@ -260,7 +299,7 @@ export function ChatSidebar({ collapsed }: ChatSidebarProps) {
       )}
       aria-hidden={collapsed || undefined}
     >
-      <ChatSidebarPanel />
+      <ChatSidebarPanel clientId={clientId} />
     </aside>
   )
 }
