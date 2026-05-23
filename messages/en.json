@@ -537,219 +537,222 @@
   },
   "landing": {
     "metadata": {
-      "title": "Hallilha — Sharia compliance for freelancers and SMEs",
-      "description": "AI-powered Islamic finance platform for solo professionals and teams. Automate Shariah compliance, purification tracking, and zakat reporting in one workspace.",
-      "ogTitle": "Hallilha — Sharia-first finance",
-      "ogDescription": "Real-time Sharia auditing, purification, and zakat dashboards for freelancers and growing businesses."
+      "title": "Hallha — AI Sharia auditor for AAOIFI-grade contract review",
+      "description": "Hallha is the AI co-auditor for Sharia audit firms. Automate AAOIFI-grade contract review with precise, page-level citations and 70% faster turnaround.",
+      "ogTitle": "Hallha — the AI co-auditor for Sharia audit firms",
+      "ogDescription": "Automate AAOIFI-grade contract review with precise citations and defensible audit trails."
     },
     "nav": {
-      "brand": "Hallilha",
-      "brandAlt": "Hallilha logo",
+      "brand": "Hallha",
+      "brandAlt": "Hallha logo",
       "home": "Home",
       "about": "About",
-      "features": "Features",
+      "features": "Capabilities",
       "pricing": "Pricing",
-      "contact": "Contact",
+      "contact": "Talk to us",
       "faq": "FAQ",
-      "auditor": "Auditor",
-      "compliance": "Compliance",
-      "kyc": "KYC verified",
+      "auditor": "For auditors",
+      "compliance": "AAOIFI",
+      "kyc": "SOC 2 ready",
       "switchLocaleLabel": "العربية",
       "login": "Log in",
-      "register": "Get started"
+      "register": "Book a demo"
     },
     "hero": {
-      "pill": "AI-powered Islamic finance",
-      "title": "Hallilha… your financial future, on",
-      "titleAccent": "Shariah-first foundations",
-      "description": "A modern financial workspace for freelancers and SMEs. Automate compliance, ensure purification, and grow wealth with ethical confidence.",
-      "primaryCta": "Start your free audit",
-      "secondaryCta": "Watch the platform demo",
-      "shariaFirst": "Sharia-First",
-      "certified": "Certified"
+      "pill": "Built for Sharia audit firms",
+      "title": "Hallha — the AI co-auditor for",
+      "titleAccent": "Sharia audit firms",
+      "description": "Automate AAOIFI-grade contract review. Hallha reads client contracts, maps every clause to the governing AAOIFI standard, and drafts cited findings in minutes — so your auditors spend their hours on judgment, not page-flipping.",
+      "primaryCta": "Book a firm demo",
+      "secondaryCta": "See a sample audit report",
+      "shariaFirst": "AAOIFI-grade",
+      "certified": "70% faster audits"
     },
     "metrics": {
-      "title": "Shariah Health Score",
-      "subtitle": "Real-time portfolio analysis",
+      "title": "Audit Findings Score",
+      "subtitle": "Latest client engagement",
       "score": "98%",
-      "status": "Halal",
-      "trend": "+2.4%",
-      "item1Title": "Recent transaction",
-      "item1Status": "Compliant",
-      "item2Title": "Smart contract review",
-      "item2Status": "Pending"
+      "status": "Cited",
+      "trend": "+12 findings",
+      "item1Title": "Murabaha facility — clause 4.2",
+      "item1Status": "Riba risk · cited",
+      "item2Title": "Ijarah schedule — annex B",
+      "item2Status": "Under review"
     },
     "stats": {
       "items": [
-        "500+ Freelancers & SMEs Onboarded",
-        "99.8% Sharia Compliance Rate",
-        "Certified by Sharia Supervisory Board",
-        "Real-time Transaction Auditing",
-        "256-bit Bank-grade Encryption",
-        "MENA Region Focused",
-        "Zakat Auto-calculated",
-        "Trusted by Ethical Investors"
+        "70% faster audit cycle",
+        "AAOIFI FAS · SS · GS standards indexed",
+        "Page-level citations on every finding",
+        "Multi-tenant firm + client workspaces",
+        "SOC 2 ready, encrypted at rest",
+        "MENA & global Sharia firms onboarded",
+        "Defensible audit trail per engagement",
+        "Sign-off ready in one working day"
       ]
     },
     "about": {
-      "sectionLabel": "About us",
-      "title": "Built for the",
-      "titleAccent": "ethical entrepreneur",
+      "sectionLabel": "About Hallha",
+      "title": "Tooling that matches the",
+      "titleAccent": "rigor your scholars demand",
       "missionTitle": "Our Mission",
-      "missionBody": "Hallilha was founded on a simple conviction: every Muslim founder deserves access to world-class Islamic financial tools — without the prohibitive cost of traditional Sharia boards. We automate compliance so you can focus on building.",
-      "point1": "Automated Sharia auditing for SMEs and freelancers across the MENA region",
-      "point2": "Real-time purification tracking so you never unknowingly mix funds",
-      "point3": "Partnered with leading Islamic finance scholars and regional banks",
-      "stat1Value": "500+",
-      "stat1Label": "Workspaces served",
-      "stat2Value": "98%",
-      "stat2Label": "Avg. Compliance Score",
-      "stat3Value": "12+",
-      "stat3Label": "MENA Countries",
-      "stat4Value": "3M+",
-      "stat4Label": "Transactions Audited"
+      "missionBody": "Sharia audit firms deserve tooling that matches the rigor their scholars demand. Hallha is the AI co-auditor that turns a multi-week contract review into a one-day, fully-cited deliverable — without replacing the partner sign-off.",
+      "point1": "Clause-by-clause review against AAOIFI FAS, SS, and GS standards",
+      "point2": "Every finding ships with page number, section heading, and a verbatim authority quote",
+      "point3": "Firm + client workspaces keep each engagement isolated and ready to hand to the partner",
+      "stat1Value": "70%",
+      "stat1Label": "Avg. audit cycle saved",
+      "stat2Value": "60+",
+      "stat2Label": "AAOIFI standards indexed",
+      "stat3Value": "1 day",
+      "stat3Label": "From upload to draft report",
+      "stat4Value": "100%",
+      "stat4Label": "Findings carry citations"
     },
     "features": {
-      "sectionLabel": "Platform features",
-      "title": "A complete ethical system",
-      "description": "Enterprise-grade tools made simple for freelancers and SMEs to maintain strong Shariah hygiene.",
+      "sectionLabel": "Capabilities",
+      "title": "Everything an audit firm needs to ship a defensible report",
+      "description": "Six capabilities, one workflow: from contract intake to partner sign-off, with citation discipline at every step.",
       "items": {
         "auditor": {
-          "title": "Smart AI Auditor",
-          "description": "An AI chat interface that reviews contracts and transactions against approved fatwas in real time — available 24/7."
+          "title": "AI Co-Auditor",
+          "description": "Reads the client's contract clause-by-clause, names the Sharia issue (Riba, Gharar, Maysir, prohibited industry), and grades severity — alongside your senior auditor, not in place of them."
         },
         "purification": {
-          "title": "Automatic Purification",
-          "description": "Automatically identify and isolate non-compliant income sources to track purification with pinpoint accuracy."
+          "title": "Purification Calculator",
+          "description": "When realized riba or haram income is found, Hallha drafts the التطهير formula and amount so the engagement letter can attach a calculated remediation."
         },
         "contracts": {
-          "title": "Contract Templates",
-          "description": "Access a library of pre-audited, ready-to-use Musharakah, Mudarabah, and Murabahah agreements."
+          "title": "AAOIFI Standard Mapping",
+          "description": "Every flagged clause is paired side-by-side with the governing AAOIFI standard — FAS 4 (Musharaka), FAS 28 (Murabaha), SS 9 (Ijarah), and the rest of the index."
         },
         "zakat": {
-          "title": "Zakat Dashboard",
-          "description": "Automatic calculations for hawl and nisab across your holdings and business assets, ready when you pay."
+          "title": "Precise Citations",
+          "description": "Each finding carries the exact page number and section heading from both the client document and the AAOIFI source — ready for the partner's review file."
         },
         "realtime": {
-          "title": "Real-time Monitoring",
-          "description": "Optional bank connections for live cash-flow auditing when you need it. Every synced transaction can be scored as it lands."
+          "title": "Firm + Client Workspaces",
+          "description": "Isolate every audited client in its own workspace. Your firm's policies and the client's contracts live in separate namespaces, retrieved together only when an engagement is open."
         },
         "secure": {
-          "title": "Bank-grade Security",
-          "description": "256-bit encryption, SOC 2 compliant infrastructure, and your credentials are never stored on our servers."
+          "title": "Audit Trail & Sign-off",
+          "description": "Every AI suggestion, scholar comment, and amendment is logged. Export a defensible audit trail with the final report — encrypted at rest and SOC 2 ready."
         }
       }
     },
     "pricing": {
       "sectionLabel": "Pricing",
-      "title": "Ethical, transparent pricing",
+      "title": "Plans that scale with your engagement load",
       "period": "/month",
       "monthly": "Monthly",
       "yearly": "Yearly",
       "savings": "Save 20%",
       "tiers": {
         "free": {
-          "title": "Free",
+          "title": "Solo Auditor",
           "price": "$0",
           "features": [
-            "Halim AI assistant",
-            "5 AI audit conversations per month",
-            "Smaller documents per thread (~10 pages)",
-            "Upgrade anytime"
+            "Halim AI co-auditor",
+            "5 audited contracts per month",
+            "Single auditor seat",
+            "Page-level AAOIFI citations"
           ],
-          "cta": "Get started free"
+          "cta": "Start free"
         },
         "starter": {
-          "title": "Starter",
-          "price": "$9",
-          "yearlyPrice": "$7",
+          "title": "Boutique Firm",
+          "price": "$149",
+          "yearlyPrice": "$119",
           "features": [
-            "Everything in Free",
-            "50 AI audit conversations per month",
-            "Documents up to ~50 pages per thread"
+            "Everything in Solo Auditor",
+            "50 audited contracts per month",
+            "Up to 5 auditor seats",
+            "Client-isolated workspaces"
           ],
-          "cta": "Get started"
+          "cta": "Start a firm trial"
         },
         "business": {
-          "title": "Business",
-          "price": "$19",
-          "yearlyPrice": "$15",
-          "highlightLabel": "Most popular",
+          "title": "Enterprise Audit Firm",
+          "price": "$499",
+          "yearlyPrice": "$399",
+          "highlightLabel": "Most chosen by firms",
           "features": [
-            "250 AI audit conversations per month",
-            "More room for large documents",
-            "Up to 3 workspace seats"
+            "250 audited contracts per month",
+            "Up to 20 auditor seats",
+            "Audit trail export & e-sign-off",
+            "Priority AAOIFI index updates"
           ],
-          "cta": "Get started"
+          "cta": "Choose Enterprise"
         },
         "enterprise": {
-          "title": "Enterprise",
+          "title": "Custom (Sharia Boards)",
           "price": "Custom",
           "features": [
-            "Custom monthly limits",
-            "API access available",
-            "Security reviews & onboarding support"
+            "Unlimited engagements & seats",
+            "Bring-your-own standards ingestion",
+            "On-prem or private VPC deployment",
+            "Dedicated onboarding & scholar liaison"
           ],
-          "cta": "Contact sales"
+          "cta": "Talk to our team"
         }
       }
     },
     "contact": {
-      "sectionLabel": "Contact us",
-      "title": "Let's start a",
-      "titleAccent": "conversation",
-      "subtitle": "Have a question or want to see a demo? Our team typically responds within 24 hours.",
+      "sectionLabel": "Talk to us",
+      "title": "Book a",
+      "titleAccent": "firm demo",
+      "subtitle": "Tell us about your firm and the kind of engagements you run. We respond within one working day — usually the same day in MENA hours.",
       "nameLabel": "Full name",
       "namePlaceholder": "Your full name",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "you@example.com",
-      "messageLabel": "Message",
-      "messagePlaceholder": "Tell us how we can help you…",
-      "submit": "Send message",
-      "success": "Message sent! We'll be in touch soon."
+      "emailLabel": "Work email",
+      "emailPlaceholder": "you@yourfirm.com",
+      "messageLabel": "About your firm",
+      "messagePlaceholder": "Firm name, country, average contracts audited per month, and what you'd like to see in the demo…",
+      "submit": "Request demo",
+      "success": "Thank you. Our team will reach out within one working day."
     },
     "faq": {
       "sectionLabel": "FAQ",
       "title": "Questions",
-      "titleAccent": "& answers",
+      "titleAccent": "from firms",
       "items": [
         {
-          "q": "Is Hallilha certified by a Sharia Supervisory Board?",
-          "a": "Yes. All compliance rules, purification calculations, and contract templates on Hallilha have been reviewed and approved by our Sharia Supervisory Board, composed of certified Islamic finance scholars."
+          "q": "Does Hallha replace our Sharia Supervisory Board?",
+          "a": "No. Hallha is a co-auditor for your team — it produces cited drafts and surfaces issues for review. Final rulings and partner sign-off remain with your qualified scholars. The aim is to remove the page-flipping, not the judgment."
         },
         {
-          "q": "How does automatic purification work?",
-          "a": "When Hallilha detects a non-compliant income source (such as interest income from a conventional bank account), it automatically quarantines the flagged amount in a 'Purification Queue'. You can then easily donate it to a charity of your choice directly from the dashboard."
+          "q": "Which AAOIFI standards are indexed?",
+          "a": "Hallha indexes the AAOIFI FAS (Financial Accounting), SS (Sharia), and GS (Governance) standards. Coverage is versioned and updated as AAOIFI publishes revisions — Enterprise plans receive priority index refreshes."
         },
         {
-          "q": "Can I connect my bank account?",
-          "a": "Yes. Whether you use a personal account as a freelancer or a business account as an SME, Hallilha integrates with major banks in the MENA region via secure open-banking APIs when you choose to connect. We use strong encryption and never store your bank credentials."
+          "q": "How precise are the citations?",
+          "a": "Every finding ships with three coordinates: the standard name and number (e.g. FAS 4 — Musharaka Financing), the exact page number in the source PDF, and the section heading the clause sits under. If the source has no machine-readable standard number, Hallha flags it rather than inventing one."
         },
         {
-          "q": "What is the Zakat Dashboard?",
-          "a": "The Zakat Dashboard tracks zakatable assets over the lunar year (hawl) and helps estimate your obligation based on current nisab thresholds—for sole traders with simple portfolios as well as larger businesses. It produces a structured report you can review with a qualified accountant or scholar before paying."
+          "q": "How do client engagements stay isolated?",
+          "a": "Each audited client gets its own namespace. The firm's AAOIFI knowledge base is shared; client contracts and policies are not. A client's documents are only retrieved during an open engagement for that client — never bled into another."
         },
         {
-          "q": "Is there a free plan?",
-          "a": "Yes. The Free plan includes Halim with 5 AI audit conversations per month (see pricing for document limits). Paid plans start at $9/month for higher quotas. Contact us about Enterprise if you need custom limits or API access."
+          "q": "Can we white-label or self-host?",
+          "a": "Yes. The Custom (Sharia Boards) plan supports white-labeled deployments and on-prem or private-VPC installs for firms with data-residency requirements. Contact our team to scope an engagement."
         },
         {
-          "q": "What languages does Hallilha support?",
-          "a": "Hallilha fully supports both Arabic (RTL) and English, with more languages planned. The entire platform — including the AI auditor — works in both languages."
+          "q": "Which languages do auditors work in?",
+          "a": "Hallha is fully bilingual Arabic (RTL) and English (LTR). Auditors can write findings in either language and Hallha mirrors the language of the input — including verbatim Arabic citations from AAOIFI sources."
         }
       ]
     },
     "footerNote": "All rights reserved.",
     "footer": {
-      "copyright": "© 2026 Hallilha. Audited by the Shariah Supervisory Board.",
-      "tagline": "Your financial future, built on Shariah-first foundations.",
-      "complianceBadge": "Shariah Supervisory Board Certified",
+      "copyright": "© 2026 Hallha. The AI co-auditor for Sharia audit firms.",
+      "tagline": "Automate AAOIFI-grade contract review. Keep the judgment where it belongs.",
+      "complianceBadge": "AAOIFI-aligned · SOC 2 ready",
       "productTitle": "Product",
       "companyTitle": "Company",
       "stayUpdated": "Stay Updated",
-      "newsletterDesc": "Get insights on Islamic finance and compliance delivered to your inbox.",
-      "contactUs": "Get in touch",
-      "getStarted": "Get started",
+      "newsletterDesc": "Get briefings on AAOIFI revisions and Sharia audit tooling, monthly.",
+      "contactUs": "Talk to us",
+      "getStarted": "Book a demo",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     }
