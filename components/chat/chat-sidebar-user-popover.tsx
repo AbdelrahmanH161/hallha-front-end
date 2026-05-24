@@ -20,7 +20,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { signOut, useSession } from "@/lib/auth/client"
+import { useSession } from "@/lib/auth/client"
+import { performSignOut } from "@/lib/auth/sign-out"
+import { useQueryClient } from "@tanstack/react-query"
 import { useOrganizationQuery } from "@/lib/api/queries/organization"
 import { useSettingsDialog } from "@/lib/stores/settings-dialog"
 import { cn } from "@/lib/utils"
@@ -46,6 +48,7 @@ export function ChatSidebarUserPopover() {
   const { data: org } = useOrganizationQuery()
   const openSettings = useSettingsDialog((s) => s.openAt)
   const router = useRouter()
+  const queryClient = useQueryClient()
   const { resolvedTheme, setTheme } = useTheme()
   const isClient = useIsClient()
   const isDark = resolvedTheme === "dark"
@@ -66,7 +69,7 @@ export function ChatSidebarUserPopover() {
 
   async function handleSignOut() {
     setOpen(false)
-    await signOut()
+    await performSignOut(queryClient)
     router.push("/login")
     router.refresh()
   }

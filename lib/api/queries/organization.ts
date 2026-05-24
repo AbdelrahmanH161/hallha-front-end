@@ -32,13 +32,14 @@ export const organizationKeys = {
   me: ["organization", "me"] as const,
 }
 
-export function useOrganizationQuery() {
+export function useOrganizationQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: organizationKeys.me,
     queryFn: () =>
       apiFetch<{ organization: Organization }>("/organizations/me").then(
         (r) => r.organization
       ),
+    enabled: options?.enabled ?? true,
   })
 }
 

@@ -24,6 +24,7 @@ import {
   useSkipOnboardingMutation,
 } from "@/lib/api/queries/organization"
 import { useQueryClient } from "@tanstack/react-query"
+import { useSession } from "@/lib/auth/client"
 import { useRegisterDraft } from "@/lib/stores/register-draft"
 
 /** Business wizard URL steps reach 6 for success splash; Auditor reaches 5 (added first-client step). */
@@ -48,7 +49,11 @@ export function RegisterWizard() {
   const messages = useMessages()
   const common = messages.common as CommonCopy
   const qc = useQueryClient()
-  const { data: org, isFetched } = useOrganizationQuery()
+  const { data: session, isPending: sessionPending } = useSession()
+  const authenticated = Boolean(session?.user)
+  const { data: org, isFetched: orgFetched } = useOrganizationQuery({
+    enabled: authenticated,
+  })
   const draftPath = useRegisterDraft((s) => s.userPath)
   const reset = useRegisterDraft((s) => s.reset)
 
@@ -61,10 +66,20 @@ export function RegisterWizard() {
 
   React.useEffect(() => {
     if (!pathname?.startsWith("/register")) return
-    if (!isFetched) return
+    if (sessionPending) return
+    if (!authenticated) return
+    if (!orgFetched) return
     if (successMode) return
     if (org?.onboardingCompleted) router.replace("/dashboard")
-  }, [pathname, isFetched, org?.onboardingCompleted, router, successMode])
+  }, [
+    pathname,
+    sessionPending,
+    authenticated,
+    orgFetched,
+    org?.onboardingCompleted,
+    router,
+    successMode,
+  ])
 
   const register = messages.auth.register as Record<string, unknown>
   const tButtons =
@@ -116,9 +131,10 @@ export function RegisterWizard() {
 
   /** Deep-link guard: persona questions without a saved path can't render */
   React.useEffect(() => {
-    if (!isFetched) return
+    if (sessionPending) return
+    if (authenticated && !orgFetched) return
     if (stepFromUrl >= 3 && draftPath === null && !org?.userType && stepFromUrl < 900) goTo(2)
-  }, [draftPath, goTo, isFetched, org?.userType, stepFromUrl])
+  }, [authenticated, draftPath, goTo, org?.userType, orgFetched, sessionPending, stepFromUrl])
 
   const finish = React.useCallback(() => {
     router.push("/dashboard")
@@ -170,8 +186,9 @@ export function RegisterWizard() {
     )
   }
 
+  const orgReady = !authenticated || orgFetched
   const loadingGuard =
-    stepFromUrl >= 3 && branch === null && isFetched && !draftPath && !org?.userType ? (
+    stepFromUrl >= 3 && branch === null && orgReady && !draftPath && !org?.userType ? (
       <div className="flex flex-col items-center justify-center gap-4 py-12">
         <Loader2 className="size-10 animate-spin text-muted-foreground" aria-hidden />
         <p className="text-center text-sm text-muted-foreground">{String((register.loadingBranch as string) ?? "")}</p>
