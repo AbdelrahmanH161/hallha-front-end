@@ -880,6 +880,91 @@
       "deleteThread": "Delete conversation",
       "threadActions": "Thread actions"
     },
+    "nav": {
+      "dashboard": "Dashboard",
+      "chats": "Chats",
+      "clients": "Clients",
+      "knowledge": "Knowledge",
+      "platform": "Workspace",
+      "preferences": "Preferences"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "toggle": "Toggle theme"
+    },
+    "clients": {
+      "title": "Audited clients",
+      "description": "Each client gets isolated document storage and Sharia audits.",
+      "newClient": "New client",
+      "loading": "Loading…",
+      "empty": "No clients yet.",
+      "emptyHint": "Create one to start auditing their documents.",
+      "noIndustry": "No industry",
+      "documentsCount": "{count, plural, =0 {No documents} one {# document} other {# documents}}",
+      "open": "Open",
+      "dialog": {
+        "title": "New audited client",
+        "nameLabel": "Client name",
+        "namePlaceholder": "e.g. Bank Alpha",
+        "industryLabel": "Industry (optional)",
+        "industryPlaceholder": "e.g. Banking",
+        "cancel": "Cancel",
+        "create": "Create",
+        "creating": "Creating…"
+      },
+      "emptyCta": "Add your first client",
+      "auditFromChat": "Audit a client's document"
+    },
+    "clientDetail": {
+      "loading": "Loading client…",
+      "notFound": "Client not found.",
+      "back": "Clients",
+      "metaSeparator": "·",
+      "documentsCount": "{count, plural, =0 {No documents} one {# document} other {# documents}}",
+      "startChat": "Start chat about this client",
+      "upload": {
+        "sectionTitle": "Upload a document",
+        "sectionHint": "Drop files or click to choose. PDFs up to 25 MB. Multiple files are uploaded one at a time.",
+        "documentTypeLabel": "Document type",
+        "documentTypes": {
+          "policies": "Policies",
+          "contracts": "Contracts",
+          "financials": "Financials",
+          "other": "Other"
+        },
+        "dropzone": {
+          "active": "Drop the PDF here…",
+          "idle": "Drag a PDF here, or click to choose",
+          "hint": "Accepted: PDF • up to 25 MB per file"
+        },
+        "fileQueueTitle": "Queue",
+        "transport": "Uploading {percent}%",
+        "processing": "Processing…",
+        "ready": "Ready",
+        "failed": "Failed",
+        "retry": "Retry",
+        "cancel": "Cancel",
+        "remove": "Remove",
+        "tooLargeTitle": "File too large",
+        "tooLargeDescription": "Maximum size is 25 MB.",
+        "wrongTypeTitle": "Unsupported file",
+        "wrongTypeDescription": "Only PDF files are supported right now.",
+        "uploadFailed": "Upload failed"
+      },
+      "documents": {
+        "sectionTitle": "Documents",
+        "empty": "No documents uploaded yet for this client.",
+        "deleteConfirm": "Delete this document and its vectors?",
+        "delete": "Delete",
+        "pending": "Pending",
+        "processing": "Processing…",
+        "ready": "Ready",
+        "failed": "Failed"
+      }
+    },
     "settings": {
       "title": "Settings",
       "description": "Manage your profile, workspace, and preferences.",

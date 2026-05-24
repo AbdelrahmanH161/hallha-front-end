@@ -21,6 +21,8 @@ export type AuditedClient = {
   documentCount: number
 }
 
+export type ClientDocumentStatus = "pending" | "ready" | "failed"
+
 export type ClientDocument = {
   s3Key: string
   organizationId: string
@@ -31,6 +33,18 @@ export type ClientDocument = {
   uploadedAt: string
   uploadedBy: string
   sizeBytes: number
+  status: ClientDocumentStatus
+  error: string | null
+  chunkCount: number | null
+  processedAt: string | null
+}
+
+export type ClientDocumentStatusResponse = {
+  status: ClientDocumentStatus
+  error: string | null
+  chunkCount: number | null
+  processedAt: string | null
+  document: ClientDocument
 }
 
 export const clientKeys = {
@@ -40,6 +54,8 @@ export const clientKeys = {
   detail: (id: string) => ["clients", "detail", id] as const,
   documents: (id: string, documentType?: ClientDocumentType) =>
     ["clients", id, "documents", documentType ?? null] as const,
+  documentStatus: (clientId: string, documentId: string) =>
+    ["clients", clientId, "documents", documentId, "status"] as const,
 }
 
 export function useClientsQuery(params?: {
@@ -133,9 +149,23 @@ export function useClientDocumentsQuery(
   })
 }
 
+export type UploadAcceptedResponse = {
+  status: "accepted"
+  documentId: string
+  statusUrl: string
+  document: ClientDocument
+}
+
 /**
  * Upload a client document with progress callbacks. Uses XMLHttpRequest to
- * surface upload progress; matches the admin SPA pattern.
+ * surface upload progress (fetch lacks upload progress events).
+ *
+ * The backend now returns **202 Accepted** with `{ documentId, statusUrl }` and runs
+ * the heavy ingest (PDF parse + embedding + Pinecone upsert) in the background.
+ * Callers should poll `statusUrl` (or use `useDocumentStatusQuery`) until status
+ * flips to `ready` or `failed`.
+ *
+ * Pass `signal` from an `AbortController` to support user-initiated cancel.
  */
 export function uploadClientDocument(opts: {
   clientId: string
@@ -143,11 +173,14 @@ export function uploadClientDocument(opts: {
   file: File
   displayName?: string
   onProgress?: (loaded: number, total: number) => void
-}): Promise<{ status: string; document: ClientDocument }> {
+  signal?: AbortSignal
+  registerAbort?: (abort: () => void) => void
+}): Promise<UploadAcceptedResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.open("POST", `${API_URL}/api/clients/${opts.clientId}/documents`)
     xhr.withCredentials = true
+    xhr.timeout = 0 // no client timeout — wait for server's 202
     xhr.upload.onprogress = (ev) => {
       if (ev.lengthComputable && ev.total > 0 && opts.onProgress) {
         opts.onProgress(ev.loaded, ev.total)
@@ -162,7 +195,7 @@ export function uploadClientDocument(opts: {
         }
       })()
       if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(body as { status: string; document: ClientDocument })
+        resolve(body as UploadAcceptedResponse)
       } else {
         const detail =
           typeof body === "object" && body !== null && "detail" in body
@@ -172,6 +205,24 @@ export function uploadClientDocument(opts: {
       }
     }
     xhr.onerror = () => reject(new Error("Network error"))
+    xhr.onabort = () => reject(new DOMException("Aborted", "AbortError"))
+
+    const abort = () => {
+      try {
+        xhr.abort()
+      } catch {
+        /* noop */
+      }
+    }
+    opts.registerAbort?.(abort)
+    if (opts.signal) {
+      if (opts.signal.aborted) {
+        abort()
+        return
+      }
+      opts.signal.addEventListener("abort", abort, { once: true })
+    }
+
     const fd = new FormData()
     fd.append("file", opts.file)
     fd.append("documentType", opts.documentType)
@@ -190,12 +241,42 @@ export function useUploadClientDocumentMutation(
       documentType: ClientDocumentType
       displayName?: string
       onProgress?: (loaded: number, total: number) => void
+      signal?: AbortSignal
+      registerAbort?: (abort: () => void) => void
     }) => uploadClientDocument({ clientId, ...input }),
     onSuccess: () => {
+      // Refresh the documents list so the new 'pending' row appears in the UI.
       qc.invalidateQueries({ queryKey: clientKeys.documents(clientId) })
-      qc.invalidateQueries({ queryKey: clientKeys.detail(clientId) })
-      qc.invalidateQueries({ queryKey: clientKeys.all })
     },
+  })
+}
+
+/**
+ * Poll the backend for ingest completion. Refetches every ~2s while pending; stops once
+ * the doc is `ready` or `failed`. Pair this with the 202 returned by `uploadClientDocument`.
+ */
+export function useDocumentStatusQuery(opts: {
+  clientId: string | null | undefined
+  documentId: string | null | undefined
+  /** Stop polling once we hit a terminal state. */
+  enabled?: boolean
+}) {
+  const enabled = (opts.enabled ?? true) && Boolean(opts.clientId && opts.documentId)
+  return useQuery({
+    queryKey: clientKeys.documentStatus(opts.clientId ?? "", opts.documentId ?? ""),
+    queryFn: () =>
+      apiFetch<ClientDocumentStatusResponse>(
+        `/api/clients/${opts.clientId}/documents/${encodeURIComponent(
+          opts.documentId ?? ""
+        )}/status`
+      ),
+    enabled,
+    refetchInterval: (q) => {
+      const data = q.state.data as ClientDocumentStatusResponse | undefined
+      if (data?.status === "ready" || data?.status === "failed") return false
+      return 2000
+    },
+    refetchOnWindowFocus: false,
   })
 }
 

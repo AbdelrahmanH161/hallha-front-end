@@ -6,7 +6,7 @@ Cross-repo contract between the Hallha backend and the Next.js frontend. Keep th
 
 | Role | Path | Stack | Default port |
 |---|---|---|---|
-| Backend | `E:\client-projects\hallha-node` | Express 5 + LangGraph + Gemini + Pinecone + MongoDB + Better-Auth + S3 | 8000 |
+| Backend | `E:\client-projects\hallha-node` | Express 5 + LangGraph (Agentic CRAG) + DeepSeek + Pinecone + MongoDB + Better-Auth + S3 | 8000 |
 | Frontend (user app) | `E:\client-projects\hallha-front-end` | Next.js 16 App Router + React 19 | 3000 |
 | Admin SPA | `E:\client-projects\hallha-node\admin\` | Vite + React 19 + shadcn (pnpm workspace sibling) | 5173 |
 
@@ -55,8 +55,11 @@ For each endpoint actually called from the frontend.
 | `PATCH /api/clients/:id` | same | `useUpdateClientMutation` |
 | `POST /api/clients/:id/archive` | same | `useArchiveClientMutation` |
 | `GET /api/clients/:id/documents` (`?documentType=...`) | same | `useClientDocumentsQuery` |
-| `POST /api/clients/:id/documents` | same | `uploadClientDocument` (XHR — for `xhr.upload.onprogress`) |
-| `DELETE /api/clients/:id/documents` | same | `useDeleteClientDocumentMutation` (body: `{ s3Key }`) |
+| `POST /api/clients/:id/documents` | same | `uploadClientDocument` (XHR for `xhr.upload.onprogress`) — **returns 202** with `{ documentId, statusUrl, document }`; ingest runs async, frontend polls `statusUrl`. |
+| `GET /api/clients/:id/documents/:documentId/status` | same | `useDocumentStatusQuery` polls every ~2s → `{ status: 'pending'\|'ready'\|'failed', error, chunkCount, processedAt, document }`. |
+| `DELETE /api/clients/:id/documents` | same | `useDeleteClientDocumentMutation` (body: `{ s3Key }`) — also works for `pending`/`failed` docs to clean up partial uploads. |
+
+> **Async ingest contract.** `POST /api/clients/:id/documents` no longer runs PDF parse + embedding + Pinecone upsert inline (that produced 504s in prod when the cold-start embedding model exceeded gateway timeouts). The route now: writes the file to S3, inserts a `client_document` row with `status='pending'`, and returns **202 Accepted** with the `documentId` (== `s3Key`) and a `statusUrl`. A `setImmediate` callback runs ingest in the background and flips the row to `ready` (incrementing `documentCount`) or `failed` (with an `error` string). The frontend should disable the document until status is `ready`.
 
 ### Organization / onboarding
 
@@ -106,7 +109,7 @@ Backend `src/middleware/error.ts` maps exceptions to HTTP responses:
 |---|---|---|
 | `HttpError(status, message)` | `status` | `{ detail: message }` |
 | `IngestError(message)` | 400 | `{ detail: message }` |
-| Upstream LLM quota / rate-limit | 429 | `{ detail, kind: 'quota_exhausted' \| 'rate_limited', provider: 'gemini' \| 'groq', retryAfterSeconds? }` + `Retry-After` header |
+| Upstream LLM quota / rate-limit | 429 | `{ detail, kind: 'quota_exhausted' \| 'rate_limited', provider: 'deepseek' \| 'gemini' \| 'groq', retryAfterSeconds? }` + `Retry-After` header |
 | Upstream LLM other (5xx) | 502 | `{ detail, kind: 'upstream_error', provider }` |
 | Better-Auth `APIError` | its status | `{ detail }` |
 | Anything else | 500 | `{ detail: 'Internal Server Error' }` |

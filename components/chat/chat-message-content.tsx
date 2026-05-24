@@ -8,6 +8,31 @@ import remarkGfm from "remark-gfm"
 import type { RetrievedSource } from "@/lib/types/retrieved-source"
 import { cn } from "@/lib/utils"
 
+/**
+ * Build a deep link to the source document. For PDF document sources we append
+ * `#page=N` — a de-facto standard fragment honored by Chrome / Edge / Firefox /
+ * Safari native PDF viewers, which jumps directly to the cited page. For web
+ * sources or sources without a URL, we return whatever we have (or null).
+ *
+ * Fragments are client-side only, so appending to a presigned S3 URL doesn't
+ * break the signature.
+ */
+function sourceHref(source: RetrievedSource): string | null {
+  if (!source.url) return null
+  // Web search hits don't have page numbers in the same sense.
+  if (source.type === "web") return source.url
+  if (!Number.isFinite(source.page) || source.page <= 0) return source.url
+  // Don't double-append a fragment if the URL already has one.
+  if (source.url.includes("#")) return source.url
+  return `${source.url}#page=${source.page}`
+}
+
+function sourceTooltip(source: RetrievedSource, pageLabel: string): string {
+  const name = source.displayName?.trim() || source.source
+  if (source.type === "web") return name
+  return `${name} — ${pageLabel}`
+}
+
 const SOURCES_HEADING_RE =
   /(?:^|\n)(?:\s*(?:#+\s*)?(?:\*\*)?\s*Sources\s*(?:\*\*)?:?\s*)\n/i
 
@@ -27,18 +52,46 @@ function splitContent(content: string): Part[] {
   return parts
 }
 
-function transformBodyText(text: string, anchorPrefix: string): React.ReactNode[] {
+function transformBodyText(
+  text: string,
+  anchorPrefix: string,
+  sourcesById: Map<number, RetrievedSource>,
+  pageLabelFor: (page: number) => string
+): React.ReactNode[] {
   const tokens = text.split(/(\[\d+\])/g)
   return tokens.map((token, i) => {
     const m = token.match(/^\[(\d+)\]$/)
     if (!m) return token
     const n = m[1]
+    const source = sourcesById.get(Number(n))
+    const href = source ? sourceHref(source) : null
+    const title = source ? sourceTooltip(source, pageLabelFor(source.page)) : undefined
+    // If we have a real document URL, open it in a new tab so the user lands on
+    // the cited page directly. Otherwise keep the in-page anchor jump fallback
+    // (scrolls to the source row in the footer).
+    if (href) {
+      return (
+        <sup key={i} className="px-0.5">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={title}
+            className="font-medium text-primary no-underline hover:underline"
+            aria-label={title ?? `Source ${n}`}
+          >
+            [{n}]
+          </a>
+        </sup>
+      )
+    }
     return (
       <sup key={i} className="px-0.5">
         <a
           href={`#${anchorPrefix}-${n}`}
+          title={title}
           className="font-medium text-primary no-underline hover:underline"
-          aria-label={`Source ${n}`}
+          aria-label={title ?? `Source ${n}`}
         >
           [{n}]
         </a>
@@ -49,11 +102,13 @@ function transformBodyText(text: string, anchorPrefix: string): React.ReactNode[
 
 function walkChildren(
   children: React.ReactNode,
-  anchorPrefix: string
+  anchorPrefix: string,
+  sourcesById: Map<number, RetrievedSource>,
+  pageLabelFor: (page: number) => string
 ): React.ReactNode {
   return React.Children.map(children, (child) => {
     if (typeof child === "string") {
-      return transformBodyText(child, anchorPrefix)
+      return transformBodyText(child, anchorPrefix, sourcesById, pageLabelFor)
     }
     return child
   })
@@ -153,13 +208,32 @@ export function ChatMessageContent({
     return raw
   }, [content, structuredSources])
 
+  // Lookup map for inline `[n]` citation markers → source row. We pass it into
+  // the markdown text walker so each marker can deep-link to the cited PDF page.
+  const sourcesById = React.useMemo(() => {
+    const m = new Map<number, RetrievedSource>()
+    for (const s of structuredSources ?? []) m.set(s.id, s)
+    return m
+  }, [structuredSources])
+
+  const pageLabelFor = React.useCallback(
+    (page: number) => t("sourcePage", { page }),
+    [t]
+  )
+
   const bodyComponents: Components = React.useMemo(
     () => ({
-      p: ({ children }) => <p>{walkChildren(children, anchorPrefix)}</p>,
-      li: ({ children }) => <li>{walkChildren(children, anchorPrefix)}</li>,
-      ...overflowMarkdownComponents((ch) => walkChildren(ch, anchorPrefix)),
+      p: ({ children }) => (
+        <p>{walkChildren(children, anchorPrefix, sourcesById, pageLabelFor)}</p>
+      ),
+      li: ({ children }) => (
+        <li>{walkChildren(children, anchorPrefix, sourcesById, pageLabelFor)}</li>
+      ),
+      ...overflowMarkdownComponents((ch) =>
+        walkChildren(ch, anchorPrefix, sourcesById, pageLabelFor)
+      ),
     }),
-    [anchorPrefix]
+    [anchorPrefix, sourcesById, pageLabelFor]
   )
 
   const sourcesComponents: Components = React.useMemo(
@@ -219,18 +293,25 @@ export function ChatMessageContent({
             {t("sourcesHeading")}
           </div>
           <ol className="my-1.5 ms-5 list-decimal space-y-1 [&_a]:text-primary">
-            {structuredSources.map((s) => (
+            {structuredSources.map((s) => {
+              const deepHref = sourceHref(s)
+              return (
               <li
                 key={s.id}
                 id={`${anchorPrefix}-${s.id}`}
                 className="scroll-mt-24 marker:text-muted-foreground"
               >
                 <span className="inline-flex flex-wrap items-center gap-2">
-                  {s.url ? (
+                  {deepHref ? (
                     <a
-                      href={s.url}
+                      href={deepHref}
                       target="_blank"
                       rel="noopener noreferrer"
+                      title={
+                        s.type === "web"
+                          ? undefined
+                          : t("openDocument") + " — " + t("sourcePage", { page: s.page })
+                      }
                       className="font-medium text-primary no-underline hover:underline"
                     >
                       {s.displayName?.trim()?.length ? s.displayName : s.source}
@@ -264,7 +345,8 @@ export function ChatMessageContent({
                   <span className="sr-only"> ({t("openDocument")})</span>
                 ) : null}
               </li>
-            ))}
+              )
+            })}
           </ol>
         </div>
       ) : null}

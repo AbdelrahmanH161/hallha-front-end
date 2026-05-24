@@ -123,7 +123,13 @@ export function useSendChatStream() {
       )
       return { previousThread }
     },
-    onError: (_err, { threadId }, context) => {
+    onError: (err, { threadId }, context) => {
+      // AbortError isn't a real error — it's user intent. The mutationFn already
+      // committed the partial assistant message to cache; just unwind state.
+      if (err instanceof Error && err.name === "AbortError") {
+        finishStreaming()
+        return
+      }
       finishStreaming()
       const prev = context?.previousThread
       if (prev !== undefined) {
@@ -171,6 +177,19 @@ export function useSendChatStream() {
           },
         })
       } catch (err) {
+        // Stop button fired AbortController.abort() — commit whatever partial
+        // assistant text + sources we collected to the cache so the user keeps
+        // the visible context, then return without throwing. The backend now
+        // persists the thread up-front (before streaming starts), so a follow-up
+        // GET /chats/:id will succeed instead of 404'ing.
+        if (controller.signal.aborted || (err instanceof Error && err.name === "AbortError")) {
+          commitPartialAssistantMessage(qc, threadId)
+          finishStreaming()
+          // Schedule a sync with the backend (will pick up the persisted thread).
+          void qc.invalidateQueries({ queryKey: chatKeys.detail(threadId) })
+          void qc.invalidateQueries({ queryKey: chatKeys.all })
+          return
+        }
         finishStreaming()
         throw err
       }
@@ -184,5 +203,35 @@ export function useSendChatStream() {
       finishStreaming()
       await qc.invalidateQueries({ queryKey: chatKeys.all })
     },
+  })
+}
+
+/**
+ * Read the partial assistant text + sources from the chat store and commit them as a
+ * finalized assistant message in the React Query cache. Called when the user stops the
+ * stream — keeps whatever was generated visible instead of restoring the cache to its
+ * pre-send state (which would erase both the user message and the partial response).
+ */
+function commitPartialAssistantMessage(
+  qc: ReturnType<typeof useQueryClient>,
+  threadId: string
+) {
+  const { streamingText, streamingSources } = useChatStore.getState()
+  // No partial content yet (abort fired before first token) — leave the optimistic
+  // user message alone. The follow-up invalidate will reconcile with the backend.
+  if (!streamingText && streamingSources.length === 0) return
+
+  qc.setQueryData<ChatThread | undefined>(chatKeys.detail(threadId), (existing) => {
+    if (!existing) return existing
+    const assistantMsg: ChatMessage = {
+      role: "assistant",
+      content: streamingText,
+    }
+    return {
+      ...existing,
+      messages: [...existing.messages, assistantMsg],
+      sources: streamingSources.length > 0 ? streamingSources : existing.sources,
+      lastMessageAt: new Date().toISOString(),
+    }
   })
 }

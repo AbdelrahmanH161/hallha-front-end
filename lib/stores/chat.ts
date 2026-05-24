@@ -51,10 +51,11 @@ export const useChatStore = create<ChatStreamState>((set, get) => ({
   abortStreaming: () => {
     const ctrl = get().abortController
     ctrl?.abort()
+    // Note: we intentionally do NOT clear streamingText / streamingSources here.
+    // The mutation's catch block reads the partial snapshot to commit it to the
+    // React Query cache (so the user sees what was generated up to abort), then
+    // calls finishStreaming() which clears it.
     set({
-      streamingThreadId: null,
-      streamingText: "",
-      streamingSources: [],
       isStreaming: false,
       abortController: null,
     })

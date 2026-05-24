@@ -880,6 +880,91 @@
       "deleteThread": "حذف المحادثة",
       "threadActions": "إجراءات المحادثة"
     },
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "chats": "المحادثات",
+      "clients": "العملاء",
+      "knowledge": "المعرفة",
+      "platform": "مساحة العمل",
+      "preferences": "التفضيلات"
+    },
+    "theme": {
+      "label": "المظهر",
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "حسب النظام",
+      "toggle": "تبديل المظهر"
+    },
+    "clients": {
+      "title": "العملاء المُدقَّقون",
+      "description": "كل عميل يحصل على تخزين مستندات معزول وتدقيق شرعي مستقل.",
+      "newClient": "عميل جديد",
+      "loading": "جارٍ التحميل…",
+      "empty": "لا يوجد عملاء بعد.",
+      "emptyHint": "أنشئ عميلاً لبدء تدقيق مستنداته.",
+      "noIndustry": "بدون قطاع",
+      "documentsCount": "{count, plural, =0 {لا توجد مستندات} one {مستند واحد} two {مستندان} few {# مستندات} many {# مستنداً} other {# مستند}}",
+      "open": "فتح",
+      "dialog": {
+        "title": "عميل مُدقَّق جديد",
+        "nameLabel": "اسم العميل",
+        "namePlaceholder": "مثال: بنك ألفا",
+        "industryLabel": "القطاع (اختياري)",
+        "industryPlaceholder": "مثال: مصرفية",
+        "cancel": "إلغاء",
+        "create": "إنشاء",
+        "creating": "جارٍ الإنشاء…"
+      },
+      "emptyCta": "أضف عميلك الأول",
+      "auditFromChat": "ابدأ تدقيق مستند لعميل"
+    },
+    "clientDetail": {
+      "loading": "جارٍ تحميل العميل…",
+      "notFound": "العميل غير موجود.",
+      "back": "العملاء",
+      "metaSeparator": "·",
+      "documentsCount": "{count, plural, =0 {لا توجد مستندات} one {مستند واحد} two {مستندان} few {# مستندات} many {# مستنداً} other {# مستند}}",
+      "startChat": "ابدأ محادثة حول هذا العميل",
+      "upload": {
+        "sectionTitle": "رفع مستند",
+        "sectionHint": "اسحب الملفات أو انقر للاختيار. ملفات PDF حتى 25 ميجابايت. تُرفع الملفات المتعددة واحداً تلو الآخر.",
+        "documentTypeLabel": "نوع المستند",
+        "documentTypes": {
+          "policies": "السياسات",
+          "contracts": "العقود",
+          "financials": "المالية",
+          "other": "أخرى"
+        },
+        "dropzone": {
+          "active": "أفلت ملف PDF هنا…",
+          "idle": "اسحب ملف PDF هنا، أو انقر للاختيار",
+          "hint": "المقبول: PDF • حتى 25 ميجابايت لكل ملف"
+        },
+        "fileQueueTitle": "قائمة الانتظار",
+        "transport": "جارٍ الرفع {percent}%",
+        "processing": "قيد المعالجة…",
+        "ready": "جاهز",
+        "failed": "فشل",
+        "retry": "إعادة المحاولة",
+        "cancel": "إلغاء",
+        "remove": "إزالة",
+        "tooLargeTitle": "حجم الملف كبير جداً",
+        "tooLargeDescription": "الحد الأقصى 25 ميجابايت.",
+        "wrongTypeTitle": "نوع ملف غير مدعوم",
+        "wrongTypeDescription": "يُدعم حالياً ملفات PDF فقط.",
+        "uploadFailed": "فشل الرفع"
+      },
+      "documents": {
+        "sectionTitle": "المستندات",
+        "empty": "لم يتم رفع أي مستندات لهذا العميل بعد.",
+        "deleteConfirm": "هل تريد حذف هذا المستند ومتجهاته؟",
+        "delete": "حذف",
+        "pending": "بالانتظار",
+        "processing": "قيد المعالجة…",
+        "ready": "جاهز",
+        "failed": "فشل"
+      }
+    },
     "settings": {
       "title": "الإعدادات",
       "description": "إدارة ملفك الشخصي ومساحة العمل وتفضيلاتك.",
