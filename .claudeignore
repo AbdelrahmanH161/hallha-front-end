@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.cursor/
+coverage/
+dist/
+build/
+out/
+.turbo/
+.vercel/
+public/sw.js
+*.tsbuildinfo
+.DS_Store
