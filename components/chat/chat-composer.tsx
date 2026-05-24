@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/tooltip"
 import { ApiError } from "@/lib/api/client"
 import { transcribeChatAudio } from "@/lib/api/transcribe"
-import { useSendChatStream } from "@/lib/api/queries/chats"
+import { ChatStreamError, useSendChatStream } from "@/lib/api/queries/chats"
 import { useChatStore } from "@/lib/stores/chat"
 import { cn } from "@/lib/utils"
 
@@ -423,6 +423,22 @@ export function ChatComposer({
       await sendChat.mutateAsync(payload)
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return
+      if (err instanceof ChatStreamError) {
+        const titleKey =
+          err.kind === "quota_exhausted"
+            ? "quotaExceededTitle"
+            : err.kind === "rate_limited"
+              ? "rateLimitedTitle"
+              : err.kind === "invalid_api_key"
+                ? "providerUnavailableTitle"
+                : err.kind === "model_not_found"
+                  ? "providerUnavailableTitle"
+                  : err.kind === "upstream_error"
+                    ? "providerUnavailableTitle"
+                    : "sendFailed"
+        toast.error(t(titleKey), { description: err.message })
+        return
+      }
       const description =
         err instanceof ApiError
           ? err.detail

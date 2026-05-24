@@ -3,6 +3,22 @@ import type { RetrievedSource } from "@/lib/types/retrieved-source"
 
 export type SseEvent = { event: string; data: unknown }
 
+export type StreamErrorKind =
+  | "quota_exhausted"
+  | "rate_limited"
+  | "invalid_api_key"
+  | "model_not_found"
+  | "upstream_error"
+  | "unknown"
+
+export type StreamErrorPayload = {
+  detail: string
+  kind?: StreamErrorKind
+  status?: number
+  provider?: "gemini" | "groq"
+  retryAfterSeconds?: number
+}
+
 export type StreamChatAuditOptions = {
   threadId: string
   clientId?: string | null
@@ -13,7 +29,7 @@ export type StreamChatAuditOptions = {
   onToken?: (text: string) => void
   onSources?: (sources: RetrievedSource[]) => void
   onDone?: (data: { thread_id: string; client_id?: string | null }) => void
-  onError?: (detail: string) => void
+  onError?: (payload: StreamErrorPayload) => void
 }
 
 function parseEventBlock(block: string): SseEvent | null {
@@ -104,9 +120,17 @@ export async function streamChatAudit({
           case "done":
             onDone?.(evt.data as { thread_id: string })
             break
-          case "error":
-            onError?.((evt.data as { detail?: string }).detail ?? "stream error")
+          case "error": {
+            const raw = (evt.data ?? {}) as Partial<StreamErrorPayload>
+            onError?.({
+              detail: raw.detail ?? "stream error",
+              kind: raw.kind,
+              status: raw.status,
+              provider: raw.provider,
+              retryAfterSeconds: raw.retryAfterSeconds,
+            })
             break
+          }
         }
       }
     }

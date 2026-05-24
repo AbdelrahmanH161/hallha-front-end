@@ -1,9 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { apiFetch } from "@/lib/api/client"
-import { streamChatAudit } from "@/lib/api/sse"
+import { streamChatAudit, type StreamErrorPayload } from "@/lib/api/sse"
 import { useChatStore } from "@/lib/stores/chat"
 import type { RetrievedSource } from "@/lib/types/retrieved-source"
+
+export class ChatStreamError extends Error {
+  readonly kind: StreamErrorPayload["kind"]
+  readonly status?: number
+  readonly provider?: StreamErrorPayload["provider"]
+  readonly retryAfterSeconds?: number
+  constructor(payload: StreamErrorPayload) {
+    super(payload.detail)
+    this.name = "ChatStreamError"
+    this.kind = payload.kind
+    this.status = payload.status
+    this.provider = payload.provider
+    this.retryAfterSeconds = payload.retryAfterSeconds
+  }
+}
 
 export type { RetrievedSource }
 
@@ -140,7 +155,7 @@ export function useSendChatStream() {
         }
       )
 
-      let lastError: string | null = null
+      let lastError: StreamErrorPayload | null = null
 
       try {
         await streamChatAudit({
@@ -151,8 +166,8 @@ export function useSendChatStream() {
           signal: controller.signal,
           onToken: (text) => appendToken(text),
           onSources: (sources) => setStreamingSources(sources),
-          onError: (detail) => {
-            lastError = detail
+          onError: (payload) => {
+            lastError = payload
           },
         })
       } catch (err) {
@@ -162,7 +177,7 @@ export function useSendChatStream() {
 
       if (lastError) {
         finishStreaming()
-        throw new Error(lastError)
+        throw new ChatStreamError(lastError)
       }
 
       await qc.invalidateQueries({ queryKey: chatKeys.detail(threadId) })
