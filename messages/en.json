@@ -850,6 +850,7 @@
         "sendFailed": "Failed to send message",
         "quotaExceededTitle": "AI quota exceeded",
         "rateLimitedTitle": "AI rate limit reached",
+        "insufficientCreditsTitle": "AI credits insufficient",
         "providerUnavailableTitle": "AI provider unavailable",
         "disclaimer": "Halim may make mistakes. Always verify rulings with qualified Sharia scholars.",
         "voiceMic": "Dictate",
@@ -952,7 +953,9 @@
         "tooLargeDescription": "Maximum size is 25 MB.",
         "wrongTypeTitle": "Unsupported file",
         "wrongTypeDescription": "Only PDF files are supported right now.",
-        "uploadFailed": "Upload failed"
+        "uploadFailed": "Upload failed",
+        "uploadSuccessTitle": "Upload received",
+        "uploadSuccessDescription": "Processing in the background — the file is now in your documents list."
       },
       "documents": {
         "sectionTitle": "Documents",

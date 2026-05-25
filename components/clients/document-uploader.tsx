@@ -7,9 +7,7 @@ import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import {
   AlertCircle,
-  CheckCircle2,
   FileText,
-  Loader2,
   RotateCw,
   UploadCloud,
   X,
@@ -22,19 +20,20 @@ import { cn } from "@/lib/utils"
 import {
   clientKeys,
   uploadClientDocument,
-  useDocumentStatusQuery,
-  useDeleteClientDocumentMutation,
+  type ClientDocument,
 } from "@/lib/api/queries/clients"
 import type { ClientDocumentType } from "@/lib/types/retrieved-source"
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024 // 25 MB
 
+// Queue only tracks the *transport* phase. Once the backend acknowledges (202),
+// the file is hoisted into the documents list (left side) and the queue row is
+// removed. Background ingest (pending → ready/failed) is reflected on the
+// documents list itself via auto-polling in `useClientDocumentsQuery`.
 type QueueState =
   | { phase: "queued" }
   | { phase: "uploading"; percent: number; cancel: () => void }
-  | { phase: "processing"; documentId: string }
-  | { phase: "ready"; documentId: string }
-  | { phase: "failed"; error: string; documentId?: string }
+  | { phase: "failed"; error: string }
 
 type QueueItem = {
   id: string
@@ -52,14 +51,17 @@ export function DocumentUploader({ clientId }: { clientId: string }) {
   const [queue, setQueue] = useState<QueueItem[]>([])
   const isProcessingRef = useRef(false)
 
-  const updateItem = useCallback((id: string, patch: Partial<QueueItem> | ((it: QueueItem) => QueueItem)) => {
-    setQueue((prev) =>
-      prev.map((it) => {
-        if (it.id !== id) return it
-        return typeof patch === "function" ? patch(it) : { ...it, ...patch }
-      })
-    )
-  }, [])
+  const updateItem = useCallback(
+    (id: string, patch: Partial<QueueItem> | ((it: QueueItem) => QueueItem)) => {
+      setQueue((prev) =>
+        prev.map((it) => {
+          if (it.id !== id) return it
+          return typeof patch === "function" ? patch(it) : { ...it, ...patch }
+        })
+      )
+    },
+    []
+  )
 
   const removeItem = useCallback((id: string) => {
     setQueue((prev) => prev.filter((it) => it.id !== id))
@@ -102,10 +104,42 @@ export function DocumentUploader({ clientId }: { clientId: string }) {
           },
         })
         if (cancelled) return
-        // Move from transport→processing; the polling hook below resolves it.
-        updateItem(next.id, { state: { phase: "processing", documentId: res.documentId } })
-        // Surface the new pending row in the parent list.
+
+        // Optimistically hoist the new doc into the documents list. The list's
+        // auto-poll flips status from pending → ready/failed without any
+        // per-file polling on this side.
+        const optimistic: ClientDocument = {
+          s3Key: res.documentId,
+          organizationId: "",
+          clientId,
+          documentType: next.documentType,
+          originalName: res.document.originalName,
+          displayName: res.document.displayName,
+          uploadedAt: new Date().toISOString(),
+          uploadedBy: "",
+          sizeBytes: next.file.size,
+          status: "pending",
+          error: null,
+          chunkCount: null,
+          processedAt: null,
+        }
+        qc.setQueryData<ClientDocument[]>(
+          clientKeys.documents(clientId),
+          (prev) => {
+            if (!prev) return [optimistic]
+            if (prev.some((d) => d.s3Key === optimistic.s3Key)) return prev
+            return [optimistic, ...prev]
+          }
+        )
+        // Also nudge any list filtered by documentType (in case other callers
+        // are subscribed to a typed view of the same client).
         qc.invalidateQueries({ queryKey: clientKeys.documents(clientId) })
+
+        // Drop the queue row — the documents list now owns its lifecycle.
+        removeItem(next.id)
+        toast.success(t("uploadSuccessTitle"), {
+          description: t("uploadSuccessDescription"),
+        })
       } catch (err) {
         if (cancelled) return
         const isAbort = err instanceof DOMException && err.name === "AbortError"
@@ -231,19 +265,8 @@ export function DocumentUploader({ clientId }: { clientId: string }) {
               <QueueRow
                 key={it.id}
                 item={it}
-                clientId={clientId}
                 onRemove={() => removeItem(it.id)}
-                onRetry={() =>
-                  updateItem(it.id, { state: { phase: "queued" } })
-                }
-                onMarkReady={(docId) =>
-                  updateItem(it.id, { state: { phase: "ready", documentId: docId } })
-                }
-                onMarkFailed={(docId, error) =>
-                  updateItem(it.id, {
-                    state: { phase: "failed", documentId: docId, error },
-                  })
-                }
+                onRetry={() => updateItem(it.id, { state: { phase: "queued" } })}
               />
             ))}
           </ul>
@@ -255,53 +278,14 @@ export function DocumentUploader({ clientId }: { clientId: string }) {
 
 function QueueRow({
   item,
-  clientId,
   onRemove,
   onRetry,
-  onMarkReady,
-  onMarkFailed,
 }: {
   item: QueueItem
-  clientId: string
   onRemove: () => void
   onRetry: () => void
-  onMarkReady: (documentId: string) => void
-  onMarkFailed: (documentId: string, error: string) => void
 }) {
   const t = useTranslations("app.clientDetail.upload")
-  const qc = useQueryClient()
-  const deleteMutation = useDeleteClientDocumentMutation(clientId)
-  const processingDocId =
-    item.state.phase === "processing" ? item.state.documentId : null
-
-  const statusQuery = useDocumentStatusQuery({
-    clientId,
-    documentId: processingDocId,
-    enabled: Boolean(processingDocId),
-  })
-
-  useEffect(() => {
-    const status = statusQuery.data?.status
-    if (!processingDocId || !status) return
-    if (status === "ready") {
-      onMarkReady(processingDocId)
-      // Refresh the document list to show the ready row.
-      qc.invalidateQueries({ queryKey: clientKeys.documents(clientId) })
-      qc.invalidateQueries({ queryKey: clientKeys.detail(clientId) })
-    } else if (status === "failed") {
-      onMarkFailed(processingDocId, statusQuery.data?.error ?? t("uploadFailed"))
-    }
-  }, [
-    statusQuery.data?.status,
-    statusQuery.data?.error,
-    processingDocId,
-    clientId,
-    onMarkReady,
-    onMarkFailed,
-    qc,
-    t,
-  ])
-
   const sizeKb = Math.max(1, Math.round(item.file.size / 1024))
 
   return (
@@ -357,19 +341,7 @@ function QueueRow({
             type="button"
             variant="ghost"
             size="icon"
-            onClick={() => {
-              // If the doc was persisted (processing/ready/failed with an id), clean it up server-side.
-              const docId =
-                item.state.phase === "processing"
-                  ? item.state.documentId
-                  : item.state.phase === "ready"
-                    ? item.state.documentId
-                    : item.state.phase === "failed"
-                      ? item.state.documentId
-                      : undefined
-              if (docId) deleteMutation.mutate(docId)
-              onRemove()
-            }}
+            onClick={onRemove}
             aria-label={t("remove")}
           >
             <X className="size-4" />
@@ -389,20 +361,6 @@ function StatePill({ state }: { state: QueueState }) {
       return (
         <span className="text-xs text-muted-foreground">
           {t("transport", { percent: state.percent })}
-        </span>
-      )
-    case "processing":
-      return (
-        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Loader2 className="size-3 animate-spin" aria-hidden />
-          {t("processing")}
-        </span>
-      )
-    case "ready":
-      return (
-        <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
-          <CheckCircle2 className="size-3" aria-hidden />
-          {t("ready")}
         </span>
       )
     case "failed":

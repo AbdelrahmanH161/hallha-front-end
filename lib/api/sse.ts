@@ -8,6 +8,7 @@ export type StreamErrorKind =
   | "rate_limited"
   | "invalid_api_key"
   | "model_not_found"
+  | "insufficient_credits"
   | "upstream_error"
   | "unknown"
 

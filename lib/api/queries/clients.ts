@@ -146,6 +146,14 @@ export function useClientDocumentsQuery(
       ).then((r) => r.items)
     },
     enabled: Boolean(clientId),
+    // Auto-poll while any doc is still ingesting (status === "pending"). The
+    // uploader optimistically inserts a pending row into this cache on 202,
+    // and the poll flips it to ready/failed without per-file polling.
+    refetchInterval: (q) => {
+      const items = q.state.data as ClientDocument[] | undefined
+      const hasPending = items?.some((it) => it.status === "pending")
+      return hasPending ? 2500 : false
+    },
   })
 }
 

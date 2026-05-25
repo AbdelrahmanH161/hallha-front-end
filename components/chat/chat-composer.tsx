@@ -429,13 +429,15 @@ export function ChatComposer({
             ? "quotaExceededTitle"
             : err.kind === "rate_limited"
               ? "rateLimitedTitle"
-              : err.kind === "invalid_api_key"
-                ? "providerUnavailableTitle"
-                : err.kind === "model_not_found"
+              : err.kind === "insufficient_credits"
+                ? "insufficientCreditsTitle"
+                : err.kind === "invalid_api_key"
                   ? "providerUnavailableTitle"
-                  : err.kind === "upstream_error"
+                  : err.kind === "model_not_found"
                     ? "providerUnavailableTitle"
-                    : "sendFailed"
+                    : err.kind === "upstream_error"
+                      ? "providerUnavailableTitle"
+                      : "sendFailed"
         toast.error(t(titleKey), { description: err.message })
         return
       }

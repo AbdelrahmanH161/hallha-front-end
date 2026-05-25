@@ -850,6 +850,7 @@
         "sendFailed": "تعذّر إرسال الرسالة",
         "quotaExceededTitle": "تم تجاوز الحصة المخصّصة للذكاء الاصطناعي",
         "rateLimitedTitle": "تجاوزت معدّل الطلبات للذكاء الاصطناعي",
+        "insufficientCreditsTitle": "رصيد الذكاء الاصطناعي غير كافٍ",
         "providerUnavailableTitle": "مزوّد الذكاء الاصطناعي غير متاح",
         "disclaimer": "قد يخطئ حليم. تحقّق دائماً من الأحكام مع علماء شرعيين معتمدين.",
         "voiceMic": "إملاء",
@@ -952,7 +953,9 @@
         "tooLargeDescription": "الحد الأقصى 25 ميجابايت.",
         "wrongTypeTitle": "نوع ملف غير مدعوم",
         "wrongTypeDescription": "يُدعم حالياً ملفات PDF فقط.",
-        "uploadFailed": "فشل الرفع"
+        "uploadFailed": "فشل الرفع",
+        "uploadSuccessTitle": "تم استلام الملف",
+        "uploadSuccessDescription": "جارٍ المعالجة في الخلفية — الملف موجود الآن في قائمة المستندات."
       },
       "documents": {
         "sectionTitle": "المستندات",
